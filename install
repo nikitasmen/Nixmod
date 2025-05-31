@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Usage: ./install-nix-config.sh your-file.nix
+set -e
+
+NIX_FILE="$1"
+NIXOS_DIR="/etc/nixos"
+TARGET_FILE="$NIXOS_DIR/$(basename "$NIX_FILE")"
+
+if [ -z "$NIX_FILE" ]; then
+  echo "Usage: $0 <your-file.nix>"
+  exit 1
+fi
+
+if [ ! -f "$NIX_FILE" ]; then
+  echo "Error: File '$NIX_FILE' does not exist."
+  exit 1
+fi
+
+# Copy the file to /etc/nixos
+echo "Copying $NIX_FILE to $TARGET_FILE"
+sudo cp "$NIX_FILE" "$TARGET_FILE"
+
+# Add an import line to configuration.nix if not already present
+IMPORT_LINE="  ./$(basename "$NIX_FILE")"
+if ! grep -q "$IMPORT_LINE" "$NIXOS_DIR/configuration.nix"; then
+  echo "Adding import line to configuration.nix"
+  sudo sed -i "/^ *imports *= *\[/a\    $IMPORT_LINE" "$NIXOS_DIR/configuration.nix"
+else
+  echo "Import line already present in configuration.nix"
+fi
+
+
+echo "Done."
