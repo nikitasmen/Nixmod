@@ -107,10 +107,12 @@
   environment.systemPackages = with pkgs; [
 
     # --- Essential Tools ---
+    tmux          # Terminal Multiplexer
     git           # Version control
     direnv        # Environment variable management, integrates well with VS Code
     # wget        # Optional: CLI tool for downloading files
-    vim         # Optional: Editor for editing configuration.nix
+    vim           # Optional: Editor for editing configuration.nix
+    helix         # Text Editor 
 
     # --- Development Environment ---
     vscode        # Visual Studio Code editor
@@ -130,20 +132,31 @@
     # legcord       # Discord alternative UNOFFICIAL CLIENT
 
     # --- Dependencies --- 
-    # libXcomposite   #Dependencies for playwright tests
-    # libXdamage      #Dependencies for playwright tests
-    # fontconfig      #Dependencies for playwright tests
-    # libXrandr       #Dependencies for playwright tests
-    # freetype        #Dependencies for playwright tests
-    # libX11          #Dependencies for playwright tests
-    # pango           #Dependencies for playwright tests
-    # cairo           #Dependencies for playwright tests
-    # glib            #Dependencies for playwright tests
-    # gtk3            #Dependencies for playwright tests
-    # nss             #Dependencies for playwright tests
 
   ];
 
+#  programs.helix = {
+#   enable = true;
+#   settings = {
+#     theme = "autumn_night_transparent";
+#     editor.cursor-shape = {
+#       normal = "block";
+#       insert = "bar";
+#       select = "underline";
+#     };
+#   };
+#   languages.language = [{
+#     name = "nix";
+#     auto-format = true;
+#     formatter.command = "${pkgs.nixfmt}/bin/nixfmt";
+#   }];
+#   themes = {
+#     autumn_night_transparent = {
+#       "inherits" = "autumn_night";
+#       "ui.background" = { };
+#     };
+#   };
+#  };
   #users.users.nikitasmen.packages = with pkgs; [ 
     
   #]
