@@ -118,9 +118,35 @@
     # --- Browsers ---
     opera         # Web browser
 
+    # --- Programmin stuff --- 
+    nodejs
+    playwright-driver
     # --- Media ---
     spotify       # Music streaming client
+
+    # --- Communication --- 
+    slack
+    discord-ptb     # Discord official client  
+    # legcord       # Discord alternative UNOFFICIAL CLIENT
+
+    # --- Dependencies --- 
+    # libXcomposite   #Dependencies for playwright tests
+    # libXdamage      #Dependencies for playwright tests
+    # fontconfig      #Dependencies for playwright tests
+    # libXrandr       #Dependencies for playwright tests
+    # freetype        #Dependencies for playwright tests
+    # libX11          #Dependencies for playwright tests
+    # pango           #Dependencies for playwright tests
+    # cairo           #Dependencies for playwright tests
+    # glib            #Dependencies for playwright tests
+    # gtk3            #Dependencies for playwright tests
+    # nss             #Dependencies for playwright tests
+
   ];
+
+  #users.users.nikitasmen.packages = with pkgs; [ 
+    
+  #]
 
   programs.git = { 
     enable = true; 
