@@ -47,15 +47,26 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  #services.xserver.displayManager.gdm.enable = true;
+  #services.xserver.desktopManager.gnome.enable = true;
+  
+  # Enable the Hyprland Desktop Environment. 
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+  # Configure automatic login for Hyprland if desired
+  # services.displayManager.autoLogin.enable = true;
+  #services.displayManager.autoLogin.user = "nikmen";
+  services.displayManager.defaultSession = "hyprland-uwsm";
 
+  services.seatd.enable = true; 
+  services.logind.enable = true;
+  
   # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
-
+  # services.xserver.xkb = {
+  #   layout = "us";
+  #   variant = "";
+  # };
+1
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -85,13 +96,12 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
     #  thunderbird
+    #
+    slack
     ];
   };
 
-  # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "nikmen";
-
+  
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
@@ -113,21 +123,41 @@
     # wget        # Optional: CLI tool for downloading files
     vim           # Optional: Editor for editing configuration.nix
     helix         # Text Editor 
-
+    p7zip         # File Archiver
+    texliveFull   # Tex Live enviroment
+    tree          # Directory structure viewer
+    
+    # --- Hyprland Essentials ---
+    kitty                # Terminal for Hyprland
+    waybar               # Status bar
+    rofi-wayland         # Application launcher
+    dunst                # Notification daemon
+    libnotify            # Notification library
+    swww                 # Wallpaper tool
+    wl-clipboard         # Clipboard tools
+    hyprpaper            # Wallpaper utility for Hyprland
+    xdg-desktop-portal-hyprland  # XDG desktop integration
+    
+    # Optional but recommended
+    swaylock             # Screen locker
+    grimblast           # Screenshot tool
+    slurp               # Region selection
+    
     # --- Development Environment ---
     vscode        # Visual Studio Code editor
     docker        # Docker Container Application 
+
     # --- Browsers ---
     opera         # Web browser
 
     # --- Programmin stuff --- 
     nodejs
     playwright-driver
+
     # --- Media ---
     spotify       # Music streaming client
 
     # --- Communication --- 
-    slack
     discord-ptb     # Discord official client  
     # legcord       # Discord alternative UNOFFICIAL CLIENT
 
@@ -160,7 +190,12 @@
   #users.users.nikitasmen.packages = with pkgs; [ 
     
   #]
-
+  programs.hyprland = {
+    enable=true;
+    withUWSM = true;
+    xwayland.enable = true; 
+  };
+  
   programs.git = { 
     enable = true; 
     config = {  
