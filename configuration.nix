@@ -2,18 +2,25 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib,  ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./nvidia-configuration.nix
     ];
 
+  # Use flakes
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+  
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.grub.enable = false;
+  #boot.loader.grub.device = "/dev/nvme0n1";
+  #boot.loader.grub.useOSProber = true;
+  
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -34,7 +41,7 @@
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "el_GR.UTF-8";
     LC_IDENTIFICATION = "el_GR.UTF-8";
-    LC_MEASUREMENT = "el_GR.UTF-8";
+    LC_MEASUREMENT = "el_GR.UTF-8"; 
     LC_MONETARY = "el_GR.UTF-8";
     LC_NAME = "el_GR.UTF-8";
     LC_NUMERIC = "el_GR.UTF-8";
@@ -47,26 +54,15 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  #services.xserver.displayManager.gdm.enable = true;
-  #services.xserver.desktopManager.gnome.enable = true;
-  
-  # Enable the Hyprland Desktop Environment. 
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
-  # Configure automatic login for Hyprland if desired
-  # services.displayManager.autoLogin.enable = true;
-  #services.displayManager.autoLogin.user = "nikmen";
-  services.displayManager.defaultSession = "hyprland-uwsm";
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = false;
 
-  services.seatd.enable = true; 
-  services.logind.enable = true;
-  
   # Configure keymap in X11
-  # services.xserver.xkb = {
-  #   layout = "us";
-  #   variant = "";
-  # };
-1
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -96,12 +92,13 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
     #  thunderbird
-    #
-    slack
     ];
   };
 
-  
+  # Enable automatic login for the user.
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "nikmen";
+
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
@@ -109,93 +106,40 @@
   # Install firefox.
   programs.firefox.enable = true;
 
+  # Enable hyprland 
+  programs.hyprland.enable = true; 
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-
+ 
     # --- Essential Tools ---
-    tmux          # Terminal Multiplexer
     git           # Version control
-    direnv        # Environment variable management, integrates well with VS Code
+    #direnv        # Environment variable management, integrates well with VS Code
+    tmux        # terminal multiplexer
+    tree        # structured dir displayer  
     # wget        # Optional: CLI tool for downloading files
-    vim           # Optional: Editor for editing configuration.nix
-    helix         # Text Editor 
-    p7zip         # File Archiver
-    texliveFull   # Tex Live enviroment
-    tree          # Directory structure viewer
-    
-    # --- Hyprland Essentials ---
-    kitty                # Terminal for Hyprland
-    waybar               # Status bar
-    rofi-wayland         # Application launcher
-    dunst                # Notification daemon
-    libnotify            # Notification library
-    swww                 # Wallpaper tool
-    wl-clipboard         # Clipboard tools
-    hyprpaper            # Wallpaper utility for Hyprland
-    xdg-desktop-portal-hyprland  # XDG desktop integration
-    
-    # Optional but recommended
-    swaylock             # Screen locker
-    grimblast           # Screenshot tool
-    slurp               # Region selection
-    
+    vim         # Optional: Editor for editing configuration.nix
+    helix       # Editor 
+    alacritty 
+    nnn         # File explorer    
     # --- Development Environment ---
-    vscode        # Visual Studio Code editor
+    #vscode        # Visual Studio Code editor
     docker        # Docker Container Application 
-
     # --- Browsers ---
     opera         # Web browser
 
-    # --- Programmin stuff --- 
-    nodejs
-    playwright-driver
-
+    kitty        # Hyprland terminal emulator. Required for default config  
+    waybar       # Display Server
+    # rofi-wayland
+    wofi         # Search bar 
     # --- Media ---
     spotify       # Music streaming client
-
-    # --- Communication --- 
-    discord-ptb     # Discord official client  
-    # legcord       # Discord alternative UNOFFICIAL CLIENT
-
-    # --- Dependencies --- 
-
   ];
 
-#  programs.helix = {
-#   enable = true;
-#   settings = {
-#     theme = "autumn_night_transparent";
-#     editor.cursor-shape = {
-#       normal = "block";
-#       insert = "bar";
-#       select = "underline";
-#     };
-#   };
-#   languages.language = [{
-#     name = "nix";
-#     auto-format = true;
-#     formatter.command = "${pkgs.nixfmt}/bin/nixfmt";
-#   }];
-#   themes = {
-#     autumn_night_transparent = {
-#       "inherits" = "autumn_night";
-#       "ui.background" = { };
-#     };
-#   };
-#  };
-  #users.users.nikitasmen.packages = with pkgs; [ 
-    
-  #]
-  programs.hyprland = {
-    enable=true;
-    withUWSM = true;
-    xwayland.enable = true; 
-  };
-  
   programs.git = { 
     enable = true; 
     config = {  
@@ -203,9 +147,7 @@
     	user.email = "menounosnikitas@gmail.com";
     };
   }; 
-environment.sessionVariables = {
-    WLR_RENDERER_ALLOW_SOFTWARE = "1";
-  };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -233,4 +175,4 @@ environment.sessionVariables = {
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
 
-}
+} 
