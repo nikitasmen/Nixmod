@@ -125,7 +125,9 @@
     vim         # Optional: Editor for editing configuration.nix
     helix       # Editor 
     alacritty 
-    nnn         # File explorer    
+    yazi         # File explorer    
+    fish 
+
     # --- Development Environment ---
     #vscode        # Visual Studio Code editor
     docker        # Docker Container Application 
