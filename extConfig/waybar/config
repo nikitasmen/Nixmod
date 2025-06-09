@@ -45,9 +45,9 @@
     },
 
     "clock#time": {
-        "format": "{:%I:%M %p %Ez}",
-        // "locale": "en_US.UTF-8",
-        // "timezones": [ "Europe/Kyiv", "America/New_York" ],
+        "format": "{:%I:%M %p}",
+        "locale": "en_US.UTF-8",
+        "timezones": [ "Europe/Athens" ],
     },
 
     "custom/separator": {
@@ -91,11 +91,11 @@
     },
 
     "clock": {
-        "format": "{:%I:%M %p %Ez | %a • %h | %F}",
+        "format": "{:%I:%M %p | %a • %h | %F}",
         "format-alt": "{:%I:%M %p}",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         // "locale": "en_US.UTF-8",
-        // "timezones": [ "Europe/Kyiv", "America/New_York" ],
+        // "timezones": [ "Europe/Athens" ],
         "actions": {
             "on-click-right": "mode",
         },
@@ -233,8 +233,7 @@
         "exec": "fish -c dunst_pause",
         "on-click": "dunstctl set-paused toggle",
         "restart-interval": 1,
-    },
-
+    },         
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
@@ -270,14 +269,12 @@
 
     // Modules Config
     "hyprland/window": {
-        "format": "👼 {title} 😈",
+        "format": " {title} ",
         "max-length": 50,
     },
 
     "hyprland/language": {
-        "format-en": "🇺🇸 ENG (US)",
-        "format-uk": "🇺🇦 UKR",
-        "format-ru": "🇷🇺 RUS",
+        "format-en": "ENG (US)",
         "keyboard-name": "at-translated-set-2-keyboard",
         "on-click": "hyprctl switchxkblayout at-translated-set-2-keyboard next",
     },
