@@ -327,7 +327,7 @@
     },
 
     "cpu": {
-        "format": "󰻠{usage}%",
+        "format": "󰻠 {usage}%",
         "states": {
             "high": 90,
             "upper-medium": 70,
@@ -340,7 +340,7 @@
     },
     
     "memory": {
-        "format": "󰍛{percentage}%",
+        "format": "󰍛 {percentage}%",
         "tooltip-format": "Main: ({used} GiB/{total} GiB)({percentage}%), available {avail} GiB\nSwap: ({swapUsed} GiB/{swapTotal} GiB)({swapPercentage}%), available {swapAvail} GiB",
         "states": {
             "high": 90,
@@ -354,7 +354,7 @@
     },
 
     "disk": {
-        "format": "󰋊{percentage_used}%",  
+        "format": "󰋊 {percentage_used}%",  
         "tooltip-format": "({used}/{total})({percentage_used}%) in '{path}', available {free}({percentage_free}%)",
         "states": {
             "high": 90,
