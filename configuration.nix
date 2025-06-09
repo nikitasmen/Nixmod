@@ -131,7 +131,7 @@
     alacritty 
     yazi         # File explorer    
     fish 
-
+    wlogout 
     networkmanager_dmenu 
     # --- Development Environment ---
     #vscode        # Visual Studio Code editor
