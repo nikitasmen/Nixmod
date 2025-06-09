@@ -95,6 +95,7 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
     #  thunderbird
+    slack # Communicatio
     ];
   };
 
@@ -143,6 +144,8 @@
     wofi         # Search bar 
     # --- Media ---
     spotify       # Music streaming client
+
+    discord-ptb
   ];
 
   programs.git = { 
