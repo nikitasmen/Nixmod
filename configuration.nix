@@ -31,7 +31,10 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-
+  
+  # Enable Blueman applet GUI
+  services.blueman.enable = true;
+   
   # Set your time zone.
   time.timeZone = "Europe/Athens";
 
