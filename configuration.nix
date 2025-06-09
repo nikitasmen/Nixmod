@@ -132,6 +132,7 @@
     yazi         # File explorer    
     fish 
 
+    networkmanager_dmenu 
     # --- Development Environment ---
     #vscode        # Visual Studio Code editor
     docker        # Docker Container Application 
