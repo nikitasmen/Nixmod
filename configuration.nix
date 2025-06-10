@@ -38,7 +38,7 @@
        STOP_CHARGE_THRESH_BAT0 = 80; # 80 and above it stops charging
 
       };
-};
+  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -148,15 +148,21 @@
     tree        # structured dir displayer  
     # wget        # Optional: CLI tool for downloading files
     vim         # Optional: Editor for editing configuration.nix
-    helix       # Editor 
     alacritty 
     yazi         # File explorer    
+    superfile    # File explorer
+
     fish 
+
+    pavucontrol  # Sound Control
     wlogout 
-    networkmanager_dmenu 
+    networkmanager_dmenu   # Network manager
+    
     # --- Development Environment ---
-    #vscode        # Visual Studio Code editor
+    #vscode       # Visual Studio Code editor
     docker        # Docker Container Application 
+    helix         # Helix Text Editor
+    
     # --- Browsers ---
     opera         # Web browser
 
@@ -167,6 +173,7 @@
     # --- Media ---
     spotify       # Music streaming client
 
+    # --- Communication --- 
     discord-ptb
   ];
 
