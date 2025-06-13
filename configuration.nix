@@ -151,7 +151,8 @@
     alacritty 
     yazi         # File explorer    
     superfile    # File explorer
-
+    ghostty      # Terminal emulator
+    # kdeconnect
     fish 
 
     pavucontrol  # Sound Control
