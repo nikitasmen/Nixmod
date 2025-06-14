@@ -121,10 +121,13 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  #
+  virtualisation.docker.enable = true; 
+  
   users.users.nikmen = {
     isNormalUser = true;
     description = "nikmen";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
     #  thunderbird
     slack # Communicatio
