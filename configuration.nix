@@ -173,7 +173,9 @@
     pavucontrol  # Sound Control
     wlogout 
     networkmanager_dmenu   # Network manager
-    
+    hyprpaper
+    findutils
+    coreutils
     # --- Development Environment ---
     #vscode       # Visual Studio Code editor
     docker        # Docker Container Application 
