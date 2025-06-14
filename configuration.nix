@@ -169,7 +169,7 @@
     ghostty      # Terminal emulator
     # kdeconnect
     fish 
-
+    mako 
     pavucontrol  # Sound Control
     wlogout 
     networkmanager_dmenu   # Network manager
