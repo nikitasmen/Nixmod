@@ -82,6 +82,16 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = false;
 
+  #@@@@ TODO!!! kde connect phone !! 
+   # services.kdeconnect.enable = true;
+
+  # You may also need this if you want a system tray for KDE Connect
+  # services.dbus.enable = true;
+  # programs.dconf.enable = true;
+
+  # Optional but recommended for notifications
+  # services.mako.enable = true; # or any other notification daemon
+  
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
@@ -148,6 +158,7 @@
     tmux        # terminal multiplexer
     tree        # structured dir displayer  
     # wget        # Optional: CLI tool for downloading files
+    neofetch    # Optional: System information tool 
     vim         # Optional: Editor for editing configuration.nix
     alacritty 
     yazi         # File explorer    
@@ -186,6 +197,11 @@
     	user.email = "menounosnikitas@gmail.com";
     };
   }; 
+
+  programs.kdeconnect = {
+    enable = true;
+    package = pkgs.gnomeExtensions.gsconnect;
+  };
 
   fonts.packages = with pkgs; [
    pkgs.nerd-fonts.fira-code
