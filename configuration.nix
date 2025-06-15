@@ -194,6 +194,7 @@
 
     # --- Communication --- 
     discord-ptb
+    viber 
   ];
 
   programs.git = { 
