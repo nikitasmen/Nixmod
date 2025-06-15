@@ -164,6 +164,7 @@
     neofetch    # Optional: System information tool 
     vim         # Optional: Editor for editing configuration.nix
     alacritty 
+    playerctl
     yazi         # File explorer    
     superfile    # File explorer
     ghostty      # Terminal emulator
