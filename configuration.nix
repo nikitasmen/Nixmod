@@ -164,7 +164,10 @@
     neofetch    # Optional: System information tool 
     vim         # Optional: Editor for editing configuration.nix
     alacritty 
-    playerctl
+    flameshot    # Screenshot tool 
+    grim
+    slurp 
+    playerctl    # Music player controller
     yazi         # File explorer    
     superfile    # File explorer
     ghostty      # Terminal emulator
@@ -196,7 +199,7 @@
     discord-ptb
     viber 
   ];
-
+  
   programs.git = { 
     enable = true; 
     config = {  
