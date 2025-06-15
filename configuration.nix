@@ -189,7 +189,7 @@
     helix         # Helix Text Editor
     
     # --- Browsers ---
-    opera         # Web browser
+    # opera         # Web browser
 
     kitty        # Hyprland terminal emulator. Required for default config  
     waybar       # Display Server
@@ -199,7 +199,8 @@
     spotify       # Music streaming client
 
     # --- Communication --- 
-    discord-ptb
+    # discord-ptb
+    webcord
     viber 
   ];
   
@@ -220,6 +221,7 @@
    pkgs.nerd-fonts.fira-code
    pkgs.nerd-fonts.jetbrains-mono
   ];
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
