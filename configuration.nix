@@ -197,7 +197,7 @@
     wofi         # Search bar 
     # --- Media ---
     spotify       # Music streaming client
-
+    freetube      # Free youtube alternative
     # --- Communication --- 
     # discord-ptb
     webcord
