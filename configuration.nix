@@ -198,6 +198,8 @@
     # --- Media ---
     spotify       # Music streaming client
     freetube      # Free youtube alternative
+    stremio
+    
     # --- Communication --- 
     # discord-ptb
     webcord
