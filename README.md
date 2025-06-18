@@ -74,5 +74,4 @@ The configuration is highly modular:
 - **File Management**: Yazi and Superfile file explorers
 
 ## Screenshots
-
-*Add screenshots of your desktop environment here*
+![image](https://github.com/user-attachments/assets/49d490d7-0cd4-4823-a911-9ca77b2f0ce0)
