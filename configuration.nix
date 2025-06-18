@@ -90,9 +90,14 @@
    # services.kdeconnect.enable = true;
 
   # You may also need this if you want a system tray for KDE Connect
-  # services.dbus.enable = true;
+  services.dbus.enable = true;
   # programs.dconf.enable = true;
-
+ services.avahi = {
+    enable = true;
+    publish.enable = true;
+    publish.userServices = true;
+    publish.addresses = true;
+  };
   # Optional but recommended for notifications
   # services.mako.enable = true; # or any other notification daemon
   
@@ -188,6 +193,8 @@
     hyprlock
     findutils
     coreutils
+    plasma5Packages.kdeconnect-kde    # multiplatform connector 
+ kdePackages.kdeconnect-kde
     # --- Development Environment ---
     #vscode       # Visual Studio Code editor
     docker        # Docker Container Application 
