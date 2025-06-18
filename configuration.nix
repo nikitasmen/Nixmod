@@ -86,18 +86,25 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = false;
 
-  #@@@@ TODO!!! kde connect phone !! 
-   # services.kdeconnect.enable = true;
-
+  # Services for kdeConnect
   # You may also need this if you want a system tray for KDE Connect
   services.dbus.enable = true;
   # programs.dconf.enable = true;
- services.avahi = {
+  services.avahi = {
     enable = true;
     publish.enable = true;
     publish.userServices = true;
     publish.addresses = true;
   };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
+    config = {
+      common.default = "wlr";
+    };
+  }; 
+  
   # Optional but recommended for notifications
   # services.mako.enable = true; # or any other notification daemon
   
@@ -194,7 +201,7 @@
     findutils
     coreutils
     plasma5Packages.kdeconnect-kde    # multiplatform connector 
- kdePackages.kdeconnect-kde
+    kdePackages.kdeconnect-kde
     # --- Development Environment ---
     #vscode       # Visual Studio Code editor
     docker        # Docker Container Application 
