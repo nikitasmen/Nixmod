@@ -181,6 +181,8 @@
     wlogout 
     networkmanager_dmenu   # Network manager
     hyprpaper
+    hypridle
+    hyprlock
     findutils
     coreutils
     # --- Development Environment ---
