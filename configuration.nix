@@ -170,6 +170,8 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  programs.steam.enable = true;
+
   # $ nix search wget
   environment.systemPackages = with pkgs; [
  
