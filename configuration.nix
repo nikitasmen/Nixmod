@@ -135,12 +135,13 @@
     packages = with pkgs; [
     #  thunderbird
     slack # Communicatio
+    viber 
     ];
   };
 
   # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "nikmen";
+  # services.displayManager.autoLogin.enable = true;
+  # services.displayManager.autoLogin.user = "nikmen";
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
@@ -152,6 +153,8 @@
   # Enable hyprland 
   programs.hyprland.enable = true; 
 
+  programs.hyprlock.enable = true;
+  
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -205,7 +208,6 @@
     # --- Communication --- 
     # discord-ptb
     webcord
-    viber 
   ];
   
   programs.git = { 
