@@ -176,15 +176,16 @@
   environment.systemPackages = with pkgs; [
  
     # --- Essential Tools ---
-    git           # Version control
-    #direnv        # Environment variable management, integrates well with VS Code
-    tmux        # terminal multiplexer
-    tree        # structured dir displayer  
+    git          # Version control
+    #direnv      # Environment variable management, integrates well with VS Code
+    tmux         # terminal multiplexer
+    tree         # structured dir displayer  
     # wget        # Optional: CLI tool for downloading files
-    neofetch    # Optional: System information tool 
-    vim         # Optional: Editor for editing configuration.nix
+    neofetch     # Optional: System information tool 
+    vim          # Optional: Editor for editing configuration.nix
     alacritty 
     flameshot    # Screenshot tool 
+    eww          # Widget Sytem
     grim
     slurp 
     playerctl    # Music player controller
@@ -218,6 +219,7 @@
     wofi         # Search bar 
     # --- Media ---
     spotify       # Music streaming client
+    spicetify-cli # Spotify customize cli tool 
     freetube      # Free youtube alternative
     stremio
     
