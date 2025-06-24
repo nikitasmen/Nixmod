@@ -195,6 +195,7 @@
     # kdeconnect
     fish 
     mako 
+    htop         # Processes Viewer with the looks 
     pavucontrol  # Sound Control
     wlogout 
     networkmanager_dmenu   # Network manager
