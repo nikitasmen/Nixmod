@@ -161,6 +161,7 @@
 
   # Install firefox.
   programs.firefox.enable = true;
+  
 
   # Enable hyprland 
   programs.hyprland.enable = true; 
@@ -213,7 +214,8 @@
     
     # --- Browsers ---
     # opera         # Web browser
-
+    google-chrome
+    
     kitty        # Hyprland terminal emulator. Required for default config  
     waybar       # Display Server
     # rofi-wayland
