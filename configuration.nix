@@ -205,13 +205,13 @@
     hyprlock
     findutils
     coreutils
-    plasma5Packages.kdeconnect-kde    # multiplatform connector 
+    # plasma5Packages.kdeconnect-kde    # multiplatform connector 
     kdePackages.kdeconnect-kde
     # --- Development Environment ---
     #vscode       # Visual Studio Code editor
     docker        # Docker Container Application 
     helix         # Helix Text Editor
-    
+    logseq        # Knowledge manager 
     # --- Browsers ---
     # opera         # Web browser
     google-chrome
