@@ -44,8 +44,8 @@ show_help() {
     echo "  test                Test the configuration without applying it"
     echo "  status              Show the current system status"
     echo "  backup              Create a backup of the current system configuration"
-    echo "  flake-init           Initialize flake configuration"
-    echo "  flake-update         Update flake inputs"
+    echo "  flake-init          Initialize flake configuration"
+    echo "  flake-update        Update flake inputs"
     echo "  help                Show this help message"
     echo ""
 }
