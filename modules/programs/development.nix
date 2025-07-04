@@ -23,5 +23,6 @@
     tree         # Directory display
     findutils    # File search utilities
     coreutils    # Basic utilities
+    xclip        # Clipboard controll
   ];
 }
