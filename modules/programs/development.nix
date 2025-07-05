@@ -24,5 +24,6 @@
     findutils    # File search utilities
     coreutils    # Basic utilities
     xclip        # Clipboard controll
+    scc          # Code counter
   ];
 }
