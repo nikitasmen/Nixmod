@@ -31,7 +31,8 @@
     # System tools
     neofetch
     htop
-    
+    nwg-look
+        
     # Screenshots
     flameshot
   ];
