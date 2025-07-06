@@ -1,6 +1,6 @@
 # NixOS Configuration with Hyprland
 
-A modern NixOS desktop environment configuration centered around the Hyprland compositor.
+A modern NixOS desktop environment configuration centered around the Hyprland compositor, now with Nix Flakes for better reproducibility and up-to-date UnixKit tools.
 
 ## Overview
 
@@ -10,6 +10,8 @@ This NixOS setup provides:
 - Multiple terminal options (kitty, ghostty, alacritty)
 - Dynamic wallpaper management with hyprpaper
 - Comprehensive development environment
+- UnixKit tools (always fetches latest version via flakes)
+- Nix Flakes support for reproducible builds
 
 ## Key Components
 
@@ -47,6 +49,8 @@ This NixOS setup provides:
 
 ## Installation
 
+### Traditional Method
+
 1. Clone this repository
 2. Use the provided installation script:
    ```bash
@@ -57,6 +61,30 @@ This NixOS setup provides:
    sudo nixos-rebuild switch
    ```
 
+### Using Flakes (Recommended)
+
+The flakes-based approach ensures you always get the latest UnixKit tools:
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/nixmod.git
+   cd nixmod
+   ```
+
+2. Build and activate the configuration with flakes:
+   ```bash
+   sudo nixos-rebuild switch --flake .#nixos
+   ```
+
+3. Update everything to latest versions (including UnixKit):
+   ```bash
+   # Update all flake inputs to their latest versions
+   nix flake update
+   
+   # Apply the updated configuration
+   sudo nixos-rebuild switch --flake .#nixos
+   ```
+
 ## Customization
 
 The configuration is highly modular:
@@ -65,6 +93,31 @@ The configuration is highly modular:
 - Change terminal behavior in [kitty.conf](extConfig/kitty/kitty.conf)
 - Customize system information display with [neofetch config](extConfig/neofetch/config.conf)
 
+## Using UnixKit Tools
+
+This configuration includes [UnixKit](https://github.com/nikitasmen/UnixKit), a collection of custom utility scripts:
+
+### Automatic Updates
+
+Thanks to the flake-based approach, UnixKit is automatically updated to the latest version whenever you run:
+
+```bash
+nix flake update
+sudo nixos-rebuild switch --flake .#nixos
+```
+
+### Accessing UnixKit Tools
+
+After rebuilding your system, all UnixKit tools will be available in your PATH. You can:
+
+1. Run them directly from the terminal
+2. Use them in your own scripts
+3. Add keyboard shortcuts to frequently used tools
+
+### Custom Scripts
+
+You can add your own scripts to the `scripts/` directory, and they'll be available alongside the UnixKit tools.
+
 ## Additional Features
 
 - **Pipewire**: Modern audio system with PulseAudio compatibility
@@ -72,6 +125,7 @@ The configuration is highly modular:
 - **Network**: NetworkManager with dmenu integration
 - **Screenshots**: Flameshot with custom overlay
 - **File Management**: Yazi and Superfile file explorers
+- **UnixKit**: Custom utility scripts that are always up-to-date
 
 ## Screenshots
 ![image](https://github.com/user-attachments/assets/49d490d7-0cd4-4823-a911-9ca77b2f0ce0)
