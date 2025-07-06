@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Helper script to create new flake modules for Nixmod
+# Helper script to add new flake inputs to the main flake.nix
 
 set -e
 
@@ -14,14 +14,16 @@ FLAKE_URL=""
 FLAKE_NIXPKGS_FOLLOWS=false
 NOT_A_FLAKE=false
 FLAKE_DESCRIPTION=""
+MODULE_PATH=""
 
 print_usage() {
   echo "Usage: nixmod.sh add-flake [options]"
   echo ""
   echo "Options:"
-  echo "  -n, --name NAME          Name of the flake module (required)"
+  echo "  -n, --name NAME          Name of the flake input (required)"
   echo "  -u, --url URL            URL of the flake repository (required)"
   echo "  -d, --description DESC   Short description of the flake"
+  echo "  -m, --module PATH        Path to the module that will use this flake"
   echo "  -f, --follows-nixpkgs    Make the flake follow the main nixpkgs input"
   echo "  -N, --not-a-flake        Mark as not a flake (for repositories without flake.nix)"
   echo "  -h, --help               Show this help message"
@@ -41,85 +43,131 @@ validate_inputs() {
   fi
 }
 
-create_flake_module() {
-  local module_dir="$NIXMOD_ROOT/flakes/$FLAKE_NAME"
+add_flake_to_inputs() {
+  local flake_nix="$NIXMOD_ROOT/flake.nix"
   
-  # Check if module already exists
-  if [[ -d "$module_dir" ]]; then
-    echo_error "A flake module named '$FLAKE_NAME' already exists"
-    exit 1
-  fi
+  echo_info "Adding $FLAKE_NAME to flake.nix inputs"
   
-  echo_info "Creating flake module: $FLAKE_NAME"
+  # Create temporary file
+  local temp_file=$(mktemp)
   
-  # Create directory
-  mkdir -p "$module_dir"
+  # Create the flake input definition
+  local flake_def="    # ${FLAKE_DESCRIPTION:-$FLAKE_NAME input}\n    $FLAKE_NAME = {\n      url = \"$FLAKE_URL\";"
   
-  # Generate default.nix content
-  local not_flake_line=""
   if [[ "$NOT_A_FLAKE" = true ]]; then
-    not_flake_line="      flake = false; # This is not a flake"
+    flake_def="$flake_def\n      flake = false;"
   fi
   
-  local follows_nixpkgs_line=""
   if [[ "$FLAKE_NIXPKGS_FOLLOWS" = true ]]; then
-    follows_nixpkgs_line="      inputs.nixpkgs.follows = \"nixpkgs\";"
+    flake_def="$flake_def\n      inputs.nixpkgs.follows = \"nixpkgs\";"
   fi
   
-  cat > "$module_dir/default.nix" << EOF
-# $FLAKE_DESCRIPTION
-{
-  # Define ${FLAKE_NAME} inputs
-  inputs = {
-    ${FLAKE_NAME} = {
-      url = "${FLAKE_URL}";
-${not_flake_line}
-${follows_nixpkgs_line}
-    };
-  };
+  flake_def="$flake_def\n    };"
   
-  # Define the output function that creates the module
-  outputs = inputs@{ ${FLAKE_NAME}, ... }: {
-    # This function returns a NixOS module
-    module = { config, pkgs, lib, ... }: {
-      # Your module configuration goes here
-      # For example:
-      # imports = [ ${FLAKE_NAME}.nixosModules.default ];
-      
-      # Or direct configuration:
-      # programs.${FLAKE_NAME}.enable = true;
-    };
-    
-    # Expose any other useful outputs from the flake
-    # nixosModules = ${FLAKE_NAME}.nixosModules or {};
-    # packages = ${FLAKE_NAME}.packages or {};
-  };
+  # Insert the flake input definition before the closing } of the inputs section
+  awk -v flake_def="$flake_def" '
+    /^  inputs = {/,/^  };/ {
+      if (/^  };/) {
+        print flake_def
+        print $0
+        next
+      }
+    }
+    {print}
+  ' "$flake_nix" > "$temp_file"
+  
+  # Replace the original file with the modified content
+  mv "$temp_file" "$flake_nix"
+  
+  echo_success "Added $FLAKE_NAME to flake.nix inputs"
+  
+  # Create a module example if module path is provided
+  if [[ -n "$MODULE_PATH" ]]; then
+    create_module
+  else
+    echo_info "Now add the module to your flake outputs:"
+    echo ""
+    echo_code "outputs = { self, nixpkgs, $FLAKE_NAME, ... }@inputs:"
+    echo_code "  let"
+    echo_code "    # Create module for $FLAKE_NAME"
+    echo_code "    ${FLAKE_NAME}Module = {"
+    echo_code "      module = { config, ... }: {"
+    echo_code "        imports = [ ./path/to/your/module.nix ];"
+    echo_code "        _module.args.${FLAKE_NAME} = $FLAKE_NAME;"
+    echo_code "      };"
+    echo_code "    };"
+    echo_code "  in {"
+    echo_code "    # Add to modules list"
+    echo_code "    nixosConfigurations.nixos = lib.nixosSystem {"
+    echo_code "      modules = ["
+    echo_code "        # ..."
+    echo_code "        ${FLAKE_NAME}Module.module"
+    echo_code "      ];"
+    echo_code "    };"
+    echo_code "  };"
+  fi
+}
+
+create_module() {
+  echo_info "Creating module for $FLAKE_NAME at $MODULE_PATH"
+  
+  # Create directory if it doesn't exist
+  mkdir -p "$(dirname "$MODULE_PATH")"
+  
+  # Create the module file
+  cat > "$MODULE_PATH" << EOF
+{ config, pkgs, lib, $FLAKE_NAME ? null, ... }:
+
+# ${FLAKE_DESCRIPTION:-Module for $FLAKE_NAME}
+{
+  # Your configuration for $FLAKE_NAME goes here
+  # Example:
+  # programs.$FLAKE_NAME.enable = true;
 }
 EOF
+
+  echo_success "Created module at $MODULE_PATH"
   
-  echo_success "Created flake module in $module_dir/default.nix"
-  echo_info "Now you need to:"
-  echo "  1. Edit the module to configure how it should be used"
-  echo "  2. Update your main flake.nix to include this module"
+  echo_info "Now add the module to your flake outputs:"
   echo ""
-  echo_code "inputs = {"
-  echo_code "  # ...existing inputs"
-  echo_code "  ${FLAKE_NAME} = (import ./flakes/${FLAKE_NAME}).inputs.${FLAKE_NAME};"
-  echo_code "};"
-  echo ""
-  echo_code "outputs = { self, nixpkgs, ... }@inputs: "
+  echo_code "outputs = { self, nixpkgs, $FLAKE_NAME, ... }@inputs:"
   echo_code "  let"
-  echo_code "    # ...existing setup"
-  echo_code "    ${FLAKE_NAME}Module = (import ./flakes/${FLAKE_NAME}).outputs inputs;"
+  echo_code "    # Create module for $FLAKE_NAME"
+  echo_code "    ${FLAKE_NAME}Module = {"
+  echo_code "      module = { config, ... }: {"
+  echo_code "        imports = [ $MODULE_PATH ];"
+  echo_code "        _module.args.${FLAKE_NAME} = $FLAKE_NAME;"
+  echo_code "      };"
+  echo_code "    };"
   echo_code "  in {"
+  echo_code "    # Add to modules list"
   echo_code "    nixosConfigurations.nixos = lib.nixosSystem {"
-  echo_code "      # ...existing config"
   echo_code "      modules = ["
-  echo_code "        # ...existing modules"
+  echo_code "        # ..."
   echo_code "        ${FLAKE_NAME}Module.module"
   echo_code "      ];"
   echo_code "    };"
   echo_code "  };"
+}
+
+# Parse command line arguments
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    -n|--name) FLAKE_NAME="$2"; shift ;;
+    -u|--url) FLAKE_URL="$2"; shift ;;
+    -d|--description) FLAKE_DESCRIPTION="$2"; shift ;;
+    -m|--module) MODULE_PATH="$2"; shift ;;
+    -f|--follows-nixpkgs) FLAKE_NIXPKGS_FOLLOWS=true ;;
+    -N|--not-a-flake) NOT_A_FLAKE=true ;;
+    -h|--help) print_usage; exit 0 ;;
+    *) echo_error "Unknown parameter: $1"; print_usage; exit 1 ;;
+  esac
+  shift
+done
+
+# Validate and process inputs
+validate_inputs
+add_flake_to_inputs
 }
 
 # Parse command line arguments

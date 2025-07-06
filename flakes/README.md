@@ -1,64 +1,58 @@
-# Modular Flakes for NixOS Configuration
+# Flake Templates for NixOS Configuration
 
-This directory contains modular flake components that are composed in the main `flake.nix`.
+This directory contains template files for flake modules that can be used to extend your NixOS configuration.
 
 ## Structure
 
-Each subdirectory represents a separate flake input and its corresponding NixOS module:
+The directory is organized as follows:
 
 ```nix
 flakes/
-├── unixkit/         # Custom Unix utilities
-│   └── default.nix  # Defines inputs and outputs
 └── templates/       # Templates for new flake modules
     └── generic-flake.nix
 ```
 
-## How It Works
+## Simplified Approach
 
-Each module exports two functions:
+We now use a more direct approach for flake inputs in the main `flake.nix` file:
 
-- `inputs`: Defines the flake inputs required by the module
-- `outputs`: Creates the actual NixOS module using those inputs
+1. Define inputs directly in the main flake.nix
+2. Pass them to modules via specialArgs or _module.args
+3. Use the module pattern shown in the templates as a reference
 
-The main `flake.nix` imports and composes these modules, avoiding duplication and keeping the configuration clean.
+## Adding a New Flake Input
 
-## Adding a New Flake Module
+To add a new flake input, follow these steps:
 
-1. Create a new directory for your module:
-
-   ```bash
-   mkdir -p flakes/new-module
-   ```
-
-2. Copy the template:
-
-   ```bash
-   cp flakes/templates/generic-flake.nix flakes/new-module/default.nix
-   ```
-
-3. Edit the new `default.nix` to define your flake inputs and outputs.
-
-4. Update the main `flake.nix`:
+1. Add the input directly to your main flake.nix:
 
    ```nix
    inputs = {
-     # ...existing inputs
-     new-module = (import ./flakes/new-module).inputs.new-module;
+     # Existing inputs
+     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+     
+     # New input
+     new-input = {
+       url = "github:owner/repo";
+       flake = true; # or false for non-flake repos
+     };
    };
-   
-   outputs = { self, nixpkgs, ... }@inputs: 
+   ```
+
+2. Create a module that uses the input:
+
+   ```nix
+   outputs = { self, nixpkgs, new-input, ... }@inputs: 
      let
-       # ...existing setup
-       newModuleModule = (import ./flakes/new-module).outputs inputs;
-     in {
-       nixosConfigurations.nixos = lib.nixosSystem {
-         # ...existing config
-         modules = [
-           # ...existing modules
-           newModuleModule.module
-         ];
+       # Create a module that passes the input to your config
+       newInputModule = {
+         module = { config, ... }: {
+           imports = [ ./path/to/module.nix ];
+           _module.args.newInput = new-input;
+         };
        };
+     in {
+       # Rest of your flake output
      };
    ```
 
