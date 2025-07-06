@@ -46,6 +46,7 @@ show_help() {
     echo "  backup              Create a backup of the current system configuration"
     echo "  flake-init          Initialize flake configuration"
     echo "  flake-update        Update flake inputs"
+    echo "  add-flake           Add a new flake module to the configuration"
     echo "  help                Show this help message"
     echo ""
 }
@@ -170,21 +171,13 @@ init_flake() {
     
     cat > "$REPO_ROOT/flake.nix" << 'EOF'
 {
-  description = "NixOS configuration with Hyprland";
+  description = "NixOS configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    
-    # Optional useful inputs
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    
-    hyprland.url = "github:hyprwm/Hyprland";
   };
 
-  outputs = { self, nixpkgs, home-manager, hyprland, ... }@inputs:
+  outputs = { self, nixpkgs, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -208,16 +201,7 @@ init_flake() {
             # Core configuration
             ./configuration.nix
             
-            # Import Hyprland flake's NixOS modules
-            hyprland.nixosModules.default
-            
-            # Optional: Home Manager configuration
-            # home-manager.nixosModules.home-manager
-            # {
-            #   home-manager.useGlobalPkgs = true;
-            #   home-manager.useUserPackages = true;
-            #   home-manager.users.nikmen = import ./home-manager/nikmen.nix;
-            # }
+            # Add more modules here if needed
           ];
         };
       };
@@ -267,6 +251,16 @@ update_flake() {
     echo -e "  sudo nixos-rebuild switch --flake \"$REPO_ROOT#nixos\""
 }
 
+# Function to add a flake module
+add_flake() {
+    echo -e "${BLUE}Adding new flake module...${NC}"
+    
+    # Pass all arguments to the add-flake.sh script
+    "$SCRIPT_DIR/add-flake.sh" "$@"
+    
+    echo -e "${YELLOW}Don't forget to update your flake.nix to include the new module!${NC}"
+}
+
 # Main script logic
 case "$1" in
     install)
@@ -289,6 +283,10 @@ case "$1" in
         ;;
     flake-update)
         update_flake
+        ;;
+    add-flake)
+        shift  # Remove the 'add-flake' argument
+        add_flake "$@"  # Pass remaining arguments
         ;;
     help|--help|-h)
         show_help
