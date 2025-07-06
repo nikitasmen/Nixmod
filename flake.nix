@@ -5,14 +5,16 @@
     # Base inputs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     
-    # Import flake inputs from modules
     # UnixKit module inputs
-    unixkit = (import ./flakes/unixkit).inputs.unixkit;
+    unixkit = {
+      url = "github:nikitasmen/UnixKit";
+      flake = false;
+    };
     
     # You can add more modular inputs here
   };
 
-  outputs = { self, nixpkgs, ... }@inputs: 
+  outputs = { self, nixpkgs, unixkit, ... }@inputs: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -23,8 +25,13 @@
       };
       lib = nixpkgs.lib;
       
-      # Import module outputs
-      unixkitModule = (import ./flakes/unixkit).outputs inputs;
+      # Create UnixKit module directly
+      unixkitModule = {
+        module = { config, ... }: {
+          imports = [ ./unixkit.nix ];
+          _module.args.unixkit = unixkit;
+        };
+      };
       
     in {
       nixosConfigurations.nixos = lib.nixosSystem {
