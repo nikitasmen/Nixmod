@@ -1,2 +1,5 @@
 # Dont trach results folder
 results/
+
+#ignore all .lock files
+*.lock
