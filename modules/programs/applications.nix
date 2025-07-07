@@ -35,5 +35,8 @@
         
     # Screenshots
     flameshot
+
+    # ScreenSaver
+    pipes-rs
   ];
 }
