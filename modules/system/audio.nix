@@ -17,6 +17,7 @@
   environment.systemPackages = with pkgs; [
     pavucontrol  # Sound control panel
     playerctl    # Music player controller
+    cava         # Audio Visualizer
   ];
   
   # Bluetooth configuration
