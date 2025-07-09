@@ -23,7 +23,9 @@
     tree         # Directory display
     findutils    # File search utilities
     coreutils    # Basic utilities
-    xclip        # Clipboard controll
+    # xclip      # Clipboard controll X11 based
+    wl-clipboard # Clipboard controll Waylad based
+    clipse       # Clipboard manager 
     scc          # Code counter
   ];
 }
