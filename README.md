@@ -76,7 +76,14 @@ The flakes-based approach ensures you always get the latest UnixKit tools:
    sudo nixos-rebuild switch --flake .#nixos
    ```
 
-3. Update everything to latest versions (including UnixKit):
+3. Manually set up your user configurations (optional):
+   ```bash
+   # Example: copying Hyprland configuration to your home directory
+   mkdir -p ~/.config/hyprland
+   cp -r ./extConfig/hyprland/* ~/.config/hyprland/
+   ```
+
+4. Update everything to latest versions (including UnixKit):
    ```bash
    # Update all flake inputs to their latest versions
    nix flake update
@@ -88,10 +95,26 @@ The flakes-based approach ensures you always get the latest UnixKit tools:
 ## Customization
 
 The configuration is highly modular:
+
 - Modify waybar appearance in [style.css](extConfig/waybar/style.css)
 - Adjust Hyprland settings in [hyprland.conf](extConfig/hyprland/hyprland.conf)
 - Change terminal behavior in [kitty.conf](extConfig/kitty/kitty.conf)
 - Customize system information display with [neofetch config](extConfig/neofetch/config.conf)
+
+### Managing Configuration Files
+
+All application configurations are stored in the `extConfig/` directory. These are **not** automatically installed by NixOS and need to be managed separately.
+
+**Note:** The `extConfig/` directory is intentionally excluded from the NixOS system configuration. You'll need to manually copy or symlink these files to your `~/.config` directory as needed.
+
+Example:
+```bash
+# Manual symlink for a specific config
+ln -sf /path/to/nixmod/extConfig/hyprland ~/.config/hyprland
+
+# Or copy configuration files
+cp -r /path/to/nixmod/extConfig/kitty ~/.config/
+```
 
 ## Using UnixKit Tools
 
