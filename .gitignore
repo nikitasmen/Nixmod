@@ -1,5 +1,13 @@
 # Dont trach results folder
 results/
 
+# User-specific configuration files (to prevent accidental commits)
+# These should be manually managed by each user
+extConfig/**/*.local
+extConfig/**/*.user
+extConfig/**/*.bak
+extConfig/**/*~
+extConfig/**/secrets*
+
 #ignore all .lock files
 *.lock

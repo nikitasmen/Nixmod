@@ -47,6 +47,7 @@ show_help() {
     echo "  flake-init          Initialize flake configuration"
     echo "  flake-update        Update flake inputs"
     echo "  add-flake           Add a new flake module to the configuration"
+    echo "  update-unixkit      Update UnixKit to latest commit and rebuild system"
     echo "  help                Show this help message"
     echo ""
 }
@@ -70,10 +71,14 @@ install_config() {
         echo -e "${GREEN}Backup created at $BACKUP_DIR${NC}"
     fi
     
-    # Copy configuration files
+    # Copy configuration files (excluding extConfig directory)
     echo -e "${BLUE}Copying configuration files...${NC}"
     mkdir -p /etc/nixos
-    cp -r "$REPO_ROOT"/* /etc/nixos/
+    
+    # Use rsync to exclude extConfig directory
+    rsync -a --exclude='extConfig/' "$REPO_ROOT/" /etc/nixos/
+    
+    # Ensure hardware configuration is copied
     cp "$REPO_ROOT/hardware-configuration.nix" /etc/nixos/
     
     # Apply the configuration
@@ -261,6 +266,14 @@ add_flake() {
     echo -e "${YELLOW}Don't forget to update your flake.nix to include the new module!${NC}"
 }
 
+# Function to update UnixKit to latest commit
+update_unixkit() {
+    echo -e "${BLUE}Updating UnixKit to latest commit...${NC}"
+    
+    # Execute the update-unixkit.sh script
+    "$SCRIPT_DIR/update-unixkit.sh"
+}
+
 # Main script logic
 case "$1" in
     install)
@@ -287,6 +300,9 @@ case "$1" in
     add-flake)
         shift  # Remove the 'add-flake' argument
         add_flake "$@"  # Pass remaining arguments
+        ;;
+    update-unixkit)
+        update_unixkit
         ;;
     help|--help|-h)
         show_help
