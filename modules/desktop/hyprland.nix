@@ -31,7 +31,7 @@
     mako         # Notification daemon
     grim         # Screenshot utility (backend)
     slurp        # Area selection for screenshots
-    eww          # Widget system
+    #eww          # Widget system
     #jq           # Command-line JSON processor
   ];
 }
