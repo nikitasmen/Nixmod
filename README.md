@@ -154,4 +154,6 @@ You can add your own scripts to the `scripts/` directory, and they'll be availab
 ![image](https://github.com/user-attachments/assets/49d490d7-0cd4-4823-a911-9ca77b2f0ce0)
 
 ![image](https://github.com/user-attachments/assets/f8c25395-2a8a-4e65-a461-802c2fc422da)
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/5523ae28-f98a-4bb9-9262-dc831d20e746" />
+
 
