@@ -62,43 +62,6 @@ clean_system() {
     echo -e "\n${GREEN}System cleaned successfully!${NC}"
 }
 
-# Function to sync dotfiles
-sync_dotfiles() {
-    echo -e "${BLUE}Syncing Dotfiles${NC}"
-    echo -e "${BLUE}--------------${NC}"
-    
-    # Create config directories if they don't exist
-    mkdir -p "$REPO_ROOT/extConfig/hyprland"
-    mkdir -p "$REPO_ROOT/extConfig/waybar"
-    mkdir -p "$REPO_ROOT/extConfig/kitty"
-    mkdir -p "$REPO_ROOT/extConfig/wofi"
-    
-    # Sync Hyprland configs
-    if [ -d "$HOME/.config/hyprland" ]; then
-        echo -e "\n${BLUE}Syncing Hyprland configs...${NC}"
-        cp -rv "$HOME/.config/hyprland/"* "$REPO_ROOT/extConfig/hyprland/"
-    fi
-    
-    # Sync Waybar configs
-    if [ -d "$HOME/.config/waybar" ]; then
-        echo -e "\n${BLUE}Syncing Waybar configs...${NC}"
-        cp -rv "$HOME/.config/waybar/"* "$REPO_ROOT/extConfig/waybar/"
-    fi
-    
-    # Sync Kitty configs
-    if [ -d "$HOME/.config/kitty" ]; then
-        echo -e "\n${BLUE}Syncing Kitty configs...${NC}"
-        cp -rv "$HOME/.config/kitty/"* "$REPO_ROOT/extConfig/kitty/"
-    fi
-    
-    # Sync Wofi configs
-    if [ -d "$HOME/.config/wofi" ]; then
-        echo -e "\n${BLUE}Syncing Wofi configs...${NC}"
-        cp -rv "$HOME/.config/wofi/"* "$REPO_ROOT/extConfig/wofi/"
-    fi
-    
-    echo -e "\n${GREEN}Dotfiles synced successfully!${NC}"
-}
 
 # Function to create a new module
 create_module() {
@@ -187,10 +150,7 @@ case "$1" in
     clean)
         clean_system
         ;;
-    sync-dotfiles)
-        sync_dotfiles
-        ;;
-    create-module)
+   create-module)
         create_module "$2"
         ;;
     *)
@@ -199,7 +159,6 @@ case "$1" in
         echo "Commands:"
         echo "  health              Check system health"
         echo "  clean               Clean the Nix store and remove old generations"
-        echo "  sync-dotfiles       Sync dotfiles from your home directory to the repo"
         echo "  create-module NAME  Create a new module template"
         exit 1
         ;;
