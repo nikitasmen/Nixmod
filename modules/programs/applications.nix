@@ -16,7 +16,7 @@
     spotify
     spicetify-cli
     freetube
-    stremio
+    # stremio #Insecure dependencies
     
     # Communication
     webcord
