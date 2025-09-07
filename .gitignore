@@ -9,5 +9,13 @@ extConfig/**/*.bak
 extConfig/**/*~
 extConfig/**/secrets*
 
+# App specific run data
+extConfig/clipse/clipboard_history.json
+extConfig/clipse/clipse.log
+extConfig/clipse/tmp_files/*
+
+extConfig/hypr/last_wallpaper.txt
+
 #ignore all .lock files
 *.lock
+
