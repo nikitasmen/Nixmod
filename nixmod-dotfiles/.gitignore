@@ -1,0 +1,32 @@
+# Backup files created by scripts
+*.backup.*
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+*~
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Log files
+*.log
+
+# Cache directories
+.cache/
+*.cache
+
+# User-specific files that shouldn't be shared
+hyprland/last_wallpaper.txt
