@@ -62,45 +62,12 @@ cd nixmod-dotfiles
 ./scripts/update-paths.sh /home/yourusername
 ```
 
-## 🔄 **Migration from Old Structure**
-
-If you're currently using the old combined structure, you can migrate to the new separated structure:
-
-### **Option 1: Use Migration Script (Recommended)**
-
-```bash
-# Run the migration script
-chmod +x migrate-to-separate-repos.sh
-./migrate-to-separate-repos.sh
-
-# Follow the instructions to initialize Git repositories
-```
-
-### **Option 2: Manual Migration**
-
-1. **Clone the new repositories**:
-   ```bash
-   git clone https://github.com/yourusername/nixmod-system.git
-   git clone https://github.com/yourusername/nixmod-dotfiles.git ~/.config/dotfiles
-   ```
-
-2. **Update your system**:
-   ```bash
-   cd nixmod-system
-   sudo ./toolkit/nixmod.sh update
-   ```
-
-3. **Install dotfiles**:
-   ```bash
-   cd ~/.config/dotfiles
-   ./install.sh
-   ```
 
 ## 📚 **Documentation**
 
 - **[System Configuration](nixmod-system/README.md)** - NixOS system setup and management
 - **[User Dotfiles](nixmod-dotfiles/README.md)** - Application configurations and theming
-- **[Migration Guide](SEPARATION_GUIDE.md)** - How to migrate from the old structure
+- **[Toolkit](toolkit/README.md)** - Management scripts and utilities
 
 ## ✨ Features
 
@@ -131,61 +98,6 @@ chmod +x migrate-to-separate-repos.sh
 - **Animations**: Smooth transitions and effects
 - **Keybindings**: Intuitive keyboard shortcuts
 
-## 🚀 **Legacy Installation (Old Structure)**
-
-> **Note**: This is the old installation method. We recommend using the new separated structure above.
-
-### Prerequisites
-- NixOS system (or NixOS Live USB)
-- Basic knowledge of NixOS and Linux
-- Git installed
-
-### Installation
-
-#### Method 1: Flakes (Recommended)
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/nixmod.git
-cd nixmod
-
-# Build and activate the configuration
-sudo nixos-rebuild switch --flake .#nixos
-
-# Set up user configurations
-./toolkit/setup-configs.sh
-```
-
-#### Method 2: Traditional NixOS
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/nixmod.git
-cd nixmod
-
-# Use the installation script
-sudo ./toolkit/nixmod.sh install
-
-# Rebuild the system
-sudo nixos-rebuild switch
-```
-
-### Post-Installation Setup
-
-1. **Configure User Settings**:
-   ```bash
-   # Copy configuration files to your home directory
-   ./toolkit/setup-configs.sh
-   ```
-
-2. **Customize Paths**:
-   - Update wallpaper paths in `extConfig/hypr/hyprlock.conf`
-   - Modify user-specific paths in configuration files
-
-3. **First Boot**:
-   - Log in with your user account
-   - Hyprland will start automatically
-   - Use `Super + D` to open the application launcher
 
 ## 📁 **Current Project Structure**
 
@@ -284,53 +196,27 @@ toolkit/
 └── update-unixkit.sh            # UnixKit updates
 ```
 
-## 📁 **Legacy Project Structure (Old)**
-
-> **Note**: This is the old combined structure. The new separated structure is recommended.
-
-```
-nixmod/
-├── nixmod-system/                # NixOS system configuration
-│   ├── flake.nix                 # Nix flake configuration
-│   ├── configuration.nix         # Main system configuration
-│   ├── hardware-configuration.nix # Hardware-specific settings
-│   ├── nvidia-configuration.nix  # NVIDIA driver configuration
-│   └── unixkit.nix               # UnixKit integration
-├── modules/                      # Modular configuration components
-│   ├── desktop/                  # Desktop environment modules
-│   ├── programs/                 # Application configurations
-│   ├── system/                   # System-level configurations
-│   └── users/                    # User management
-├── extConfig/                    # Application configuration files
-│   ├── hypr/                     # Hyprland and related tools
-│   ├── waybar/                   # Status bar configuration
-│   ├── kitty/                    # Terminal configuration
-│   └── ...                       # Other application configs
-├── toolkit/                      # Management and utility scripts
-└── overlays/                     # Custom package overlays
-```
-
 ## 🔧 Configuration
 
 ### Core Components
 
 | Component | Description | Configuration File |
 |-----------|-------------|-------------------|
-| **Hyprland** | Wayland compositor | `extConfig/hypr/hyprland.conf` |
-| **Waybar** | Status bar | `extConfig/waybar/config` |
-| **Kitty** | Terminal emulator | `extConfig/kitty/kitty.conf` |
-| **Wofi** | Application launcher | `extConfig/wofi/config` |
-| **Hyprlock** | Lock screen | `extConfig/hypr/hyprlock.conf` |
+| **Hyprland** | Wayland compositor | `nixmod-dotfiles/hypr/hyprland.conf` |
+| **Waybar** | Status bar | `nixmod-dotfiles/waybar/config` |
+| **Kitty** | Terminal emulator | `nixmod-dotfiles/kitty/kitty.conf` |
+| **Wofi** | Application launcher | `nixmod-dotfiles/wofi/config` |
+| **Hyprlock** | Lock screen | `nixmod-dotfiles/hypr/hyprlock.conf` |
 
 ### Customization Guide
 
 #### Changing Themes
-1. **Waybar Theme**: Edit `extConfig/waybar/style.css`
-2. **Hyprland Colors**: Modify `extConfig/hypr/hyprland.conf`
-3. **Terminal Theme**: Update `extConfig/kitty/theme.conf`
+1. **Waybar Theme**: Edit `nixmod-dotfiles/waybar/style.css`
+2. **Hyprland Colors**: Modify `nixmod-dotfiles/hypr/hyprland.conf`
+3. **Terminal Theme**: Update `nixmod-dotfiles/kitty/theme.conf`
 
 #### Adding Applications
-1. Edit `modules/programs/applications.nix`
+1. Edit `nixmod-system/modules/programs/applications.nix`
 2. Add packages to `environment.systemPackages`
 3. Rebuild: `sudo nixos-rebuild switch --flake .#nixos`
 
@@ -403,36 +289,6 @@ cd nixmod-dotfiles
 ./toolkit/update-unixkit.sh
 ```
 
-## 🛠️ **Legacy Management Tools (Old Structure)**
-
-> **Note**: This is the old management method. The new separated structure is recommended.
-
-### NixMod Toolkit
-
-The `toolkit/` directory contains scripts for managing your configuration:
-
-```bash
-# Main management script
-./toolkit/nixmod.sh [command]
-
-# Available commands:
-# install    - Install configuration
-# update     - Update system
-# test       - Test configuration
-# status     - Show system status
-# backup     - Create backup
-# flake-update - Update flake inputs
-```
-
-### Helper Scripts
-
-```bash
-# System maintenance
-./toolkit/helper.sh health    # Check system health
-./toolkit/helper.sh clean     # Clean Nix store
-./toolkit/helper.sh sync-dotfiles  # Sync configurations
-```
-
 ## 🔄 **Updates (Current Structure)**
 
 ### **Updating System Configuration**
@@ -468,30 +324,6 @@ git pull
 
 # Update UnixKit
 ./update-unixkit.sh
-```
-
-## 🔄 **Legacy Updates (Old Structure)**
-
-> **Note**: This is the old update method. The new separated structure is recommended.
-
-### Updating the System
-
-```bash
-# Update flake inputs (recommended)
-nix flake update
-sudo nixos-rebuild switch --flake .#nixos
-
-# Or use the toolkit
-sudo ./toolkit/nixmod.sh flake-update
-```
-
-### Updating UnixKit
-
-UnixKit is automatically updated when you update flake inputs:
-
-```bash
-nix flake update
-sudo nixos-rebuild switch --flake .#nixos
 ```
 
 ## 🐛 Troubleshooting
@@ -577,5 +409,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Made with ❤️ for the NixOS community**
-
-
