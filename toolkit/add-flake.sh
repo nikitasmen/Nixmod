@@ -44,7 +44,7 @@ validate_inputs() {
 }
 
 add_flake_to_inputs() {
-  local flake_nix="$NIXMOD_ROOT/flake.nix"
+  local flake_nix="$NIXMOD_ROOT/nixmod-system/flake.nix"
   
   echo_info "Adding $FLAKE_NAME to flake.nix inputs"
   

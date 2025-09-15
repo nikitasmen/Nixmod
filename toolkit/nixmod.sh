@@ -78,11 +78,11 @@ install_system() {
     echo -e "${BLUE}Copying system configuration files...${NC}"
     mkdir -p /etc/nixos
     
-    # Copy all system configuration files
-    cp -r "$REPO_ROOT"/* /etc/nixos/
+    # Copy all system configuration files from nixmod-system
+    cp -r "$REPO_ROOT/nixmod-system"/* /etc/nixos/
     
     # Ensure hardware configuration is copied
-    cp "$REPO_ROOT/hardware-configuration.nix" /etc/nixos/
+    cp "$REPO_ROOT/nixmod-system/hardware-configuration.nix" /etc/nixos/
     
     # Apply the configuration
     echo -e "${BLUE}Applying system configuration...${NC}"
@@ -97,9 +97,9 @@ install_system() {
 update_system() {
     echo -e "${BLUE}Updating NixMod system...${NC}"
     
-    if [ -f "$REPO_ROOT/flake.nix" ]; then
+    if [ -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
         echo -e "${BLUE}Updating using flakes...${NC}"
-        cd "$REPO_ROOT" && nixos-rebuild switch --flake ".#nixos"
+        cd "$REPO_ROOT/nixmod-system" && nixos-rebuild switch --flake ".#nixos"
     else
         echo -e "${BLUE}Updating using traditional method...${NC}"
         nixos-rebuild switch
@@ -112,9 +112,9 @@ update_system() {
 test_config() {
     echo -e "${BLUE}Testing NixMod system configuration...${NC}"
     
-    if [ -f "$REPO_ROOT/flake.nix" ]; then
+    if [ -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
         echo -e "${BLUE}Testing using flakes...${NC}"
-        cd "$REPO_ROOT" && nixos-rebuild test --flake ".#nixos"
+        cd "$REPO_ROOT/nixmod-system" && nixos-rebuild test --flake ".#nixos"
     else
         echo -e "${BLUE}Testing using traditional method...${NC}"
         nixos-rebuild test
@@ -242,7 +242,7 @@ sync_dotfiles() {
 
 # Function to initialize flake configuration
 init_flake() {
-    if [ -f "$REPO_ROOT/flake.nix" ]; then
+    if [ -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
         echo -e "${YELLOW}flake.nix already exists. Overwrite? (y/N)${NC}"
         read -r response
         if [[ ! "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
@@ -253,7 +253,7 @@ init_flake() {
     
     echo -e "${BLUE}Creating flake.nix...${NC}"
     
-    cat > "$REPO_ROOT/flake.nix" << 'EOF'
+    cat > "$REPO_ROOT/nixmod-system/flake.nix" << 'EOF'
 {
   description = "NixOS configuration with Hyprland and UnixKit";
 
@@ -309,7 +309,7 @@ init_flake() {
 EOF
 
     echo -e "${BLUE}Creating .gitignore...${NC}"
-    cat > "$REPO_ROOT/.gitignore" << 'EOF'
+    cat > "$REPO_ROOT/nixmod-system/.gitignore" << 'EOF'
 # Nix build artifacts
 result
 result-*
@@ -332,22 +332,22 @@ EOF
 
     echo -e "${GREEN}Flake configuration initialized successfully!${NC}"
     echo -e "${YELLOW}To use the flake configuration, run:${NC}"
-    echo -e "  sudo nixos-rebuild switch --flake \"$REPO_ROOT#nixos\""
+    echo -e "  sudo nixos-rebuild switch --flake \"$REPO_ROOT/nixmod-system#nixos\""
 }
 
 # Function to update flake inputs
 update_flake() {
-    if [ ! -f "$REPO_ROOT/flake.nix" ]; then
+    if [ ! -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
         echo -e "${RED}Error: flake.nix not found. Initialize flakes first with 'flake-init'.${NC}"
         exit 1
     fi
     
     echo -e "${BLUE}Updating flake inputs...${NC}"
-    cd "$REPO_ROOT" && nix flake update
+    cd "$REPO_ROOT/nixmod-system" && nix flake update
     
     echo -e "${GREEN}Flake inputs updated successfully!${NC}"
     echo -e "${YELLOW}To apply the updated inputs, run:${NC}"
-    echo -e "  sudo nixos-rebuild switch --flake \"$REPO_ROOT#nixos\""
+    echo -e "  sudo nixos-rebuild switch --flake \"$REPO_ROOT/nixmod-system#nixos\""
 }
 
 # Function to add a flake module
