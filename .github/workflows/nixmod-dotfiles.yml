@@ -1,15 +1,9 @@
 name: NixMod Dotfiles CI
 
 on:
-  push:
-    branches: ['**']
-  pull_request:
-    branches: ['**']
-    
-# This ensures only one workflow per branch runs at a time
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  workflow_call:
+    secrets:
+      inherit: true
 
 jobs:
   check-scripts:
@@ -20,6 +14,7 @@ jobs:
 
       - name: Test installation script
         run: |
+          cd nixmod-dotfiles
           echo "Testing install.sh..."
           chmod +x install.sh
           ./install.sh help || true
@@ -27,6 +22,7 @@ jobs:
 
       - name: Test sync script
         run: |
+          cd nixmod-dotfiles
           echo "Testing sync.sh..."
           chmod +x sync.sh
           ./sync.sh help || true
@@ -34,6 +30,7 @@ jobs:
 
       - name: Test update-paths script
         run: |
+          cd nixmod-dotfiles
           echo "Testing update-paths.sh..."
           chmod +x scripts/update-paths.sh
           ./scripts/update-paths.sh help || true
@@ -47,11 +44,13 @@ jobs:
 
       - name: Check JSON files
         run: |
+          cd nixmod-dotfiles
           echo "Checking JSON configuration files..."
           find . -name "*.json" -type f -exec echo "Checking {}" \; -exec python3 -m json.tool {} \; || true
 
       - name: Check TOML files
         run: |
+          cd nixmod-dotfiles
           echo "Checking TOML configuration files..."
           # Install toml checker if available
           python3 -m pip install toml || true
@@ -59,6 +58,7 @@ jobs:
 
       - name: Check shell scripts syntax
         run: |
+          cd nixmod-dotfiles
           echo "Checking shell script syntax..."
           find . -name "*.sh" -type f -exec echo "Checking {}" \; -exec bash -n {} \; || true
 
@@ -70,6 +70,7 @@ jobs:
 
       - name: Test dry-run installation
         run: |
+          cd nixmod-dotfiles
           echo "Testing dry-run installation..."
           chmod +x install.sh
           
@@ -90,6 +91,7 @@ jobs:
 
       - name: Check for broken symlinks
         run: |
+          cd nixmod-dotfiles
           echo "Checking for broken symlinks..."
           find . -type l -exec test ! -e {} \; -print || true
           echo "No broken symlinks found"
@@ -102,6 +104,7 @@ jobs:
 
       - name: Validate directory structure
         run: |
+          cd nixmod-dotfiles
           echo "Validating directory structure..."
           
           # Check required files exist
