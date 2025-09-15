@@ -2,9 +2,105 @@
 
 A comprehensive NixOS desktop environment configuration centered around the Hyprland Wayland compositor, featuring modern tooling, beautiful theming, and developer-friendly utilities.
 
+**⚠️ IMPORTANT: This project has been separated into two repositories for better maintainability and user experience.**
+
 [![NixOS](https://img.shields.io/badge/NixOS-23.11-blue.svg)](https://nixos.org/)
 [![Hyprland](https://img.shields.io/badge/Hyprland-Wayland-green.svg)](https://hyprland.org/)
 [![Flakes](https://img.shields.io/badge/Nix-Flakes-orange.svg)](https://nixos.wiki/wiki/Flakes)
+
+## 📁 **Current Repository Structure**
+
+This project is organized into separate components for better maintainability:
+
+### **🔧 nixmod-system/** - NixOS System Configuration
+- **Purpose**: System-level NixOS configuration
+- **Scope**: Packages, services, system settings, hardware configuration
+- **Target**: `/etc/nixos/` directory
+- **Management**: NixOS rebuild commands
+
+### **🎨 nixmod-dotfiles/** - User Configuration Files
+- **Purpose**: User application configurations
+- **Scope**: `.config` files, themes, application settings
+- **Target**: `~/.config/` directory
+- **Management**: Symlink-based deployment
+
+### **🛠️ toolkit/** - Management Scripts
+- **Purpose**: Installation and maintenance utilities
+- **Scope**: Scripts for system management, configuration deployment
+- **Target**: Local system management
+- **Management**: Direct script execution
+
+### **📦 flakes/** - Nix Flake Templates
+- **Purpose**: Flake templates and documentation
+- **Scope**: Reusable flake patterns and examples
+- **Target**: Development and customization
+- **Management**: Template usage and customization
+
+## 🚀 **Quick Start (Current Structure)**
+
+### **1. Install System Configuration**
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/nixmod.git
+cd nixmod
+
+# Install the system configuration
+sudo ./toolkit/nixmod.sh install
+```
+
+### **2. Install User Dotfiles**
+```bash
+# Install user configurations
+cd nixmod-dotfiles
+./install.sh
+```
+
+### **3. Update Paths (if needed)**
+```bash
+# Update hardcoded paths for your username
+cd nixmod-dotfiles
+./scripts/update-paths.sh /home/yourusername
+```
+
+## 🔄 **Migration from Old Structure**
+
+If you're currently using the old combined structure, you can migrate to the new separated structure:
+
+### **Option 1: Use Migration Script (Recommended)**
+
+```bash
+# Run the migration script
+chmod +x migrate-to-separate-repos.sh
+./migrate-to-separate-repos.sh
+
+# Follow the instructions to initialize Git repositories
+```
+
+### **Option 2: Manual Migration**
+
+1. **Clone the new repositories**:
+   ```bash
+   git clone https://github.com/yourusername/nixmod-system.git
+   git clone https://github.com/yourusername/nixmod-dotfiles.git ~/.config/dotfiles
+   ```
+
+2. **Update your system**:
+   ```bash
+   cd nixmod-system
+   sudo ./toolkit/nixmod.sh update
+   ```
+
+3. **Install dotfiles**:
+   ```bash
+   cd ~/.config/dotfiles
+   ./install.sh
+   ```
+
+## 📚 **Documentation**
+
+- **[System Configuration](nixmod-system/README.md)** - NixOS system setup and management
+- **[User Dotfiles](nixmod-dotfiles/README.md)** - Application configurations and theming
+- **[Migration Guide](SEPARATION_GUIDE.md)** - How to migrate from the old structure
 
 ## ✨ Features
 
@@ -35,7 +131,9 @@ A comprehensive NixOS desktop environment configuration centered around the Hypr
 - **Animations**: Smooth transitions and effects
 - **Keybindings**: Intuitive keyboard shortcuts
 
-## 🚀 Quick Start
+## 🚀 **Legacy Installation (Old Structure)**
+
+> **Note**: This is the old installation method. We recommend using the new separated structure above.
 
 ### Prerequisites
 - NixOS system (or NixOS Live USB)
@@ -89,15 +187,123 @@ sudo nixos-rebuild switch
    - Hyprland will start automatically
    - Use `Super + D` to open the application launcher
 
-## 📁 Project Structure
+## 📁 **Current Project Structure**
+
+### **System Configuration (`nixmod-system/`)**
+```
+nixmod-system/
+├── README.md                     # System configuration documentation
+├── flake.nix                     # Nix flake configuration
+├── configuration.nix             # Main system configuration
+├── hardware-configuration.nix    # Hardware-specific settings
+├── nvidia-configuration.nix      # NVIDIA driver configuration
+├── unixkit.nix                   # UnixKit integration
+├── playwrightConfig.nix          # Playwright configuration
+├── modules/                      # Modular configuration components
+│   ├── desktop/                  # Desktop environment modules
+│   │   ├── hyprland.nix         # Hyprland configuration
+│   │   └── terminals.nix        # Terminal configurations
+│   ├── programs/                 # Application configurations
+│   │   ├── applications.nix     # General applications
+│   │   └── development.nix      # Development tools
+│   ├── system/                   # System-level configurations
+│   │   ├── audio.nix            # Audio system
+│   │   ├── boot.nix             # Boot configuration
+│   │   ├── fonts.nix            # Font configuration
+│   │   ├── locale.nix           # Locale settings
+│   │   ├── networking.nix       # Network configuration
+│   │   └── power.nix            # Power management
+│   └── users/                    # User management
+│       └── nikmen.nix           # User configuration
+├── overlays/                     # Custom package overlays
+│   └── flameshot.nix            # Flameshot overlay
+└── README.md                     # Module documentation
+```
+
+### **User Dotfiles (`nixmod-dotfiles/`)**
+```
+nixmod-dotfiles/
+├── README.md                     # Dotfiles documentation
+├── install.sh                    # Installation script
+├── sync.sh                       # Synchronization script
+├── hypr/                         # Hyprland ecosystem
+│   ├── hyprland.conf            # Main Hyprland config
+│   ├── hypridle.conf            # Idle management
+│   ├── hyprlock.conf            # Lock screen
+│   ├── hyprpaper.conf           # Wallpaper management
+│   ├── last_wallpaper.txt       # Wallpaper tracking
+│   ├── random-wallpaper.sh      # Wallpaper rotation
+│   └── set-wallpaper.sh         # Wallpaper setting
+├── waybar/                       # Status bar
+│   ├── config                   # Main configuration
+│   ├── style.css                # Custom styling
+│   ├── macchiato.css            # Catppuccin theme
+│   └── scripts/
+│       └── exit_menu.sh         # Exit menu script
+├── kitty/                        # Kitty terminal
+│   ├── kitty.conf               # Main configuration
+│   ├── theme.conf               # Theme settings
+│   ├── splits.conf              # Split configurations
+│   └── custom-hints.conf        # Custom key hints
+├── ghostty/                      # Ghostty terminal
+│   └── config                   # Terminal configuration
+├── wofi/                         # Application launcher
+│   ├── config                   # Main configuration
+│   └── style.css                # Styling
+├── wlogout/                      # Logout menu
+│   ├── layout                   # Layout configuration
+│   └── style.css                # Styling
+├── superfile/                    # File manager
+│   └── superfile/               # Superfile configuration
+│       ├── config.toml          # Main configuration
+│       ├── hotkeys.toml         # Keybindings
+│       └── theme/               # Theme collection
+├── neofetch/                     # System information
+│   ├── config.conf              # Neofetch configuration
+│   ├── asciiLogo.txt            # Custom ASCII art
+│   └── Atom.ascii               # Atom logo
+├── clipse/                       # Clipboard manager
+│   ├── config.json              # Main configuration
+│   └── custom_theme.json        # Custom theme
+├── cava/                         # Audio visualizer
+│   ├── config                   # Main configuration
+│   └── shaders/                 # Custom shaders
+└── scripts/                      # Helper scripts
+    └── update-paths.sh          # Path update utility
+```
+
+### **Management Toolkit (`toolkit/`)**
+```
+toolkit/
+├── README.md                     # Toolkit documentation
+├── nixmod.sh                    # Main management script
+├── helper.sh                    # Helper utilities
+├── add-flake.sh                 # Flake management
+├── install-config.sh            # Configuration installation
+├── set-wallpaper.sh             # Wallpaper management
+└── update-unixkit.sh            # UnixKit updates
+```
+
+### **Flake Templates (`flakes/`)**
+```
+flakes/
+├── README.md                     # Flake documentation
+└── templates/                    # Flake templates
+    └── generic-flake.nix        # Generic flake template
+```
+
+## 📁 **Legacy Project Structure (Old)**
+
+> **Note**: This is the old combined structure. The new separated structure is recommended.
 
 ```
 nixmod/
-├── configuration.nix              # Main system configuration
-├── hardware-configuration.nix     # Hardware-specific settings
-├── nvidia-configuration.nix       # NVIDIA driver configuration
-├── unixkit.nix                   # UnixKit integration
-├── flake.nix                     # Nix flake configuration
+├── nixmod-system/                # NixOS system configuration
+│   ├── flake.nix                 # Nix flake configuration
+│   ├── configuration.nix         # Main system configuration
+│   ├── hardware-configuration.nix # Hardware-specific settings
+│   ├── nvidia-configuration.nix  # NVIDIA driver configuration
+│   └── unixkit.nix               # UnixKit integration
 ├── modules/                      # Modular configuration components
 │   ├── desktop/                  # Desktop environment modules
 │   ├── programs/                 # Application configurations
@@ -144,7 +350,70 @@ nixmod/
 - **Super + 1-9**: Switch workspaces
 - **Super + Shift + 1-9**: Move window to workspace
 
-## 🛠️ Management Tools
+## 🛠️ **Management Tools (Current Structure)**
+
+### **System Configuration Management**
+
+```bash
+# System configuration management
+cd nixmod-system
+sudo ../toolkit/nixmod.sh [command]
+
+# Available commands:
+# install           - Install system configuration
+# update            - Update system
+# test              - Test configuration
+# status            - Show system status
+# backup            - Create backup
+# flake-update      - Update flake inputs
+```
+
+### **User Dotfiles Management**
+
+```bash
+# Dotfiles management
+cd nixmod-dotfiles
+./install.sh [command]
+
+# Available commands:
+# install [CONFIG]  - Install all or specific dotfiles
+# list              - List available configurations
+# update-paths      - Update hardcoded paths
+
+# Synchronization
+./sync.sh [command]
+
+# Available commands:
+# sync [CONFIG]     - Sync all or specific configs
+# list              - List available configurations
+# check             - Check for changes
+```
+
+### **Toolkit Utilities**
+
+```bash
+# Main management script
+./toolkit/nixmod.sh [command]
+
+# Helper utilities
+./toolkit/helper.sh [command]
+
+# Flake management
+./toolkit/add-flake.sh [flake-url] [flake-name]
+
+# Configuration installation
+./toolkit/install-config.sh [config-type]
+
+# Wallpaper management
+./toolkit/set-wallpaper.sh [wallpaper-path]
+
+# UnixKit updates
+./toolkit/update-unixkit.sh
+```
+
+## 🛠️ **Legacy Management Tools (Old Structure)**
+
+> **Note**: This is the old management method. The new separated structure is recommended.
 
 ### NixMod Toolkit
 
@@ -172,7 +441,46 @@ The `toolkit/` directory contains scripts for managing your configuration:
 ./toolkit/helper.sh sync-dotfiles  # Sync configurations
 ```
 
-## 🔄 Updates
+## 🔄 **Updates (Current Structure)**
+
+### **Updating System Configuration**
+
+```bash
+# Update system configuration
+cd nixmod-system
+git pull
+sudo ../toolkit/nixmod.sh update
+
+# Or update flake inputs
+sudo ../toolkit/nixmod.sh flake-update
+```
+
+### **Updating User Dotfiles**
+
+```bash
+# Update dotfiles
+cd nixmod-dotfiles
+git pull
+./install.sh
+
+# Sync changes back to repository
+./sync.sh
+```
+
+### **Updating Toolkit**
+
+```bash
+# Update toolkit scripts
+cd toolkit
+git pull
+
+# Update UnixKit
+./update-unixkit.sh
+```
+
+## 🔄 **Legacy Updates (Old Structure)**
+
+> **Note**: This is the old update method. The new separated structure is recommended.
 
 ### Updating the System
 

@@ -202,7 +202,7 @@ For development environments:
 The NixMod toolkit provides commands for flake management:
 
 ```bash
-# Add a new flake
+# Add a new flake (run from project root)
 ./toolkit/add-flake.sh github:owner/repo my-flake
 
 # Update all flake inputs

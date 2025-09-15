@@ -47,7 +47,7 @@ cd ~/.config/dotfiles
 ./install.sh
 
 # Or install specific configurations
-./install.sh hyprland
+./install.sh hypr
 ./install.sh waybar
 ./install.sh kitty
 ./install.sh ghostty
@@ -67,7 +67,7 @@ git clone https://github.com/yourusername/nixmod-dotfiles.git ~/.config/dotfiles
 cd ~/.config/dotfiles
 
 # Create symlinks manually
-ln -sf ~/.config/dotfiles/hyprland ~/.config/hyprland
+ln -sf ~/.config/dotfiles/hypr ~/.config/hyprland
 ln -sf ~/.config/dotfiles/waybar ~/.config/waybar
 ln -sf ~/.config/dotfiles/kitty ~/.config/kitty
 ln -sf ~/.config/dotfiles/ghostty ~/.config/ghostty
@@ -87,7 +87,7 @@ nixmod-dotfiles/
 ├── install.sh
 ├── sync.sh
 ├── .gitignore
-├── hyprland/                  # Hyprland ecosystem
+├── hypr/                      # Hyprland ecosystem
 │   ├── hyprland.conf         # Main Hyprland config
 │   ├── hypridle.conf         # Idle management
 │   ├── hyprlock.conf         # Lock screen
@@ -162,13 +162,13 @@ nixmod-dotfiles/
 
 | Component | Description | Configuration File |
 |-----------|-------------|-------------------|
-| **Hyprland** | Wayland compositor | `hyprland/hyprland.conf` |
+| **Hyprland** | Wayland compositor | `hypr/hyprland.conf` |
 | **Waybar** | Status bar | `waybar/config` |
 | **Kitty** | Terminal emulator | `kitty/kitty.conf` |
 | **Ghostty** | Terminal emulator | `ghostty/config` |
 | **Wofi** | Application launcher | `wofi/config` |
 | **Wlogout** | Logout menu | `wlogout/layout` |
-| **Hyprlock** | Lock screen | `hyprland/hyprlock.conf` |
+| **Hyprlock** | Lock screen | `hypr/hyprlock.conf` |
 | **Superfile** | File manager | `superfile/superfile/config.toml` |
 | **Neofetch** | System information | `neofetch/config.conf` |
 | **Clipse** | Clipboard manager | `clipse/config.json` |
@@ -178,9 +178,9 @@ nixmod-dotfiles/
 
 #### Changing Themes
 1. **Waybar Theme**: Edit `waybar/style.css`
-2. **Hyprland Colors**: Modify `hyprland/hyprland.conf`
+2. **Hyprland Colors**: Modify `hypr/hyprland.conf`
 3. **Terminal Theme**: Update `kitty/theme.conf`
-4. **Superfile Theme**: Change theme in `superfile/config.toml`
+4. **Superfile Theme**: Change theme in `superfile/superfile/config.toml`
 
 #### Path Customization
 Many configuration files contain hardcoded paths that need to be updated:
@@ -190,8 +190,8 @@ Many configuration files contain hardcoded paths that need to be updated:
 ./scripts/update-paths.sh /home/yourusername
 
 # Or update specific files
-sed -i 's|/home/nikmen/|/home/yourusername/|g' hyprland/hyprland.conf
-sed -i 's|/home/nikmen/|/home/yourusername/|g' hyprland/hyprlock.conf
+sed -i 's|/home/nikmen/|/home/yourusername/|g' hypr/hyprland.conf
+sed -i 's|/home/nikmen/|/home/yourusername/|g' hypr/hyprlock.conf
 ```
 
 #### Keyboard Shortcuts
@@ -211,7 +211,7 @@ sed -i 's|/home/nikmen/|/home/yourusername/|g' hyprland/hyprlock.conf
 ./install.sh
 
 # Install specific configuration
-./install.sh hyprland
+./install.sh hypr
 ./install.sh waybar
 ./install.sh kitty
 ./install.sh ghostty
@@ -230,7 +230,7 @@ sed -i 's|/home/nikmen/|/home/yourusername/|g' hyprland/hyprlock.conf
 ./sync.sh
 
 # Sync specific configuration
-./sync.sh hyprland
+./sync.sh hypr
 ./sync.sh waybar
 ./sync.sh kitty
 ./sync.sh ghostty
@@ -249,7 +249,7 @@ sed -i 's|/home/nikmen/|/home/yourusername/|g' hyprland/hyprlock.conf
 ./scripts/update-paths.sh /home/yourusername
 
 # Update specific paths
-./scripts/update-paths.sh /home/yourusername hyprland
+./scripts/update-paths.sh /home/yourusername hypr
 ./scripts/update-paths.sh /home/yourusername waybar
 ./scripts/update-paths.sh /home/yourusername kitty
 ```
@@ -266,7 +266,7 @@ git pull origin main
 ./install.sh
 
 # Or update specific configurations
-./install.sh hyprland waybar kitty ghostty wofi wlogout superfile neofetch clipse cava
+./install.sh hypr waybar kitty ghostty wofi wlogout superfile neofetch clipse cava
 ```
 
 ### Syncing Changes
