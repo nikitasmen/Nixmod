@@ -284,14 +284,6 @@ toolkit/
 └── update-unixkit.sh            # UnixKit updates
 ```
 
-### **Flake Templates (`flakes/`)**
-```
-flakes/
-├── README.md                     # Flake documentation
-└── templates/                    # Flake templates
-    └── generic-flake.nix        # Generic flake template
-```
-
 ## 📁 **Legacy Project Structure (Old)**
 
 > **Note**: This is the old combined structure. The new separated structure is recommended.
