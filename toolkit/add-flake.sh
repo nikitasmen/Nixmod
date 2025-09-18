@@ -165,17 +165,13 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
-# Validate and process inputs
-validate_inputs
-add_flake_to_inputs
-}
-
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
   case $1 in
     -n|--name) FLAKE_NAME="$2"; shift ;;
     -u|--url) FLAKE_URL="$2"; shift ;;
     -d|--description) FLAKE_DESCRIPTION="$2"; shift ;;
+    -m|--module) MODULE_PATH="$2"; shift ;;
     -f|--follows-nixpkgs) FLAKE_NIXPKGS_FOLLOWS=true ;;
     -N|--not-a-flake) NOT_A_FLAKE=true ;;
     -h|--help) print_usage; exit 0 ;;
@@ -186,4 +182,4 @@ done
 
 # Validate and process inputs
 validate_inputs
-create_flake_module
+add_flake_to_inputs
