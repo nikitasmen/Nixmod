@@ -170,177 +170,25 @@ backup_system() {
 install_dotfiles() {
     echo -e "${BLUE}Installing NixMod dotfiles...${NC}"
     
-    # Check if local dotfiles directory exists
-    if [ ! -d "$REPO_ROOT/nixmod-dotfiles" ]; then
-        echo -e "${RED}Error: nixmod-dotfiles directory not found at $REPO_ROOT/nixmod-dotfiles${NC}"
-        echo -e "${YELLOW}Make sure you're running this from the NixMod repository root.${NC}"
-        exit 1
-    fi
-    
-    # Ensure .config directory exists
-    mkdir -p "$HOME/.config"
-    
-    echo -e "${BLUE}Discovering and creating symlinks for all configurations...${NC}"
-    
-    # Find all directories in nixmod-dotfiles (excluding hidden files and special directories)
-    local config_apps=()
-    while IFS= read -r -d '' dir; do
-        # Get just the directory name (not full path)
-        local dirname=$(basename "$dir")
-        # Skip special directories and hidden files
-        if [[ "$dirname" != "scripts" && "$dirname" != ".git" && ! "$dirname" =~ ^\..*$ ]]; then
-            config_apps+=("$dirname")
-        fi
-    done < <(find "$REPO_ROOT/nixmod-dotfiles" -maxdepth 1 -type d -print0)
-    
-    echo -e "${BLUE}Found ${#config_apps[@]} configuration directories: ${config_apps[*]}${NC}"
-    
-    # Check if any directories were found
-    if [ ${#config_apps[@]} -eq 0 ]; then
-        echo -e "${YELLOW}⚠ No configuration directories found in nixmod-dotfiles${NC}"
-        echo -e "${YELLOW}Make sure the nixmod-dotfiles directory contains configuration folders.${NC}"
-        return 1
-    fi
-    
-    # Create individual symlinks for each discovered application
-    for app in "${config_apps[@]}"; do
-        local source_path="$REPO_ROOT/nixmod-dotfiles/$app"
-        local target_path="$HOME/.config/$app"
-        
-        if [ -d "$source_path" ]; then
-            # Remove existing directory or symlink if it exists
-            if [ -e "$target_path" ] || [ -L "$target_path" ]; then
-                echo -e "${YELLOW}Removing existing $app configuration...${NC}"
-                rm -rf "$target_path"
-            fi
-            
-            # Create symlink
-            echo -e "${BLUE}Linking $app configuration...${NC}"
-            ln -sf "$source_path" "$target_path"
-            
-            if [ -L "$target_path" ] && [ -e "$target_path" ]; then
-                echo -e "${GREEN}✓ $app linked successfully${NC}"
-            else
-                echo -e "${RED}✗ Failed to link $app${NC}"
-            fi
-        else
-            echo -e "${YELLOW}⚠ $app directory not found in nixmod-dotfiles${NC}"
-        fi
-    done
-    
-    echo -e "${GREEN}Dotfiles installed successfully!${NC}"
-    echo -e "${BLUE}Individual application configurations have been symlinked to ~/.config/${NC}"
+    # Use the consolidated dotfiles script
+    "$SCRIPT_DIR/dotfiles.sh" install
 }
 
 # Function to check dotfiles status
 check_dotfiles_status() {
-    echo -e "${BLUE}Dotfiles Status:${NC}"
-    echo -e "${BLUE}----------------${NC}"
-    
-    # Find all directories in nixmod-dotfiles (excluding hidden files and special directories)
-    local config_apps=()
-    while IFS= read -r -d '' dir; do
-        # Get just the directory name (not full path)
-        local dirname=$(basename "$dir")
-        # Skip special directories and hidden files
-        if [[ "$dirname" != "scripts" && "$dirname" != ".git" && ! "$dirname" =~ ^\..*$ ]]; then
-            config_apps+=("$dirname")
-        fi
-    done < <(find "$REPO_ROOT/nixmod-dotfiles" -maxdepth 1 -type d -print0)
-    
-    # Check if any directories were found
-    if [ ${#config_apps[@]} -eq 0 ]; then
-        echo -e "${YELLOW}⚠ No configuration directories found in nixmod-dotfiles${NC}"
-        echo -e "${YELLOW}Make sure the nixmod-dotfiles directory contains configuration folders.${NC}"
-        return 1
-    fi
-    
-    # Check if nixmod-dotfiles source directory exists
-    if [ -d "$REPO_ROOT/nixmod-dotfiles" ]; then
-        echo -e "${GREEN}✓ Source dotfiles directory found at $REPO_ROOT/nixmod-dotfiles${NC}"
-        
-        # Check git status if it's a git repository
-        cd "$REPO_ROOT/nixmod-dotfiles"
-        if [ -d ".git" ]; then
-            if git status --porcelain | grep -q .; then
-                echo -e "${YELLOW}⚠ Uncommitted changes in source directory:${NC}"
-                git status --short
-            else
-                echo -e "${GREEN}✓ No uncommitted changes in source directory${NC}"
-            fi
-        else
-            echo -e "${BLUE}ℹ Source directory is not a git repository${NC}"
-        fi
-    else
-        echo -e "${RED}✗ Source dotfiles directory not found at $REPO_ROOT/nixmod-dotfiles${NC}"
-        echo -e "${YELLOW}Make sure you're running this from the NixMod repository root.${NC}"
-        return 1
-    fi
-    
-    # Check individual application symlinks
-    echo -e "\n${BLUE}Application Symlink Status:${NC}"
-    local linked_count=0
-    local total_count=${#config_apps[@]}
-    
-    for app in "${config_apps[@]}"; do
-        local target_path="$HOME/.config/$app"
-        local source_path="$REPO_ROOT/nixmod-dotfiles/$app"
-        
-        if [ -L "$target_path" ]; then
-            if [ -e "$target_path" ]; then
-                local target=$(readlink "$target_path")
-                if [ "$target" = "$source_path" ]; then
-                    echo -e "${GREEN}✓ $app properly linked to source${NC}"
-                    ((linked_count++))
-                else
-                    echo -e "${YELLOW}⚠ $app linked to different location: $target${NC}"
-                fi
-            else
-                echo -e "${RED}✗ $app broken symlink${NC}"
-            fi
-        elif [ -d "$target_path" ]; then
-            echo -e "${YELLOW}⚠ $app is a directory (not symlinked)${NC}"
-        else
-            echo -e "${RED}✗ $app not found${NC}"
-        fi
-    done
-    
-    echo -e "\n${BLUE}Summary:${NC}"
-    echo -e "${BLUE}Linked: $linked_count/$total_count applications${NC}"
-    
-    if [ $linked_count -eq $total_count ]; then
-        echo -e "${GREEN}✓ All dotfiles are properly linked!${NC}"
-    elif [ $linked_count -gt 0 ]; then
-        echo -e "${YELLOW}⚠ Some dotfiles are not linked. Run 'install-dotfiles' to fix.${NC}"
-    else
-        echo -e "${RED}✗ No dotfiles are linked. Run 'install-dotfiles' to install.${NC}"
-    fi
+    # Use the consolidated dotfiles script
+    "$SCRIPT_DIR/dotfiles.sh" status
 }
 
 # Function to sync dotfiles back to repository
 sync_dotfiles() {
     echo -e "${BLUE}Syncing dotfiles back to repository...${NC}"
     
-    # Check if source dotfiles directory exists
-    if [ ! -d "$REPO_ROOT/nixmod-dotfiles" ]; then
-        echo -e "${RED}Error: Source dotfiles directory not found at $REPO_ROOT/nixmod-dotfiles${NC}"
-        echo -e "${YELLOW}Make sure you're running this from the NixMod repository root.${NC}"
-        exit 1
-    fi
-    
-    cd "$REPO_ROOT/nixmod-dotfiles"
-    
-    # Check if sync.sh exists and is executable
-    if [ -f "./sync.sh" ] && [ -x "./sync.sh" ]; then
-        echo -e "${BLUE}Running sync script...${NC}"
-        ./sync.sh
-        echo -e "${GREEN}Dotfiles synced successfully!${NC}"
-    else
-        echo -e "${YELLOW}sync.sh not found or not executable, skipping sync${NC}"
-    fi
+    # Use the consolidated dotfiles script
+    "$SCRIPT_DIR/dotfiles.sh" sync
     
     # Check if it's a git repository and suggest committing
-    if [ -d ".git" ]; then
+    if [ -d "$REPO_ROOT/nixmod-dotfiles/.git" ]; then
         echo -e "${YELLOW}Don't forget to commit and push your changes.${NC}"
         echo -e "${BLUE}To commit changes:${NC}"
         echo -e "  cd $REPO_ROOT/nixmod-dotfiles"
