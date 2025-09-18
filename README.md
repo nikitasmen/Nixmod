@@ -50,9 +50,8 @@ sudo ./toolkit/nixmod.sh install
 
 ### **2. Install User Dotfiles**
 ```bash
-# Install user configurations
-cd nixmod-dotfiles
-./install.sh
+# Install user configurations from local directory
+sudo ./toolkit/nixmod.sh install-dotfiles
 ```
 
 ### **3. Update Paths (if needed)**
@@ -249,7 +248,12 @@ sudo ../toolkit/nixmod.sh [command]
 ### **User Dotfiles Management**
 
 ```bash
-# Dotfiles management
+# Dotfiles management via toolkit
+sudo ./toolkit/nixmod.sh install-dotfiles    # Install dotfiles from local directory
+sudo ./toolkit/nixmod.sh dotfiles-status     # Check dotfiles status
+sudo ./toolkit/nixmod.sh sync-dotfiles       # Sync changes back to repository
+
+# Direct dotfiles management (alternative)
 cd nixmod-dotfiles
 ./install.sh [command]
 
@@ -306,13 +310,17 @@ sudo ../toolkit/nixmod.sh flake-update
 ### **Updating User Dotfiles**
 
 ```bash
-# Update dotfiles
+# Update dotfiles via toolkit
+sudo ./toolkit/nixmod.sh install-dotfiles
+
+# Or update directly
 cd nixmod-dotfiles
 git pull
 ./install.sh
 
 # Sync changes back to repository
-./sync.sh
+sudo ./toolkit/nixmod.sh sync-dotfiles
+# Or directly: ./sync.sh
 ```
 
 ### **Updating Toolkit**
