@@ -2,9 +2,65 @@
 
 A comprehensive NixOS desktop environment configuration centered around the Hyprland Wayland compositor, featuring modern tooling, beautiful theming, and developer-friendly utilities.
 
+**⚠️ IMPORTANT: This project has been separated into two repositories for better maintainability and user experience.**
+
 [![NixOS](https://img.shields.io/badge/NixOS-23.11-blue.svg)](https://nixos.org/)
 [![Hyprland](https://img.shields.io/badge/Hyprland-Wayland-green.svg)](https://hyprland.org/)
 [![Flakes](https://img.shields.io/badge/Nix-Flakes-orange.svg)](https://nixos.wiki/wiki/Flakes)
+
+## 📁 **Current Repository Structure**
+
+This project is organized into separate components for better maintainability:
+
+### **🔧 nixmod-system/** - NixOS System Configuration
+- **Purpose**: System-level NixOS configuration
+- **Scope**: Packages, services, system settings, hardware configuration
+- **Target**: `/etc/nixos/` directory
+- **Management**: NixOS rebuild commands
+
+### **🎨 nixmod-dotfiles/** - User Configuration Files
+- **Purpose**: User application configurations
+- **Scope**: `.config` files, themes, application settings
+- **Target**: `~/.config/` directory
+- **Management**: Symlink-based deployment via toolkit
+
+### **🛠️ toolkit/** - Management Scripts
+- **Purpose**: Installation and maintenance utilities
+- **Scope**: Scripts for system management, configuration deployment, wallpaper management
+- **Target**: Local system management
+- **Management**: Direct script execution
+
+## 🚀 **Quick Start (Current Structure)**
+
+### **1. Install System Configuration**
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/nixmod.git
+cd nixmod
+
+# Install the system configuration
+sudo ./toolkit/nixmod.sh install
+```
+
+### **2. Install User Dotfiles**
+```bash
+# Install user configurations by creating individual symlinks for all discovered apps
+sudo ./toolkit/nixmod.sh install-dotfiles
+```
+This automatically discovers all configuration directories in `nixmod-dotfiles/` and creates individual symlinks for each one in your `~/.config/` directory.
+
+### **3. Update Paths (if needed)**
+```bash
+# Update hardcoded paths for your username
+./toolkit/dotfiles.sh update-paths /home/yourusername
+```
+
+
+## 📚 **Documentation**
+
+- **[System Configuration](nixmod-system/README.md)** - NixOS system setup and management
+- **[User Dotfiles](nixmod-dotfiles/README.md)** - Application configurations and theming
+- **[Toolkit](toolkit/README.md)** - Management scripts and utilities
 
 ## ✨ Features
 
@@ -35,81 +91,96 @@ A comprehensive NixOS desktop environment configuration centered around the Hypr
 - **Animations**: Smooth transitions and effects
 - **Keybindings**: Intuitive keyboard shortcuts
 
-## 🚀 Quick Start
 
-### Prerequisites
-- NixOS system (or NixOS Live USB)
-- Basic knowledge of NixOS and Linux
-- Git installed
+## 📁 **Current Project Structure**
 
-### Installation
-
-#### Method 1: Flakes (Recommended)
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/nixmod.git
-cd nixmod
-
-# Build and activate the configuration
-sudo nixos-rebuild switch --flake .#nixos
-
-# Set up user configurations
-./toolkit/setup-configs.sh
+### **System Configuration (`nixmod-system/`)**
 ```
-
-#### Method 2: Traditional NixOS
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/nixmod.git
-cd nixmod
-
-# Use the installation script
-sudo ./toolkit/nixmod.sh install
-
-# Rebuild the system
-sudo nixos-rebuild switch
-```
-
-### Post-Installation Setup
-
-1. **Configure User Settings**:
-   ```bash
-   # Copy configuration files to your home directory
-   ./toolkit/setup-configs.sh
-   ```
-
-2. **Customize Paths**:
-   - Update wallpaper paths in `extConfig/hypr/hyprlock.conf`
-   - Modify user-specific paths in configuration files
-
-3. **First Boot**:
-   - Log in with your user account
-   - Hyprland will start automatically
-   - Use `Super + D` to open the application launcher
-
-## 📁 Project Structure
-
-```
-nixmod/
-├── configuration.nix              # Main system configuration
-├── hardware-configuration.nix     # Hardware-specific settings
-├── nvidia-configuration.nix       # NVIDIA driver configuration
-├── unixkit.nix                   # UnixKit integration
+nixmod-system/
+├── README.md                     # System configuration documentation
 ├── flake.nix                     # Nix flake configuration
+├── configuration.nix             # Main system configuration
+├── hardware-configuration.nix    # Hardware-specific settings
+├── nvidia-configuration.nix      # NVIDIA driver configuration
+├── unixkit.nix                   # UnixKit integration
+├── playwrightConfig.nix          # Playwright configuration
 ├── modules/                      # Modular configuration components
 │   ├── desktop/                  # Desktop environment modules
+│   │   ├── hyprland.nix         # Hyprland configuration
+│   │   └── terminals.nix        # Terminal configurations
 │   ├── programs/                 # Application configurations
+│   │   ├── applications.nix     # General applications
+│   │   └── development.nix      # Development tools
 │   ├── system/                   # System-level configurations
+│   │   ├── audio.nix            # Audio system
+│   │   ├── boot.nix             # Boot configuration
+│   │   ├── fonts.nix            # Font configuration
+│   │   ├── locale.nix           # Locale settings
+│   │   ├── networking.nix       # Network configuration
+│   │   └── power.nix            # Power management
 │   └── users/                    # User management
-├── extConfig/                    # Application configuration files
-│   ├── hypr/                     # Hyprland and related tools
-│   ├── waybar/                   # Status bar configuration
-│   ├── kitty/                    # Terminal configuration
-│   └── ...                       # Other application configs
-├── toolkit/                      # Management and utility scripts
-└── overlays/                     # Custom package overlays
+│       └── nikmen.nix           # User configuration
+├── overlays/                     # Custom package overlays
+│   └── flameshot.nix            # Flameshot overlay
+└── README.md                     # Module documentation
+```
+
+### **User Dotfiles (`nixmod-dotfiles/`)**
+```
+nixmod-dotfiles/
+├── README.md                     # Dotfiles documentation
+├── hypr/                         # Hyprland ecosystem
+│   ├── hyprland.conf            # Main Hyprland config
+│   ├── hypridle.conf            # Idle management
+│   ├── hyprlock.conf            # Lock screen
+│   ├── hyprpaper.conf           # Wallpaper management
+│   └── last_wallpaper.txt       # Wallpaper tracking
+├── waybar/                       # Status bar
+│   ├── config                   # Main configuration
+│   ├── style.css                # Custom styling
+│   ├── macchiato.css            # Catppuccin theme
+│   └── scripts/
+│       └── exit_menu.sh         # Exit menu script
+├── kitty/                        # Kitty terminal
+│   ├── kitty.conf               # Main configuration
+│   ├── theme.conf               # Theme settings
+│   ├── splits.conf              # Split configurations
+│   └── custom-hints.conf        # Custom key hints
+├── ghostty/                      # Ghostty terminal
+│   └── config                   # Terminal configuration
+├── wofi/                         # Application launcher
+│   ├── config                   # Main configuration
+│   └── style.css                # Styling
+├── wlogout/                      # Logout menu
+│   ├── layout                   # Layout configuration
+│   └── style.css                # Styling
+├── superfile/                    # File manager
+│   └── superfile/               # Superfile configuration
+│       ├── config.toml          # Main configuration
+│       ├── hotkeys.toml         # Keybindings
+│       └── theme/               # Theme collection
+├── neofetch/                     # System information
+│   ├── config.conf              # Neofetch configuration
+│   ├── asciiLogo.txt            # Custom ASCII art
+│   └── Atom.ascii               # Atom logo
+├── clipse/                       # Clipboard manager
+│   ├── config.json              # Main configuration
+│   └── custom_theme.json        # Custom theme
+└── cava/                         # Audio visualizer
+    ├── config                   # Main configuration
+    └── shaders/                 # Custom shaders
+```
+
+### **Management Toolkit (`toolkit/`)**
+```
+toolkit/
+├── README.md                     # Toolkit documentation
+├── nixmod.sh                    # Main management script
+├── dotfiles.sh                  # Dotfiles management (install, sync, status)
+├── wallpaper.sh                 # Wallpaper management (set, random)
+├── helper.sh                    # Helper utilities
+├── add-flake.sh                 # Flake management
+└── update-unixkit.sh            # UnixKit updates
 ```
 
 ## 🔧 Configuration
@@ -118,21 +189,21 @@ nixmod/
 
 | Component | Description | Configuration File |
 |-----------|-------------|-------------------|
-| **Hyprland** | Wayland compositor | `extConfig/hypr/hyprland.conf` |
-| **Waybar** | Status bar | `extConfig/waybar/config` |
-| **Kitty** | Terminal emulator | `extConfig/kitty/kitty.conf` |
-| **Wofi** | Application launcher | `extConfig/wofi/config` |
-| **Hyprlock** | Lock screen | `extConfig/hypr/hyprlock.conf` |
+| **Hyprland** | Wayland compositor | `nixmod-dotfiles/hypr/hyprland.conf` |
+| **Waybar** | Status bar | `nixmod-dotfiles/waybar/config` |
+| **Kitty** | Terminal emulator | `nixmod-dotfiles/kitty/kitty.conf` |
+| **Wofi** | Application launcher | `nixmod-dotfiles/wofi/config` |
+| **Hyprlock** | Lock screen | `nixmod-dotfiles/hypr/hyprlock.conf` |
 
 ### Customization Guide
 
 #### Changing Themes
-1. **Waybar Theme**: Edit `extConfig/waybar/style.css`
-2. **Hyprland Colors**: Modify `extConfig/hypr/hyprland.conf`
-3. **Terminal Theme**: Update `extConfig/kitty/theme.conf`
+1. **Waybar Theme**: Edit `nixmod-dotfiles/waybar/style.css`
+2. **Hyprland Colors**: Modify `nixmod-dotfiles/hypr/hyprland.conf`
+3. **Terminal Theme**: Update `nixmod-dotfiles/kitty/theme.conf`
 
 #### Adding Applications
-1. Edit `modules/programs/applications.nix`
+1. Edit `nixmod-system/modules/programs/applications.nix`
 2. Add packages to `environment.systemPackages`
 3. Rebuild: `sudo nixos-rebuild switch --flake .#nixos`
 
@@ -144,54 +215,105 @@ nixmod/
 - **Super + 1-9**: Switch workspaces
 - **Super + Shift + 1-9**: Move window to workspace
 
-## 🛠️ Management Tools
+## 🛠️ **Management Tools (Current Structure)**
 
-### NixMod Toolkit
+### **System Configuration Management**
 
-The `toolkit/` directory contains scripts for managing your configuration:
+```bash
+# System configuration management
+cd nixmod-system
+sudo ../toolkit/nixmod.sh [command]
+
+# Available commands:
+# install           - Install system configuration
+# update            - Update system
+# test              - Test configuration
+# status            - Show system status
+# backup            - Create backup
+# flake-update      - Update flake inputs
+```
+
+### **User Dotfiles Management**
+
+```bash
+# Dotfiles management via toolkit
+sudo ./toolkit/nixmod.sh install-dotfiles    # Create individual symlinks for all discovered apps
+sudo ./toolkit/nixmod.sh dotfiles-status     # Check individual symlink status for all apps
+sudo ./toolkit/nixmod.sh sync-dotfiles       # Sync changes back to repository
+
+# Direct dotfiles management
+./toolkit/dotfiles.sh [command]
+
+# Available commands:
+# install [CONFIG]  - Install all or specific dotfiles
+# sync [CONFIG]     - Sync all or specific configs
+# list              - List available configurations
+# status            - Check dotfiles status
+# check             - Check for changes
+# update-paths      - Update hardcoded paths
+```
+
+### **Toolkit Utilities**
 
 ```bash
 # Main management script
 ./toolkit/nixmod.sh [command]
 
-# Available commands:
-# install    - Install configuration
-# update     - Update system
-# test       - Test configuration
-# status     - Show system status
-# backup     - Create backup
-# flake-update - Update flake inputs
+# Dotfiles management
+./toolkit/dotfiles.sh [command]
+
+# Wallpaper management
+./toolkit/wallpaper.sh [command] [wallpaper-path]
+
+# Helper utilities
+./toolkit/helper.sh [command]
+
+# Flake management
+./toolkit/add-flake.sh [options]
+
+# UnixKit updates
+./toolkit/update-unixkit.sh
 ```
 
-### Helper Scripts
+## 🔄 **Updates (Current Structure)**
+
+### **Updating System Configuration**
 
 ```bash
-# System maintenance
-./toolkit/helper.sh health    # Check system health
-./toolkit/helper.sh clean     # Clean Nix store
-./toolkit/helper.sh sync-dotfiles  # Sync configurations
+# Update system configuration
+cd nixmod-system
+git pull
+sudo ../toolkit/nixmod.sh update
+
+# Or update flake inputs
+sudo ../toolkit/nixmod.sh flake-update
 ```
 
-## 🔄 Updates
-
-### Updating the System
+### **Updating User Dotfiles**
 
 ```bash
-# Update flake inputs (recommended)
-nix flake update
-sudo nixos-rebuild switch --flake .#nixos
+# Update dotfiles via toolkit (recreates individual symlinks for all discovered apps)
+sudo ./toolkit/nixmod.sh install-dotfiles
 
-# Or use the toolkit
-sudo ./toolkit/nixmod.sh flake-update
+# Or update directly
+cd nixmod-dotfiles
+git pull
+./toolkit/dotfiles.sh install
+
+# Sync changes back to repository
+sudo ./toolkit/nixmod.sh sync-dotfiles
+# Or directly: ./toolkit/dotfiles.sh sync
 ```
 
-### Updating UnixKit
-
-UnixKit is automatically updated when you update flake inputs:
+### **Updating Toolkit**
 
 ```bash
-nix flake update
-sudo nixos-rebuild switch --flake .#nixos
+# Update toolkit scripts
+cd toolkit
+git pull
+
+# Update UnixKit
+./update-unixkit.sh
 ```
 
 ## 🐛 Troubleshooting
@@ -277,5 +399,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Made with ❤️ for the NixOS community**
-
-

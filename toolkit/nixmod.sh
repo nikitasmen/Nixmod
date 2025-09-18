@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# NixMod Installation Toolkit
-# This script helps install and manage your NixOS configuration
+# NixMod System Configuration Toolkit
+# This script helps install and manage your NixOS system configuration
 
 set -e # Exit on error
 
@@ -18,7 +18,7 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Print header
 echo -e "${BLUE}================================${NC}"
-echo -e "${BLUE}   NixMod Installation Toolkit   ${NC}"
+echo -e "${BLUE}   NixMod System Toolkit        ${NC}"
 echo -e "${BLUE}================================${NC}"
 echo ""
 
@@ -39,7 +39,7 @@ show_help() {
     echo "Usage: $0 [command]"
     echo ""
     echo "Commands:"
-    echo "  install             Install the configuration to the system"
+    echo "  install             Install the system configuration"
     echo "  update              Update the system with the current configuration"
     echo "  test                Test the configuration without applying it"
     echo "  status              Show the current system status"
@@ -48,13 +48,16 @@ show_help() {
     echo "  flake-update        Update flake inputs"
     echo "  add-flake           Add a new flake module to the configuration"
     echo "  update-unixkit      Update UnixKit to latest commit and rebuild system"
+    echo "  install-dotfiles    Install user dotfiles by creating individual symlinks for all discovered apps"
+    echo "  dotfiles-status     Check individual application symlink status for all discovered apps"
+    echo "  sync-dotfiles       Sync changes from source dotfiles directory"
     echo "  help                Show this help message"
     echo ""
 }
 
-# Function to install configuration
-install_config() {
-    echo -e "${BLUE}Installing NixMod configuration...${NC}"
+# Function to install system configuration
+install_system() {
+    echo -e "${BLUE}Installing NixMod system configuration...${NC}"
     
     # Check if hardware configuration exists
     if [ ! -f "/etc/nixos/hardware-configuration.nix" ]; then
@@ -71,45 +74,47 @@ install_config() {
         echo -e "${GREEN}Backup created at $BACKUP_DIR${NC}"
     fi
     
-    # Copy configuration files (excluding extConfig directory)
-    echo -e "${BLUE}Copying configuration files...${NC}"
+    # Copy system configuration files
+    echo -e "${BLUE}Copying system configuration files...${NC}"
     mkdir -p /etc/nixos
     
-    # Use rsync to exclude extConfig directory
-    rsync -a --exclude='extConfig/' "$REPO_ROOT/" /etc/nixos/
+    # Copy all system configuration files from nixmod-system
+    cp -r "$REPO_ROOT/nixmod-system"/* /etc/nixos/
     
     # Ensure hardware configuration is copied
-    cp "$REPO_ROOT/hardware-configuration.nix" /etc/nixos/
+    cp "$REPO_ROOT/nixmod-system/hardware-configuration.nix" /etc/nixos/
     
     # Apply the configuration
-    echo -e "${BLUE}Applying configuration...${NC}"
-    nixos-rebuild switch
+    echo -e "${BLUE}Applying system configuration...${NC}"
+    nixos-rebuild switch --flake /etc/nixos#nixos
     
-    echo -e "${GREEN}NixMod configuration installed successfully!${NC}"
+    echo -e "${GREEN}NixMod system configuration installed successfully!${NC}"
+    echo -e "${YELLOW}Note: User dotfiles are managed separately.${NC}"
+    echo -e "${YELLOW}To install dotfiles, run: $0 install-dotfiles${NC}"
 }
 
 # Function to update the system
 update_system() {
-    echo -e "${BLUE}Updating NixMod...${NC}"
+    echo -e "${BLUE}Updating NixMod system...${NC}"
     
-    if [ -f "$REPO_ROOT/flake.nix" ]; then
+    if [ -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
         echo -e "${BLUE}Updating using flakes...${NC}"
-        cd "$REPO_ROOT" && nixos-rebuild switch --flake ".#nixos"
+        cd "$REPO_ROOT/nixmod-system" && nixos-rebuild switch --flake ".#nixos"
     else
         echo -e "${BLUE}Updating using traditional method...${NC}"
         nixos-rebuild switch
     fi
     
-    echo -e "${GREEN}Update completed successfully!${NC}"
+    echo -e "${GREEN}System update completed successfully!${NC}"
 }
 
 # Function to test the configuration
 test_config() {
-    echo -e "${BLUE}Testing NixMod configuration...${NC}"
+    echo -e "${BLUE}Testing NixMod system configuration...${NC}"
     
-    if [ -f "$REPO_ROOT/flake.nix" ]; then
+    if [ -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
         echo -e "${BLUE}Testing using flakes...${NC}"
-        cd "$REPO_ROOT" && nixos-rebuild test --flake ".#nixos"
+        cd "$REPO_ROOT/nixmod-system" && nixos-rebuild test --flake ".#nixos"
     else
         echo -e "${BLUE}Testing using traditional method...${NC}"
         nixos-rebuild test
@@ -134,6 +139,9 @@ check_status() {
     
     echo -e "\n${BLUE}Installed Packages:${NC}"
     nix-store -q --references /run/current-system/sw | wc -l
+    
+    echo -e "\n${BLUE}Dotfiles Status:${NC}"
+    check_dotfiles_status
 }
 
 # Function to backup the current system configuration
@@ -152,18 +160,47 @@ backup_system() {
     # Backup home configuration
     if [ -d "$HOME/.config" ]; then
         mkdir -p "$BACKUP_DIR/home_config"
-        cp -r "$HOME/.config/hyprland" "$BACKUP_DIR/home_config/" 2>/dev/null || true
-        cp -r "$HOME/.config/kitty" "$BACKUP_DIR/home_config/" 2>/dev/null || true
-        cp -r "$HOME/.config/waybar" "$BACKUP_DIR/home_config/" 2>/dev/null || true
-        cp -r "$HOME/.config/wofi" "$BACKUP_DIR/home_config/" 2>/dev/null || true
+        cp -r "$HOME/.config" "$BACKUP_DIR/home_config/" 2>/dev/null || true
     fi
     
     echo -e "${GREEN}Backup created at $BACKUP_DIR${NC}"
 }
 
+# Function to install dotfiles
+install_dotfiles() {
+    echo -e "${BLUE}Installing NixMod dotfiles...${NC}"
+    
+    # Use the consolidated dotfiles script
+    "$SCRIPT_DIR/dotfiles.sh" install
+}
+
+# Function to check dotfiles status
+check_dotfiles_status() {
+    # Use the consolidated dotfiles script
+    "$SCRIPT_DIR/dotfiles.sh" status
+}
+
+# Function to sync dotfiles back to repository
+sync_dotfiles() {
+    echo -e "${BLUE}Syncing dotfiles back to repository...${NC}"
+    
+    # Use the consolidated dotfiles script
+    "$SCRIPT_DIR/dotfiles.sh" sync
+    
+    # Check if it's a git repository and suggest committing
+    if [ -d "$REPO_ROOT/nixmod-dotfiles/.git" ]; then
+        echo -e "${YELLOW}Don't forget to commit and push your changes.${NC}"
+        echo -e "${BLUE}To commit changes:${NC}"
+        echo -e "  cd $REPO_ROOT/nixmod-dotfiles"
+        echo -e "  git add ."
+        echo -e "  git commit -m 'Update dotfiles'"
+        echo -e "  git push"
+    fi
+}
+
 # Function to initialize flake configuration
 init_flake() {
-    if [ -f "$REPO_ROOT/flake.nix" ]; then
+    if [ -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
         echo -e "${YELLOW}flake.nix already exists. Overwrite? (y/N)${NC}"
         read -r response
         if [[ ! "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
@@ -174,48 +211,63 @@ init_flake() {
     
     echo -e "${BLUE}Creating flake.nix...${NC}"
     
-    cat > "$REPO_ROOT/flake.nix" << 'EOF'
+    cat > "$REPO_ROOT/nixmod-system/flake.nix" << 'EOF'
 {
-  description = "NixOS configuration";
+  description = "NixOS configuration with Hyprland and UnixKit";
 
   inputs = {
+    # Base inputs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    
+    # UnixKit module inputs
+    unixkit = {
+      url = "github:nikitasmen/UnixKit";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, unixkit, ... }@inputs: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
-        config.allowUnfree = true;
-        overlays = [
-          (import ./overlays/flameshot.nix)
-        ];
+        config = {
+          allowUnfree = true;
+        };
       };
       lib = nixpkgs.lib;
-    in {
-      nixosConfigurations = {
-        nixos = lib.nixosSystem {
-          inherit system;
-          
-          specialArgs = { 
-            inherit inputs;
-          };
-          
-          modules = [
-            # Core configuration
-            ./configuration.nix
-            
-            # Add more modules here if needed
-          ];
+      
+      # Create UnixKit module directly
+      unixkitModule = {
+        module = { config, ... }: {
+          imports = [ ./unixkit.nix ];
+          _module.args.unixkit = unixkit;
         };
+      };
+      
+    in {
+      nixosConfigurations.nixos = lib.nixosSystem {
+        inherit system;
+        
+        specialArgs = { 
+          # Pass all inputs to modules
+          inherit inputs;
+        };
+        
+        modules = [
+          # Main configuration file
+          ./configuration.nix
+          
+          # Import modular flake components
+          unixkitModule.module
+        ];
       };
     };
 }
 EOF
 
     echo -e "${BLUE}Creating .gitignore...${NC}"
-    cat > "$REPO_ROOT/.gitignore" << 'EOF'
+    cat > "$REPO_ROOT/nixmod-system/.gitignore" << 'EOF'
 # Nix build artifacts
 result
 result-*
@@ -238,22 +290,22 @@ EOF
 
     echo -e "${GREEN}Flake configuration initialized successfully!${NC}"
     echo -e "${YELLOW}To use the flake configuration, run:${NC}"
-    echo -e "  sudo nixos-rebuild switch --flake \"$REPO_ROOT#nixos\""
+    echo -e "  sudo nixos-rebuild switch --flake \"$REPO_ROOT/nixmod-system#nixos\""
 }
 
 # Function to update flake inputs
 update_flake() {
-    if [ ! -f "$REPO_ROOT/flake.nix" ]; then
+    if [ ! -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
         echo -e "${RED}Error: flake.nix not found. Initialize flakes first with 'flake-init'.${NC}"
         exit 1
     fi
     
     echo -e "${BLUE}Updating flake inputs...${NC}"
-    cd "$REPO_ROOT" && nix flake update
+    cd "$REPO_ROOT/nixmod-system" && nix flake update
     
     echo -e "${GREEN}Flake inputs updated successfully!${NC}"
     echo -e "${YELLOW}To apply the updated inputs, run:${NC}"
-    echo -e "  sudo nixos-rebuild switch --flake \"$REPO_ROOT#nixos\""
+    echo -e "  sudo nixos-rebuild switch --flake \"$REPO_ROOT/nixmod-system#nixos\""
 }
 
 # Function to add a flake module
@@ -277,7 +329,7 @@ update_unixkit() {
 # Main script logic
 case "$1" in
     install)
-        install_config
+        install_system
         ;;
     update)
         update_system
@@ -303,6 +355,15 @@ case "$1" in
         ;;
     update-unixkit)
         update_unixkit
+        ;;
+    install-dotfiles)
+        install_dotfiles
+        ;;
+    dotfiles-status)
+        check_dotfiles_status
+        ;;
+    sync-dotfiles)
+        sync_dotfiles
         ;;
     help|--help|-h)
         show_help

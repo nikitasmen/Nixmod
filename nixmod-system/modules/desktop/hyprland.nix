@@ -31,7 +31,20 @@
     mako         # Notification daemon
     grim         # Screenshot utility (backend)
     slurp        # Area selection for screenshots
+    git          # Required for dotfiles installation
     #eww          # Widget system
     #jq           # Command-line JSON processor
   ];
+
+  # Create a systemd service to install dotfiles after user login
+  systemd.user.services.install-dotfiles = {
+    description = "Install NixMod dotfiles";
+    wantedBy = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'if [ ! -d $HOME/.config/dotfiles ]; then git clone https://github.com/yourusername/nixmod-dotfiles.git $HOME/.config/dotfiles; fi && cd $HOME/.config/dotfiles && ./install.sh'";
+      User = "nikmen";
+    };
+  };
 }

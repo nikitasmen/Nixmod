@@ -104,7 +104,7 @@ Automated script for installing configuration files to user directories.
 
 #### Supported Config Types
 
-- `hyprland` - Hyprland configuration
+- `hypr` - Hyprland configuration
 - `waybar` - Waybar status bar
 - `kitty` - Terminal configuration
 - `all` - All configurations (default)
@@ -116,10 +116,46 @@ Automated script for installing configuration files to user directories.
 ./toolkit/install-config.sh
 
 # Install only Hyprland config
-./toolkit/install-config.sh hyprland
+./toolkit/install-config.sh hypr
 
 # Install only terminal configs
 ./toolkit/install-config.sh kitty
+```
+
+### `set-wallpaper.sh` - Wallpaper Management
+
+Script for setting and managing wallpapers.
+
+```bash
+./toolkit/set-wallpaper.sh [wallpaper-path]
+```
+
+#### Examples
+
+```bash
+# Set a specific wallpaper
+./toolkit/set-wallpaper.sh /path/to/wallpaper.jpg
+
+# Set wallpaper from dotfiles
+./toolkit/set-wallpaper.sh ../nixmod-dotfiles/hypr/wallpapers/wallpaper.jpg
+```
+
+### `update-unixkit.sh` - UnixKit Updates
+
+Script for updating UnixKit utility scripts.
+
+```bash
+./toolkit/update-unixkit.sh
+```
+
+#### Examples
+
+```bash
+# Update UnixKit to latest version
+./toolkit/update-unixkit.sh
+
+# Check for updates
+./toolkit/update-unixkit.sh --check
 ```
 
 ## 🚀 Quick Start Guide
@@ -195,7 +231,7 @@ sudo ./toolkit/helper.sh clean
 
 ### Customizing Your Setup
 
-1. **Modify configuration files** in `extConfig/`
+1. **Modify configuration files** in `nixmod-dotfiles/`
 
 2. **Set up user configs**:
    ```bash
@@ -211,6 +247,27 @@ sudo ./toolkit/helper.sh clean
    ```bash
    ./toolkit/helper.sh sync-dotfiles
    ```
+
+### Wallpaper Management
+
+```bash
+# Set a new wallpaper
+./toolkit/set-wallpaper.sh /path/to/new/wallpaper.jpg
+
+# Update wallpaper in dotfiles
+cd nixmod-dotfiles
+./hypr/set-wallpaper.sh /path/to/wallpaper.jpg
+```
+
+### UnixKit Updates
+
+```bash
+# Update UnixKit utilities
+./toolkit/update-unixkit.sh
+
+# Check for available updates
+./toolkit/update-unixkit.sh --check
+```
 
 ### Backup and Recovery
 

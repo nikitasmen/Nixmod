@@ -3,18 +3,18 @@ results/
 
 # User-specific configuration files (to prevent accidental commits)
 # These should be manually managed by each user
-extConfig/**/*.local
-extConfig/**/*.user
-extConfig/**/*.bak
-extConfig/**/*~
-extConfig/**/secrets*
+nixmod-dotfiles/**/*.local
+nixmod-dotfiles/**/*.user
+nixmod-dotfiles/**/*.bak
+nixmod-dotfiles/**/*~
+nixmod-dotfiles/**/secrets*
 
 # App specific run data
-extConfig/clipse/clipboard_history.json
-extConfig/clipse/clipse.log
-extConfig/clipse/tmp_files/*
+nixmod-dotfiles/clipse/clipboard_history.json
+nixmod-dotfiles/clipse/clipse.log
+nixmod-dotfiles/clipse/tmp_files/*
 
-extConfig/hypr/last_wallpaper.txt
+nixmod-dotfiles/hypr/last_wallpaper.txt
 
 #ignore all .lock files
 *.lock
