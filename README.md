@@ -50,9 +50,10 @@ sudo ./toolkit/nixmod.sh install
 
 ### **2. Install User Dotfiles**
 ```bash
-# Install user configurations from local directory
+# Install user configurations by creating individual symlinks for all discovered apps
 sudo ./toolkit/nixmod.sh install-dotfiles
 ```
+This automatically discovers all configuration directories in `nixmod-dotfiles/` and creates individual symlinks for each one in your `~/.config/` directory.
 
 ### **3. Update Paths (if needed)**
 ```bash
@@ -249,8 +250,8 @@ sudo ../toolkit/nixmod.sh [command]
 
 ```bash
 # Dotfiles management via toolkit
-sudo ./toolkit/nixmod.sh install-dotfiles    # Install dotfiles from local directory
-sudo ./toolkit/nixmod.sh dotfiles-status     # Check dotfiles status
+sudo ./toolkit/nixmod.sh install-dotfiles    # Create individual symlinks for all discovered apps
+sudo ./toolkit/nixmod.sh dotfiles-status     # Check individual symlink status for all apps
 sudo ./toolkit/nixmod.sh sync-dotfiles       # Sync changes back to repository
 
 # Direct dotfiles management (alternative)
@@ -310,7 +311,7 @@ sudo ../toolkit/nixmod.sh flake-update
 ### **Updating User Dotfiles**
 
 ```bash
-# Update dotfiles via toolkit
+# Update dotfiles via toolkit (recreates individual symlinks for all discovered apps)
 sudo ./toolkit/nixmod.sh install-dotfiles
 
 # Or update directly

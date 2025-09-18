@@ -48,9 +48,9 @@ show_help() {
     echo "  flake-update        Update flake inputs"
     echo "  add-flake           Add a new flake module to the configuration"
     echo "  update-unixkit      Update UnixKit to latest commit and rebuild system"
-    echo "  install-dotfiles    Install user dotfiles from local nixmod-dotfiles directory"
-    echo "  dotfiles-status     Check dotfiles directory and symlink status"
-    echo "  sync-dotfiles       Sync changes from ~/.config back to dotfiles directory"
+    echo "  install-dotfiles    Install user dotfiles by creating individual symlinks for all discovered apps"
+    echo "  dotfiles-status     Check individual application symlink status for all discovered apps"
+    echo "  sync-dotfiles       Sync changes from source dotfiles directory"
     echo "  help                Show this help message"
     echo ""
 }
@@ -177,17 +177,59 @@ install_dotfiles() {
         exit 1
     fi
     
-    # Create symlink to local dotfiles directory
-    if [ ! -L "$HOME/.config/dotfiles" ]; then
-        echo -e "${BLUE}Creating symlink to local dotfiles directory...${NC}"
-        ln -sf "$REPO_ROOT/nixmod-dotfiles" "$HOME/.config/dotfiles"
+    # Ensure .config directory exists
+    mkdir -p "$HOME/.config"
+    
+    echo -e "${BLUE}Discovering and creating symlinks for all configurations...${NC}"
+    
+    # Find all directories in nixmod-dotfiles (excluding hidden files and special directories)
+    local config_apps=()
+    while IFS= read -r -d '' dir; do
+        # Get just the directory name (not full path)
+        local dirname=$(basename "$dir")
+        # Skip special directories and hidden files
+        if [[ "$dirname" != "scripts" && "$dirname" != ".git" && ! "$dirname" =~ ^\..*$ ]]; then
+            config_apps+=("$dirname")
+        fi
+    done < <(find "$REPO_ROOT/nixmod-dotfiles" -maxdepth 1 -type d -print0)
+    
+    echo -e "${BLUE}Found ${#config_apps[@]} configuration directories: ${config_apps[*]}${NC}"
+    
+    # Check if any directories were found
+    if [ ${#config_apps[@]} -eq 0 ]; then
+        echo -e "${YELLOW}⚠ No configuration directories found in nixmod-dotfiles${NC}"
+        echo -e "${YELLOW}Make sure the nixmod-dotfiles directory contains configuration folders.${NC}"
+        return 1
     fi
     
-    # Install dotfiles
-    cd "$HOME/.config/dotfiles"
-    ./install.sh
+    # Create individual symlinks for each discovered application
+    for app in "${config_apps[@]}"; do
+        local source_path="$REPO_ROOT/nixmod-dotfiles/$app"
+        local target_path="$HOME/.config/$app"
+        
+        if [ -d "$source_path" ]; then
+            # Remove existing directory or symlink if it exists
+            if [ -e "$target_path" ] || [ -L "$target_path" ]; then
+                echo -e "${YELLOW}Removing existing $app configuration...${NC}"
+                rm -rf "$target_path"
+            fi
+            
+            # Create symlink
+            echo -e "${BLUE}Linking $app configuration...${NC}"
+            ln -sf "$source_path" "$target_path"
+            
+            if [ -L "$target_path" ] && [ -e "$target_path" ]; then
+                echo -e "${GREEN}✓ $app linked successfully${NC}"
+            else
+                echo -e "${RED}✗ Failed to link $app${NC}"
+            fi
+        else
+            echo -e "${YELLOW}⚠ $app directory not found in nixmod-dotfiles${NC}"
+        fi
+    done
     
     echo -e "${GREEN}Dotfiles installed successfully!${NC}"
+    echo -e "${BLUE}Individual application configurations have been symlinked to ~/.config/${NC}"
 }
 
 # Function to check dotfiles status
@@ -195,50 +237,83 @@ check_dotfiles_status() {
     echo -e "${BLUE}Dotfiles Status:${NC}"
     echo -e "${BLUE}----------------${NC}"
     
-    if [ -d "$HOME/.config/dotfiles" ]; then
-        echo -e "${GREEN}✓ Dotfiles directory found at $HOME/.config/dotfiles${NC}"
-        
-        # Check if it's a symlink to local directory
-        if [ -L "$HOME/.config/dotfiles" ]; then
-            local target=$(readlink "$HOME/.config/dotfiles")
-            echo -e "${GREEN}✓ Symlinked to: $target${NC}"
-        else
-            echo -e "${YELLOW}⚠ Directory is not a symlink${NC}"
+    # Find all directories in nixmod-dotfiles (excluding hidden files and special directories)
+    local config_apps=()
+    while IFS= read -r -d '' dir; do
+        # Get just the directory name (not full path)
+        local dirname=$(basename "$dir")
+        # Skip special directories and hidden files
+        if [[ "$dirname" != "scripts" && "$dirname" != ".git" && ! "$dirname" =~ ^\..*$ ]]; then
+            config_apps+=("$dirname")
         fi
-        
-        cd "$HOME/.config/dotfiles"
+    done < <(find "$REPO_ROOT/nixmod-dotfiles" -maxdepth 1 -type d -print0)
+    
+    # Check if any directories were found
+    if [ ${#config_apps[@]} -eq 0 ]; then
+        echo -e "${YELLOW}⚠ No configuration directories found in nixmod-dotfiles${NC}"
+        echo -e "${YELLOW}Make sure the nixmod-dotfiles directory contains configuration folders.${NC}"
+        return 1
+    fi
+    
+    # Check if nixmod-dotfiles source directory exists
+    if [ -d "$REPO_ROOT/nixmod-dotfiles" ]; then
+        echo -e "${GREEN}✓ Source dotfiles directory found at $REPO_ROOT/nixmod-dotfiles${NC}"
         
         # Check git status if it's a git repository
+        cd "$REPO_ROOT/nixmod-dotfiles"
         if [ -d ".git" ]; then
             if git status --porcelain | grep -q .; then
-                echo -e "${YELLOW}⚠ Uncommitted changes detected:${NC}"
+                echo -e "${YELLOW}⚠ Uncommitted changes in source directory:${NC}"
                 git status --short
             else
-                echo -e "${GREEN}✓ No uncommitted changes${NC}"
+                echo -e "${GREEN}✓ No uncommitted changes in source directory${NC}"
             fi
         else
-            echo -e "${BLUE}ℹ Not a git repository${NC}"
+            echo -e "${BLUE}ℹ Source directory is not a git repository${NC}"
         fi
-        
-        # Check if dotfiles are properly symlinked
-        echo -e "\n${BLUE}Symlink Status:${NC}"
-        for config_dir in hypr waybar kitty ghostty wofi wlogout superfile neofetch clipse cava; do
-            if [ -L "$HOME/.config/$config_dir" ]; then
-                if [ -e "$HOME/.config/$config_dir" ]; then
-                    echo -e "${GREEN}✓ $config_dir properly linked${NC}"
-                else
-                    echo -e "${RED}✗ $config_dir broken symlink${NC}"
-                fi
-            elif [ -d "$HOME/.config/$config_dir" ]; then
-                echo -e "${YELLOW}⚠ $config_dir is a directory (not symlinked)${NC}"
-            else
-                echo -e "${RED}✗ $config_dir not found${NC}"
-            fi
-        done
-        
     else
-        echo -e "${RED}✗ Dotfiles directory not found at $HOME/.config/dotfiles${NC}"
-        echo -e "${YELLOW}Run 'install-dotfiles' to install.${NC}"
+        echo -e "${RED}✗ Source dotfiles directory not found at $REPO_ROOT/nixmod-dotfiles${NC}"
+        echo -e "${YELLOW}Make sure you're running this from the NixMod repository root.${NC}"
+        return 1
+    fi
+    
+    # Check individual application symlinks
+    echo -e "\n${BLUE}Application Symlink Status:${NC}"
+    local linked_count=0
+    local total_count=${#config_apps[@]}
+    
+    for app in "${config_apps[@]}"; do
+        local target_path="$HOME/.config/$app"
+        local source_path="$REPO_ROOT/nixmod-dotfiles/$app"
+        
+        if [ -L "$target_path" ]; then
+            if [ -e "$target_path" ]; then
+                local target=$(readlink "$target_path")
+                if [ "$target" = "$source_path" ]; then
+                    echo -e "${GREEN}✓ $app properly linked to source${NC}"
+                    ((linked_count++))
+                else
+                    echo -e "${YELLOW}⚠ $app linked to different location: $target${NC}"
+                fi
+            else
+                echo -e "${RED}✗ $app broken symlink${NC}"
+            fi
+        elif [ -d "$target_path" ]; then
+            echo -e "${YELLOW}⚠ $app is a directory (not symlinked)${NC}"
+        else
+            echo -e "${RED}✗ $app not found${NC}"
+        fi
+    done
+    
+    echo -e "\n${BLUE}Summary:${NC}"
+    echo -e "${BLUE}Linked: $linked_count/$total_count applications${NC}"
+    
+    if [ $linked_count -eq $total_count ]; then
+        echo -e "${GREEN}✓ All dotfiles are properly linked!${NC}"
+    elif [ $linked_count -gt 0 ]; then
+        echo -e "${YELLOW}⚠ Some dotfiles are not linked. Run 'install-dotfiles' to fix.${NC}"
+    else
+        echo -e "${RED}✗ No dotfiles are linked. Run 'install-dotfiles' to install.${NC}"
     fi
 }
 
@@ -246,16 +321,18 @@ check_dotfiles_status() {
 sync_dotfiles() {
     echo -e "${BLUE}Syncing dotfiles back to repository...${NC}"
     
-    if [ ! -d "$HOME/.config/dotfiles" ]; then
-        echo -e "${RED}Error: Dotfiles directory not found at $HOME/.config/dotfiles${NC}"
-        echo -e "${YELLOW}Run 'install-dotfiles' first.${NC}"
+    # Check if source dotfiles directory exists
+    if [ ! -d "$REPO_ROOT/nixmod-dotfiles" ]; then
+        echo -e "${RED}Error: Source dotfiles directory not found at $REPO_ROOT/nixmod-dotfiles${NC}"
+        echo -e "${YELLOW}Make sure you're running this from the NixMod repository root.${NC}"
         exit 1
     fi
     
-    cd "$HOME/.config/dotfiles"
+    cd "$REPO_ROOT/nixmod-dotfiles"
     
     # Check if sync.sh exists and is executable
     if [ -f "./sync.sh" ] && [ -x "./sync.sh" ]; then
+        echo -e "${BLUE}Running sync script...${NC}"
         ./sync.sh
         echo -e "${GREEN}Dotfiles synced successfully!${NC}"
     else
@@ -265,6 +342,11 @@ sync_dotfiles() {
     # Check if it's a git repository and suggest committing
     if [ -d ".git" ]; then
         echo -e "${YELLOW}Don't forget to commit and push your changes.${NC}"
+        echo -e "${BLUE}To commit changes:${NC}"
+        echo -e "  cd $REPO_ROOT/nixmod-dotfiles"
+        echo -e "  git add ."
+        echo -e "  git commit -m 'Update dotfiles'"
+        echo -e "  git push"
     fi
 }
 
