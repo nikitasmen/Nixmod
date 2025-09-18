@@ -22,19 +22,13 @@ This project is organized into separate components for better maintainability:
 - **Purpose**: User application configurations
 - **Scope**: `.config` files, themes, application settings
 - **Target**: `~/.config/` directory
-- **Management**: Symlink-based deployment
+- **Management**: Symlink-based deployment via toolkit
 
 ### **🛠️ toolkit/** - Management Scripts
 - **Purpose**: Installation and maintenance utilities
-- **Scope**: Scripts for system management, configuration deployment
+- **Scope**: Scripts for system management, configuration deployment, wallpaper management
 - **Target**: Local system management
 - **Management**: Direct script execution
-
-### **📦 flakes/** - Nix Flake Templates
-- **Purpose**: Flake templates and documentation
-- **Scope**: Reusable flake patterns and examples
-- **Target**: Development and customization
-- **Management**: Template usage and customization
 
 ## 🚀 **Quick Start (Current Structure)**
 
@@ -58,8 +52,7 @@ This automatically discovers all configuration directories in `nixmod-dotfiles/`
 ### **3. Update Paths (if needed)**
 ```bash
 # Update hardcoded paths for your username
-cd nixmod-dotfiles
-./scripts/update-paths.sh /home/yourusername
+./toolkit/dotfiles.sh update-paths /home/yourusername
 ```
 
 
@@ -136,16 +129,12 @@ nixmod-system/
 ```
 nixmod-dotfiles/
 ├── README.md                     # Dotfiles documentation
-├── install.sh                    # Installation script
-├── sync.sh                       # Synchronization script
 ├── hypr/                         # Hyprland ecosystem
 │   ├── hyprland.conf            # Main Hyprland config
 │   ├── hypridle.conf            # Idle management
 │   ├── hyprlock.conf            # Lock screen
 │   ├── hyprpaper.conf           # Wallpaper management
-│   ├── last_wallpaper.txt       # Wallpaper tracking
-│   ├── random-wallpaper.sh      # Wallpaper rotation
-│   └── set-wallpaper.sh         # Wallpaper setting
+│   └── last_wallpaper.txt       # Wallpaper tracking
 ├── waybar/                       # Status bar
 │   ├── config                   # Main configuration
 │   ├── style.css                # Custom styling
@@ -177,11 +166,9 @@ nixmod-dotfiles/
 ├── clipse/                       # Clipboard manager
 │   ├── config.json              # Main configuration
 │   └── custom_theme.json        # Custom theme
-├── cava/                         # Audio visualizer
-│   ├── config                   # Main configuration
-│   └── shaders/                 # Custom shaders
-└── scripts/                      # Helper scripts
-    └── update-paths.sh          # Path update utility
+└── cava/                         # Audio visualizer
+    ├── config                   # Main configuration
+    └── shaders/                 # Custom shaders
 ```
 
 ### **Management Toolkit (`toolkit/`)**
@@ -189,10 +176,10 @@ nixmod-dotfiles/
 toolkit/
 ├── README.md                     # Toolkit documentation
 ├── nixmod.sh                    # Main management script
+├── dotfiles.sh                  # Dotfiles management (install, sync, status)
+├── wallpaper.sh                 # Wallpaper management (set, random)
 ├── helper.sh                    # Helper utilities
 ├── add-flake.sh                 # Flake management
-├── install-config.sh            # Configuration installation
-├── set-wallpaper.sh             # Wallpaper management
 └── update-unixkit.sh            # UnixKit updates
 ```
 
@@ -254,22 +241,16 @@ sudo ./toolkit/nixmod.sh install-dotfiles    # Create individual symlinks for al
 sudo ./toolkit/nixmod.sh dotfiles-status     # Check individual symlink status for all apps
 sudo ./toolkit/nixmod.sh sync-dotfiles       # Sync changes back to repository
 
-# Direct dotfiles management (alternative)
-cd nixmod-dotfiles
-./install.sh [command]
+# Direct dotfiles management
+./toolkit/dotfiles.sh [command]
 
 # Available commands:
 # install [CONFIG]  - Install all or specific dotfiles
-# list              - List available configurations
-# update-paths      - Update hardcoded paths
-
-# Synchronization
-./sync.sh [command]
-
-# Available commands:
 # sync [CONFIG]     - Sync all or specific configs
 # list              - List available configurations
+# status            - Check dotfiles status
 # check             - Check for changes
+# update-paths      - Update hardcoded paths
 ```
 
 ### **Toolkit Utilities**
@@ -278,17 +259,17 @@ cd nixmod-dotfiles
 # Main management script
 ./toolkit/nixmod.sh [command]
 
+# Dotfiles management
+./toolkit/dotfiles.sh [command]
+
+# Wallpaper management
+./toolkit/wallpaper.sh [command] [wallpaper-path]
+
 # Helper utilities
 ./toolkit/helper.sh [command]
 
 # Flake management
-./toolkit/add-flake.sh [flake-url] [flake-name]
-
-# Configuration installation
-./toolkit/install-config.sh [config-type]
-
-# Wallpaper management
-./toolkit/set-wallpaper.sh [wallpaper-path]
+./toolkit/add-flake.sh [options]
 
 # UnixKit updates
 ./toolkit/update-unixkit.sh
@@ -317,11 +298,11 @@ sudo ./toolkit/nixmod.sh install-dotfiles
 # Or update directly
 cd nixmod-dotfiles
 git pull
-./install.sh
+./toolkit/dotfiles.sh install
 
 # Sync changes back to repository
 sudo ./toolkit/nixmod.sh sync-dotfiles
-# Or directly: ./sync.sh
+# Or directly: ./toolkit/dotfiles.sh sync
 ```
 
 ### **Updating Toolkit**
