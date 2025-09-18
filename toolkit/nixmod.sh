@@ -48,9 +48,9 @@ show_help() {
     echo "  flake-update        Update flake inputs"
     echo "  add-flake           Add a new flake module to the configuration"
     echo "  update-unixkit      Update UnixKit to latest commit and rebuild system"
-    echo "  install-dotfiles    Install user dotfiles from separate repository"
-    echo "  dotfiles-status     Check dotfiles repository and symlink status"
-    echo "  sync-dotfiles       Sync changes from ~/.config back to dotfiles repository"
+    echo "  install-dotfiles    Install user dotfiles from local nixmod-dotfiles directory"
+    echo "  dotfiles-status     Check dotfiles directory and symlink status"
+    echo "  sync-dotfiles       Sync changes from ~/.config back to dotfiles directory"
     echo "  help                Show this help message"
     echo ""
 }
@@ -170,10 +170,17 @@ backup_system() {
 install_dotfiles() {
     echo -e "${BLUE}Installing NixMod dotfiles...${NC}"
     
-    # Check if dotfiles repository exists
-    if [ ! -d "$HOME/.config/dotfiles" ]; then
-        echo -e "${BLUE}Cloning dotfiles repository...${NC}"
-        git clone https://github.com/yourusername/nixmod-dotfiles.git "$HOME/.config/dotfiles"
+    # Check if local dotfiles directory exists
+    if [ ! -d "$REPO_ROOT/nixmod-dotfiles" ]; then
+        echo -e "${RED}Error: nixmod-dotfiles directory not found at $REPO_ROOT/nixmod-dotfiles${NC}"
+        echo -e "${YELLOW}Make sure you're running this from the NixMod repository root.${NC}"
+        exit 1
+    fi
+    
+    # Create symlink to local dotfiles directory
+    if [ ! -L "$HOME/.config/dotfiles" ]; then
+        echo -e "${BLUE}Creating symlink to local dotfiles directory...${NC}"
+        ln -sf "$REPO_ROOT/nixmod-dotfiles" "$HOME/.config/dotfiles"
     fi
     
     # Install dotfiles
@@ -189,16 +196,28 @@ check_dotfiles_status() {
     echo -e "${BLUE}----------------${NC}"
     
     if [ -d "$HOME/.config/dotfiles" ]; then
-        echo -e "${GREEN}✓ Dotfiles repository found at $HOME/.config/dotfiles${NC}"
+        echo -e "${GREEN}✓ Dotfiles directory found at $HOME/.config/dotfiles${NC}"
+        
+        # Check if it's a symlink to local directory
+        if [ -L "$HOME/.config/dotfiles" ]; then
+            local target=$(readlink "$HOME/.config/dotfiles")
+            echo -e "${GREEN}✓ Symlinked to: $target${NC}"
+        else
+            echo -e "${YELLOW}⚠ Directory is not a symlink${NC}"
+        fi
         
         cd "$HOME/.config/dotfiles"
         
-        # Check git status
-        if git status --porcelain | grep -q .; then
-            echo -e "${YELLOW}⚠ Uncommitted changes detected:${NC}"
-            git status --short
+        # Check git status if it's a git repository
+        if [ -d ".git" ]; then
+            if git status --porcelain | grep -q .; then
+                echo -e "${YELLOW}⚠ Uncommitted changes detected:${NC}"
+                git status --short
+            else
+                echo -e "${GREEN}✓ No uncommitted changes${NC}"
+            fi
         else
-            echo -e "${GREEN}✓ No uncommitted changes${NC}"
+            echo -e "${BLUE}ℹ Not a git repository${NC}"
         fi
         
         # Check if dotfiles are properly symlinked
@@ -218,7 +237,7 @@ check_dotfiles_status() {
         done
         
     else
-        echo -e "${RED}✗ Dotfiles repository not found at $HOME/.config/dotfiles${NC}"
+        echo -e "${RED}✗ Dotfiles directory not found at $HOME/.config/dotfiles${NC}"
         echo -e "${YELLOW}Run 'install-dotfiles' to install.${NC}"
     fi
 }
@@ -228,16 +247,25 @@ sync_dotfiles() {
     echo -e "${BLUE}Syncing dotfiles back to repository...${NC}"
     
     if [ ! -d "$HOME/.config/dotfiles" ]; then
-        echo -e "${RED}Error: Dotfiles repository not found at $HOME/.config/dotfiles${NC}"
+        echo -e "${RED}Error: Dotfiles directory not found at $HOME/.config/dotfiles${NC}"
         echo -e "${YELLOW}Run 'install-dotfiles' first.${NC}"
         exit 1
     fi
     
     cd "$HOME/.config/dotfiles"
-    ./sync.sh
     
-    echo -e "${GREEN}Dotfiles synced successfully!${NC}"
-    echo -e "${YELLOW}Don't forget to commit and push your changes.${NC}"
+    # Check if sync.sh exists and is executable
+    if [ -f "./sync.sh" ] && [ -x "./sync.sh" ]; then
+        ./sync.sh
+        echo -e "${GREEN}Dotfiles synced successfully!${NC}"
+    else
+        echo -e "${YELLOW}sync.sh not found or not executable, skipping sync${NC}"
+    fi
+    
+    # Check if it's a git repository and suggest committing
+    if [ -d ".git" ]; then
+        echo -e "${YELLOW}Don't forget to commit and push your changes.${NC}"
+    fi
 }
 
 # Function to initialize flake configuration
