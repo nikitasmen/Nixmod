@@ -94,7 +94,10 @@ validate_inputs() {
 }
 
 add_flake_to_inputs() {
-  local flake_nix="$NIXMOD_ROOT/nixmod-system/flake.nix"
+  # Get the repository root directory
+  local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  local repo_root="$(dirname "$script_dir")"
+  local flake_nix="$repo_root/nixmod-system/flake.nix"
   
   # Validate flake.nix exists
   validate_file "$flake_nix" "Flake configuration file"
