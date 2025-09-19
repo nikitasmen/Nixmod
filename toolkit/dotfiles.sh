@@ -18,6 +18,25 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 DOTFILES_DIR="$REPO_ROOT/nixmod-dotfiles"
 CONFIG_TARGET="$HOME/.config"
 
+# Define validation functions locally
+validate_input() {
+    local param="$1"
+    local param_name="$2"
+    if [[ -z "$param" ]]; then
+        echo -e "${RED}Error: $param_name is required${NC}"
+        exit 1
+    fi
+}
+
+validate_directory() {
+    local dir="$1"
+    local dir_name="$2"
+    if [[ ! -d "$dir" ]]; then
+        echo -e "${RED}Error: $dir_name directory not found: $dir${NC}"
+        exit 1
+    fi
+}
+
 # Print header
 echo -e "${BLUE}================================${NC}"
 echo -e "${BLUE}   NixMod Dotfiles Manager     ${NC}"
@@ -61,6 +80,9 @@ symlink_config() {
 install_all_configs() {
     echo -e "${BLUE}Installing all configurations to $CONFIG_TARGET${NC}"
     
+    # Validate required directories
+    validate_directory "$DOTFILES_DIR" "Dotfiles source directory"
+    
     # Ensure the ~/.config directory exists
     mkdir -p "$CONFIG_TARGET"
     
@@ -86,6 +108,8 @@ install_all_configs() {
 # Function to install specific config
 install_specific_config() {
     local config_name="$1"
+    validate_input "$config_name" "Configuration name"
+    
     local source_path="$DOTFILES_DIR/$config_name"
     local target_path="$CONFIG_TARGET/$config_name"
     
@@ -147,6 +171,8 @@ sync_all_configs() {
 # Function to sync specific config
 sync_specific_config() {
     local config_name="$1"
+    validate_input "$config_name" "Configuration name"
+    
     local source_path="$CONFIG_TARGET/$config_name"
     local target_path="$DOTFILES_DIR/$config_name"
     
@@ -193,6 +219,12 @@ update_paths() {
     
     if [ -z "$new_user_path" ]; then
         new_user_path="$HOME"
+    fi
+    
+    # Validate the new path
+    if [[ ! -d "$new_user_path" ]]; then
+        echo -e "${YELLOW}Warning: Target path does not exist: $new_user_path${NC}"
+        echo -e "${YELLOW}Proceeding anyway as it may be created later...${NC}"
     fi
     
     echo -e "${BLUE}Updating hardcoded paths from $old_user_path to $new_user_path${NC}"
