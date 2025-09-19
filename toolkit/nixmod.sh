@@ -44,6 +44,7 @@ show_help() {
     echo "  health              Check system health (disk/mem/load)"
     echo "  clean               Remove generations older than 14 days and clean the Nix store"
     echo "  create-module NAME  Create a new module template"
+    echo "  validate            Validate NixOS configuration (nix flake check)"
     echo "  help                Show this help message"
     echo ""
 }
@@ -121,7 +122,7 @@ case "$1" in
     update-unixkit)
         "$SCRIPT_DIR/update-unixkit.sh"
         ;;
-    health|clean|create-module)
+    health|clean|create-module|validate)
         "$SCRIPT_DIR/helper.sh" "$@"
         ;;
     help|--help|-h)
