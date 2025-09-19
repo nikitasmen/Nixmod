@@ -16,6 +16,51 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
+# Define validation functions locally to avoid conflicts
+validate_input() {
+    local param="$1"
+    local param_name="$2"
+    if [[ -z "$param" ]]; then
+        echo -e "${RED}Error: $param_name is required${NC}"
+        exit 1
+    fi
+}
+
+validate_directory() {
+    local dir="$1"
+    local dir_name="$2"
+    if [[ ! -d "$dir" ]]; then
+        echo -e "${RED}Error: $dir_name directory not found: $dir${NC}"
+        exit 1
+    fi
+}
+
+validate_file() {
+    local file="$1"
+    local file_name="$2"
+    if [[ ! -f "$file" ]]; then
+        echo -e "${RED}Error: $file_name file not found: $file${NC}"
+        exit 1
+    fi
+}
+
+validate_nixos_config() {
+    echo -e "${BLUE}Validating NixOS configuration...${NC}"
+    
+    if [ -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
+        cd "$REPO_ROOT/nixmod-system"
+        if nix flake check 2>/dev/null; then
+            echo -e "${GREEN}✓ Configuration is valid${NC}"
+        else
+            echo -e "${RED}✗ Configuration validation failed${NC}"
+            echo -e "${YELLOW}Run 'nix flake check' for detailed error information${NC}"
+            exit 1
+        fi
+    else
+        echo -e "${YELLOW}No flake.nix found, skipping validation${NC}"
+    fi
+}
+
 # Print header
 echo -e "${BLUE}================================${NC}"
 echo -e "${BLUE}   NixMod System Toolkit        ${NC}"
@@ -59,6 +104,10 @@ show_help() {
 install_system() {
     echo -e "${BLUE}Installing NixMod system configuration...${NC}"
     
+    # Validate required directories and files
+    validate_directory "$REPO_ROOT/nixmod-system" "NixMod system configuration"
+    validate_file "$REPO_ROOT/nixmod-system/configuration.nix" "Main configuration file"
+    
     # Check if hardware configuration exists
     if [ ! -f "/etc/nixos/hardware-configuration.nix" ]; then
         echo -e "${RED}Error: hardware-configuration.nix not found in /etc/nixos/${NC}"
@@ -97,6 +146,9 @@ install_system() {
 update_system() {
     echo -e "${BLUE}Updating NixMod system...${NC}"
     
+    # Validate configuration before updating
+    validate_nixos_config
+    
     if [ -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
         echo -e "${BLUE}Updating using flakes...${NC}"
         cd "$REPO_ROOT/nixmod-system" && nixos-rebuild switch --flake ".#nixos"
@@ -111,6 +163,9 @@ update_system() {
 # Function to test the configuration
 test_config() {
     echo -e "${BLUE}Testing NixMod system configuration...${NC}"
+    
+    # Validate configuration before testing
+    validate_nixos_config
     
     if [ -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
         echo -e "${BLUE}Testing using flakes...${NC}"
@@ -295,10 +350,7 @@ EOF
 
 # Function to update flake inputs
 update_flake() {
-    if [ ! -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
-        echo -e "${RED}Error: flake.nix not found. Initialize flakes first with 'flake-init'.${NC}"
-        exit 1
-    fi
+    validate_file "$REPO_ROOT/nixmod-system/flake.nix" "Flake configuration"
     
     echo -e "${BLUE}Updating flake inputs...${NC}"
     cd "$REPO_ROOT/nixmod-system" && nix flake update
