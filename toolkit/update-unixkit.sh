@@ -19,6 +19,14 @@ if [ ! -d ".git" ]; then
   echo -e "${YELLOW}Warning: Not in a git repository root. Commands may not work as expected.${NC}"
 fi
 
+# Get the repository root directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+NIXMOD_SYSTEM_DIR="$REPO_ROOT/nixmod-system"
+
+# Change to the nixmod-system directory
+cd "$NIXMOD_SYSTEM_DIR"
+
 # Step 2: Check if flake.lock exists
 if [ -f "flake.lock" ]; then
   echo -e "${BLUE}Found existing flake.lock, updating UnixKit input...${NC}"
