@@ -9,6 +9,9 @@
     packages = with pkgs; [
       slack   # Communication
       viber   # Communication
+      discord-ptb # Communication
+      
+      prismlauncher  #Minecraft launcher
     ];
   };
 }
