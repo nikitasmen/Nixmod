@@ -19,6 +19,11 @@
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = false;
   
+  services.ollama = {
+    enable = true;
+    # aceeleration = "cuda"; 
+  };
+  
   # Hyprland related packages
   environment.systemPackages = with pkgs; [
     kitty        # Terminal emulator
@@ -33,7 +38,7 @@
     slurp        # Area selection for screenshots
     git          # Required for dotfiles installation
     #eww          # Widget system
-    #jq           # Command-line JSON processor
+    jq           # Command-line JSON processor
   ];
 
   # Create a systemd service to install dotfiles after user login
