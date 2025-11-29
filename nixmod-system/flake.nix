@@ -11,7 +11,9 @@
       flake = false;
     };
     
-    # You can add more modular inputs here
+    # NixAi assistant 
+    nix-ai.url = "github:olafkfreund/nix-ai-help";
+    
   };
 
   outputs = { self, nixpkgs, unixkit, ... }@inputs: 
