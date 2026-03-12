@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
 {
+  # Enable Steam
+  programs.steam.enable = true;
+    
   # Define user account
   users.users.nikmen = {
     isNormalUser = true;
@@ -12,6 +15,7 @@
       discord-ptb # Communication
       
       prismlauncher  #Minecraft launcher
+      heroic         # Heroic Game launcher 
     ];
   };
 }

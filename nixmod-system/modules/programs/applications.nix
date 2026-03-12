@@ -2,10 +2,7 @@
 
 {
   # Enable Firefox
-  programs.firefox.enable = true;
-  
-  # Enable Steam
-  programs.steam.enable = true;
+  programs.firefox.enable = true;  
   
   # Other applications
   environment.systemPackages = with pkgs; [
@@ -29,7 +26,8 @@
     superfile
     
     # System tools
-    neofetch
+    # neofetch
+    fastfetch
     htop
     nwg-look
         
