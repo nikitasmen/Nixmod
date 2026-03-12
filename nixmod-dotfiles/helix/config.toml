@@ -1,0 +1,71 @@
+# Helix editor configuration
+# https://docs.helix-editor.com/configuration.html
+
+theme = "catppuccin_macchiato"
+
+[editor]
+# Match terminal font (IosevkaTerm Nerd Font from kitty config)
+font-family = "Iosevka Term"
+line-number = "relative"
+cursorline = true
+cursorcolumn = true
+color-modes = true
+true-color = true
+bufferline = "multiple"
+rulers = [80, 120]
+soft-wrap.enable = false
+indent-guides.render = true
+auto-format = true
+auto-save = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.statusline]
+left = ["mode", "spinner", "file-name", "file-modification-indicator"]
+center = ["diagnostics"]
+right = ["selections", "position", "position-percentage", "separator", "file-encoding", "file-line-ending", "file-type"]
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+
+[editor.whitespace]
+render = "all"
+
+# File explorer: browse by directory (like a sidebar). Opens as overlay.
+# Space+e = workspace root, Space+E = current file's directory.
+[editor.file-explorer]
+# Respect .gitignore in the file explorer
+git-ignore = true
+
+[keys.normal]
+space = "repeat_last_motion"
+
+# Space mode: file explorer (sidebar-like) + file picker + motions
+[keys.normal.space]
+"e" = "file_explorer"                           # File explorer at workspace root
+"E" = "file_explorer_in_current_buffer_directory"  # File explorer at current file's dir
+"f" = "file_picker"                            # File picker at workspace root
+"F" = "file_picker_in_current_directory"      # File picker at cwd
+"w" = ":move_next_word_start"
+"b" = ":move_prev_word_start"
+"g" = "collapse_selection"
+"G" = "expand_selection"
+"%" = "match_brackets"
+
+[keys.select]
+space = "repeat_last_motion"
+
+[keys.select.space]
+"e" = "file_explorer"
+"E" = "file_explorer_in_current_buffer_directory"
+"f" = "file_picker"
+"F" = "file_picker_in_current_directory"
+"w" = ":move_next_word_start"
+"b" = ":move_prev_word_start"
+"g" = "collapse_selection"
+"G" = "expand_selection"
+"%" = "match_brackets"

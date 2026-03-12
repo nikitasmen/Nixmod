@@ -1,0 +1,51 @@
+# Helix language and LSP configuration
+# https://docs.helix-editor.com/languages.html
+# Remove or comment out languages whose LSP/formatter you don't have installed.
+
+[[language]]
+name = "nix"
+formatter = { command = "nixfmt" }
+auto-format = true
+
+[[language]]
+name = "bash"
+language-server = { command = "bash-language-server", args = ["start"] }
+formatter = { command = "shfmt", args = ["-i", "2", "-ci", "-w"] }
+
+[[language]]
+name = "python"
+language-server = { command = "pyright-langserver", args = ["--stdio"] }
+formatter = { command = "black", args = ["--quiet", "-"] }
+auto-format = true
+
+[[language]]
+name = "rust"
+language-server = { command = "rust-analyzer" }
+formatter = { command = "rustfmt" }
+auto-format = true
+
+[[language]]
+name = "typescript"
+language-server = { command = "typescript-language-server", args = ["--stdio"] }
+formatter = { command = "prettier", args = ["--stdin-filepath", "$FILENAME"] }
+auto-format = true
+
+[[language]]
+name = "json"
+formatter = { command = "jq", args = ["-M", "-s", "add"] }
+auto-format = true
+
+[[language]]
+name = "markdown"
+language-server = { command = "marksman", args = ["server"] }
+auto-format = true
+
+[[language]]
+name = "toml"
+formatter = { command = "taplo", args = ["format", "-"] }
+auto-format = true
+
+[[language]]
+name = "yaml"
+formatter = { command = "yq", args = ["-i"] }
+auto-format = true
