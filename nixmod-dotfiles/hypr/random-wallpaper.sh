@@ -38,7 +38,8 @@ if command -v hyprctl &>/dev/null && hyprctl hyprpaper listloaded &>/dev/null; t
     hyprctl hyprpaper wallpaper "$MON,$WALL" 2>/dev/null || true
   done
 else
+  # DRI_PRIME=0 = use Intel iGPU (avoids NVIDIA EGL errors on Prime/hybrid)
   pkill -x hyprpaper 2>/dev/null || true
   sleep 0.5
-  hyprpaper -c "$CONF" &
+  env DRI_PRIME=0 hyprpaper -c "$CONF" &
 fi

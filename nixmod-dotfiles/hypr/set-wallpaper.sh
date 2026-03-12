@@ -50,10 +50,11 @@ if command -v hyprctl &>/dev/null; then
 fi
 
 # If IPC didn't work (e.g. hyprpaper not running), restart hyprpaper with new config
+# DRI_PRIME=0 = use Intel iGPU (avoids NVIDIA EGL errors on Prime/hybrid)
 if ! hyprctl hyprpaper listloaded &>/dev/null; then
   pkill -x hyprpaper 2>/dev/null || true
   sleep 0.5
-  hyprpaper -c "$CONF" &
+  env DRI_PRIME=0 hyprpaper -c "$CONF" &
   sleep 0.5
   hyprctl hyprpaper preload "$WALLPAPER" 2>/dev/null || true
   for MON in $(hyprctl monitors 2>/dev/null | awk '/^Monitor/ {gsub(/:$/,"",$2); print $2}'); do
