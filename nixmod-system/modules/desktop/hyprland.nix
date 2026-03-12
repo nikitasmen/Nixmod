@@ -21,7 +21,7 @@
   
   services.ollama = {
     enable = true;
-    # aceeleration = "cuda"; 
+    # acceleration = "cuda";  # Uncomment for GPU
   };
   
   # Hyprland related packages
@@ -41,15 +41,14 @@
     jq           # Command-line JSON processor
   ];
 
-  # Create a systemd service to install dotfiles after user login
+  # Install dotfiles once per user on first graphical login (runs as the logged-in user)
   systemd.user.services.install-dotfiles = {
     description = "Install NixMod dotfiles";
     wantedBy = [ "graphical-session.target" ];
     after = [ "graphical-session.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'if [ ! -d $HOME/.config/dotfiles ]; then git clone https://github.com/yourusername/nixmod-dotfiles.git $HOME/.config/dotfiles; fi && cd $HOME/.config/dotfiles && ./install.sh'";
-      User = "nikmen";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'if [ ! -d $HOME/.config/dotfiles ]; then git clone https://github.com/nikitasmen/Nixmod.git $HOME/.config/dotfiles; fi && cd $HOME/.config/dotfiles && ./toolkit/dotfiles.sh install'";
     };
   };
 }

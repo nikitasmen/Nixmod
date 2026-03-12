@@ -33,12 +33,11 @@
     ];    
   };
   
-  # Audio related packages
+  # Audio related packages (OBS is already installed via programs.obs-studio above)
   environment.systemPackages = with pkgs; [
     pavucontrol  # Sound control panel
     playerctl    # Music player controller
     cava         # Audio Visualizer
-    obs-studio   # OBS studio 
   ];
   
   # Bluetooth configuration

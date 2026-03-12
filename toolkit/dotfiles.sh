@@ -281,9 +281,9 @@ show_usage() {
     echo ""
     echo "Examples:"
     echo "  $0 install             # Install all configurations"
-    echo "  $0 install hyprland    # Install only hyprland config"
+    echo "  $0 install hypr        # Install only hypr config"
     echo "  $0 sync                # Sync all configurations"
-    echo "  $0 sync hyprland       # Sync only hyprland config"
+    echo "  $0 sync hypr          # Sync only hypr config"
     echo "  $0 update-paths        # Update paths to current user home"
     echo "  $0 update-paths /home/username  # Update paths to specific user"
 }

@@ -14,7 +14,7 @@
       ./modules
     ];
 
-  # List packages installed in system profile. To search, run:
+  # Overlays (e.g. to patch packages)
   nixpkgs.overlays = [
     (import ./overlays/flameshot.nix)
   ]; 
