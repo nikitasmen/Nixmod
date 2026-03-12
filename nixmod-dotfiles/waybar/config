@@ -173,7 +173,7 @@
             "custom/recording",
             "custom/geo",
             "custom/media",
-            "custom/dunst",
+            "custom/notifications",
             "custom/night_mode",
             "custom/airplane_mode",
             "idle_inhibitor",
@@ -228,11 +228,11 @@
         "on-click": "fish -c night_mode_toggle",
     },
     
-    "custom/dunst": {
+    "custom/notifications": {
         "return-type": "json",
-        "exec": "fish -c dunst_pause",
-        "on-click": "dunstctl set-paused toggle",
-        "restart-interval": 1,
+        "exec": "echo '{ \"text\":\"󰂚\", \"tooltip\": \"notifications (mako)\" }'",
+        "interval": "once",
+        "on-click": "makoctl dismiss -a",
     },         
     "idle_inhibitor": {
         "format": "{icon}",
@@ -335,10 +335,10 @@
             "lower-medium": 30,
             "low": 10,
         },
-        "on-click": "wezterm start btop",
-        "on-click-right": "wezterm start btm",
+        "on-click": "kitty -e btop",
+        "on-click-right": "kitty -e btm",
     },
-    
+
     "memory": {
         "format": "󰍛 {percentage}%",
         "tooltip-format": "Main: ({used} GiB/{total} GiB)({percentage}%), available {avail} GiB\nSwap: ({swapUsed} GiB/{swapTotal} GiB)({swapPercentage}%), available {swapAvail} GiB",
@@ -349,8 +349,8 @@
             "lower-medium": 30,
             "low": 10,
         },
-        "on-click": "wezterm start btop",
-        "on-click-right": "wezterm start btm",
+        "on-click": "kitty -e btop",
+        "on-click-right": "kitty -e btm",
     },
 
     "disk": {
@@ -363,8 +363,8 @@
             "lower-medium": 30,
             "low": 10,
         },
-        "on-click": "wezterm start btop",
-        "on-click-right": "wezterm start btm",
+        "on-click": "kitty -e btop",
+        "on-click-right": "kitty -e btm",
     },
 
     "temperature": {
