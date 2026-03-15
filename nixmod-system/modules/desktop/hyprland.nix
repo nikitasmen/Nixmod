@@ -33,6 +33,9 @@
     hyprpaper    # Wallpaper utility
     hypridle     # Idle management
     hyprlock     # Screen locking
+    hyprutils
+    hyprlang
+    hyprwire
     mako         # Notification daemon
     grim         # Screenshot utility (backend)
     slurp        # Area selection for screenshots

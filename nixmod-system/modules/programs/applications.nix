@@ -29,6 +29,7 @@
     # neofetch
     fastfetch
     htop
+    btop
     nwg-look
         
     # Screenshots
