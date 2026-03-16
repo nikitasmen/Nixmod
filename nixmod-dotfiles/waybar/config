@@ -263,7 +263,7 @@
     "position": "bottom", // Waybar position (top|bottom|left|right)
     "height": 36, // Waybar height (to be removed for auto height)
     "spacing": 4, // Gaps between modules (4px)
-    "modules-left": ["user"],
+    "modules-left": ["custom/user"],
     "modules-center": ["hyprland/window"],
     "modules-right": ["keyboard-state", "hyprland/language"],
 
@@ -289,9 +289,11 @@
         }
     },
 
-    "user": {
-        "format": " <span color='#8bd5ca'>{user}</span> (up <span color='#f5bde6'>{work_d} d</span> <span color='#8aadf4'>{work_H} h</span> <span color='#eed49f'>{work_M} min</span> <span color='#a6da95'>↑</span>)",
-        "icon": true,
+    "custom/user": {
+        "format": " {}",
+        "interval": 30,
+        "exec": "~/.config/waybar/scripts/user-uptime.sh",
+        "tooltip": false,
     },
 },
 

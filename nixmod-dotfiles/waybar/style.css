@@ -50,7 +50,7 @@ window.bottom_bar .modules-right {
   margin-bottom: 5;
 }
 
-#user {
+#custom-user {
   padding-left: 10;
 }
 
@@ -183,7 +183,7 @@ window.top_bar .modules-center {
   color: @subtext0;
 }
 
-#custom-dunst.off {
+#custom-notifications.off {
   color: @subtext0;
 }
 
@@ -203,7 +203,7 @@ window.top_bar .modules-center {
   color: @subtext0;
 }
 
-#custom-dunst {
+#custom-notifications {
   margin-right: 2;
 }
 
