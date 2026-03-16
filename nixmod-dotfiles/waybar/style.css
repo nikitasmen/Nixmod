@@ -252,34 +252,11 @@ window.top_bar #privacy {
   color: @subtext0;
 }
 
-/* Media group: expand to show 3 buttons on hover */
-#group-media #custom-media-prev,
-#group-media #custom-media-play,
-#group-media #custom-media-next {
-  opacity: 0;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  transition: opacity 0.15s ease, min-width 0.15s ease;
-}
-#group-media:hover #custom-media-prev,
-#group-media:hover #custom-media-play,
-#group-media:hover #custom-media-next {
-  opacity: 1;
-  min-width: 22px;
-}
-#group-media #custom-media-prev { color: @subtext0; }
-#group-media #custom-media-play { color: @green; }
-#group-media #custom-media-next { color: @subtext0; }
-
 /* Top bar: custom modules in group - visible icons */
 window.top_bar #custom-webcam,
 window.top_bar #custom-recording,
 window.top_bar #custom-geo,
 window.top_bar #custom-media,
-window.top_bar #custom-media-prev,
-window.top_bar #custom-media-play,
-window.top_bar #custom-media-next,
 window.top_bar #custom-notifications,
 window.top_bar #custom-night_mode,
 window.top_bar #custom-airplane_mode,

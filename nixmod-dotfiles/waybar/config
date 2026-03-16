@@ -122,7 +122,9 @@
         "max-length": 35,
         "exec": "bash ~/.config/waybar/scripts/media.sh",
         "tooltip": true,
-      
+        "on-click": "playerctl play-pause",
+        "on-click-right": "playerctl next",
+        "on-click-middle": "playerctl previous",
         "on-scroll-up": "playerctl volume 0.05-",
         "on-scroll-down": "playerctl volume 0.05+",
         "smooth-scrolling-threshold": "0.1",
@@ -167,43 +169,12 @@
             "privacy",
             "custom/recording",
             "custom/geo",
-            "group/media",
+            "custom/media",
             "custom/notifications",
             "custom/night_mode",
             "custom/airplane_mode",
             "idle_inhibitor",
         ],
-    },
-
-    "group/media": {
-        "orientation": "horizontal",
-        "modules": [
-            "custom/media",
-            "custom/media-prev",
-            "custom/media-play",
-            "custom/media-next",
-        ],
-    },
-
-    "custom/media-prev": {
-        "format": "󰒮",
-        "tooltip": "Previous",
-        "interval": "once",
-        "on-click": "playerctl previous",
-    },
-
-    "custom/media-play": {
-        "format": "󰐊",
-        "tooltip": "Play/Pause",
-        "interval": "once",
-        "on-click": "playerctl play-pause",
-    },
-
-    "custom/media-next": {
-        "format": "󰒭",
-        "tooltip": "Next",
-        "interval": "once",
-        "on-click": "playerctl next",
     },
 
     "custom/webcam": {
