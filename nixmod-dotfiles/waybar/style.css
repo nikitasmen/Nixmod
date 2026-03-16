@@ -255,11 +255,9 @@ window.top_bar #privacy {
 #custom-media-prev,
 #custom-media-next {
   color: @subtext0;
-  cursor: pointer;
 }
 #custom-media-play {
   color: @green;
-  cursor: pointer;
 }
 
 /* Top bar: custom modules in group - visible icons */
