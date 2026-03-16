@@ -3,5 +3,5 @@
 if pgrep -x wl-screenrec >/dev/null 2>&1 || pgrep -f wl-screenrec >/dev/null 2>&1; then
   echo '{"alt":"on","text":"󰑓","tooltip":"Screen recording"}'
 else
-  echo '{"alt":"off","text":"","tooltip":"Recording (off)"}'
+  echo '{"alt":"off","text":"󰑓","tooltip":"Recording (off)"}'
 fi

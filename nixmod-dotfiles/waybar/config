@@ -171,8 +171,6 @@
             "custom/geo",
             "custom/media",
             "custom/notifications",
-            "custom/night_mode",
-            "custom/airplane_mode",
             "idle_inhibitor",
         ],
     },
@@ -199,32 +197,16 @@
 
     "custom/recording": {
         "interval": 1,
-        "exec-if": "pgrep -f wl-screenrec",
         "exec": "bash ~/.config/waybar/scripts/recording.sh",
         "return-type": "json",
     },
 
     "custom/geo": {
         "interval": 1,
-        "exec-if": "pgrep -f geoclue",
         "exec": "bash ~/.config/waybar/scripts/geo.sh",
         "return-type": "json",
     },
 
-    "custom/airplane_mode": {
-        "return-type": "json",
-        "interval": 1,
-        "exec": "bash ~/.config/waybar/scripts/airplane-mode.sh",
-        "on-click": "bash ~/.config/waybar/scripts/airplane-mode.sh toggle",
-    },
-
-    "custom/night_mode": {
-        "return-type": "json",
-        "interval": 1,
-        "exec": "bash ~/.config/waybar/scripts/night-mode.sh",
-        "on-click": "bash ~/.config/waybar/scripts/night-mode.sh toggle",
-    },
-    
     "custom/notifications": {
         "return-type": "json",
         "exec": "echo '{ \"text\":\"󰂚\", \"tooltip\": \"notifications (mako)\" }'",

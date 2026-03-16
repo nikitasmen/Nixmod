@@ -228,19 +228,9 @@ window.top_bar #privacy {
   color: @subtext0;
 }
 
-#custom-airplane_mode {
-  margin-right: 2px;
-}
-
-#custom-airplane_mode.off {
-  color: @subtext0;
-}
-
-#custom-night_mode {
-  margin-right: 2px;
-}
-
-#custom-night_mode.off {
+#custom-webcam.off,
+#custom-recording.off,
+#custom-geo.off {
   color: @subtext0;
 }
 
