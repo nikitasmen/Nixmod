@@ -151,7 +151,7 @@ jobs:
           
           # Check config directories exist
           cd nixmod-dotfiles
-          for dir in hypr waybar kitty ghostty wofi wlogout superfile neofetch clipse cava; do
+          for dir in hypr waybar kitty ghostty tmux wofi wlogout superfile neofetch clipse cava; do
             if [ -d "$dir" ]; then
               echo "✓ $dir directory found"
             else
