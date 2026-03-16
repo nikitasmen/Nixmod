@@ -105,6 +105,47 @@ window.top_bar .modules-center {
   margin-bottom: 5px;
 }
 
+/* Top bar right: cohesive layout */
+window.top_bar .modules-right {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+
+/* Connectivity: bluetooth + network as a unit */
+window.top_bar #bluetooth,
+window.top_bar #network {
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+/* Group misc: compact icon cluster with background */
+window.top_bar #group-misc {
+  background-color: alpha(@surface1, 0.6);
+  border-radius: 12px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* Icons in group: consistent size and spacing */
+window.top_bar #group-misc button,
+window.top_bar #group-misc > box,
+window.top_bar #group-misc #privacy {
+  min-width: 24px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+window.top_bar #privacy {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
 #custom-separator {
   color: @green;
 }
@@ -211,6 +252,19 @@ window.top_bar .modules-center {
   color: @subtext0;
 }
 
+/* Top bar: custom modules in group - visible icons */
+window.top_bar #custom-webcam,
+window.top_bar #custom-recording,
+window.top_bar #custom-geo,
+window.top_bar #custom-media,
+window.top_bar #custom-notifications,
+window.top_bar #custom-night_mode,
+window.top_bar #custom-airplane_mode,
+window.top_bar #idle_inhibitor {
+  font-size: 1.05rem;
+  min-width: 22px;
+}
+
 #custom-webcam {
   color: @maroon;
   margin-right: 3px;
@@ -234,6 +288,19 @@ window.top_bar .modules-center {
 #custom-geo {
   color: @yellow;
   margin-right: 4px;
+}
+
+/* Logout: prominent on top bar right */
+window.top_bar #custom-logout_menu {
+  color: @red;
+  background-color: alpha(@surface1, 0.7);
+  border-radius: 12px;
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 4px;
+  font-size: 1.1rem;
 }
 
 #custom-logout_menu {
