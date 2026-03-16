@@ -125,8 +125,8 @@
         "on-click": "playerctl previous",
         "on-click-right": "playerctl next",
         "on-click-middle": "playerctl play-pause",
-        "on-scroll-up": "playerctl volume 0.05-",
-        "on-scroll-down": "playerctl volume 0.05+",
+        "on-scroll-up": "playerctl volume 0.05+",
+        "on-scroll-down": "playerctl volume 0.05-",
         "smooth-scrolling-threshold": "0.1",
     },
 
