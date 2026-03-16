@@ -47,7 +47,7 @@
 # background = 000000
 background-opacity = 0.8
 foreground = f8f8f2
-theme = dark:catppuccin-frappe,light:catppuccin-latte
+theme = dark:Catppuccin Frappe,light:Catppuccin Latte
 keybind = ctrl+d=new_split:right
 cursor-style = block
 cursor-style-blink = false
