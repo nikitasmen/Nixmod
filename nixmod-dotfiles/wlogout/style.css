@@ -13,17 +13,17 @@ window {
 
 button {
     font-family: "IosevkaTerm Nerd Font", sans-serif;
-    font-size: 13px;
+    font-size: 20px;
     font-weight: 600;
     color: #cad3f5;
     background-color: #363a4f;
-    border-radius: 10px;
-    padding: 44px 16px 12px 16px;
+    border-radius: 12px;
+    padding: 72px 24px 20px 24px;
     margin: 6px;
-    min-width: 85px;
+    min-width: 110px;
     background-repeat: no-repeat;
-    background-position: center 14px;
-    background-size: 40px;
+    background-position: center 20px;
+    background-size: 64px;
 }
 
 button:hover {
