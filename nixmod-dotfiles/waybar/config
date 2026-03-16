@@ -125,7 +125,7 @@
             "none": "󰎈",
         },
         "max-length": 35,
-        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/media.sh\"'",
+        "exec": "bash ~/.config/waybar/scripts/media.sh",
         "tooltip": true,
         "tooltip-format": "{tooltip}",
         "on-click": "playerctl play-pause",
