@@ -252,13 +252,25 @@ window.top_bar #privacy {
   color: @subtext0;
 }
 
-#custom-media-prev,
-#custom-media-next {
-  color: @subtext0;
+/* Media group: buttons hidden until hover; stay visible until leaving both media and buttons */
+#group-media #custom-media-prev,
+#group-media #custom-media-play,
+#group-media #custom-media-next {
+  opacity: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  transition: opacity 0.15s ease, min-width 0.15s ease;
 }
-#custom-media-play {
-  color: @green;
+#group-media:hover #custom-media-prev,
+#group-media:hover #custom-media-play,
+#group-media:hover #custom-media-next {
+  opacity: 1;
+  min-width: 22px;
 }
+#group-media #custom-media-prev,
+#group-media #custom-media-next { color: @subtext0; }
+#group-media #custom-media-play { color: @green; }
 
 /* Top bar: custom modules in group - visible icons */
 window.top_bar #custom-webcam,
