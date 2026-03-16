@@ -260,7 +260,6 @@ window.top_bar #privacy {
   min-width: 0;
   margin: 0;
   padding: 0;
-  overflow: hidden;
   transition: opacity 0.15s ease, min-width 0.15s ease;
 }
 #group-media:hover #custom-media-prev,
