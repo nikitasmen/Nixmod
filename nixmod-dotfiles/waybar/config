@@ -122,9 +122,10 @@
         "format-icons": {
             "Playing": "",
             "Paused": "",
+            "none": "",
         },
         "max-length": 35,
-        "exec": "fish -c fetch_music_player_data",
+        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/media.sh\"'",
         "on-click": "playerctl play-pause",
         "on-click-right": "playerctl next",
         "on-click-middle": "playerctl prev",
@@ -182,7 +183,7 @@
 
     "custom/webcam": {
         "interval": 1,
-        "exec": "fish -c check_webcam",
+        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/webcam.sh\"'",
         "return-type": "json",
     },
 
@@ -203,29 +204,29 @@
     "custom/recording": {
         "interval": 1,
         "exec-if": "pgrep wl-screenrec",
-        "exec": "fish -c check_recording",
+        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/recording.sh\"'",
         "return-type": "json",
     },
 
     "custom/geo": {
         "interval": 1,
         "exec-if": "pgrep geoclue",
-        "exec": "fish -c check_geo_module",
+        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/geo.sh\"'",
         "return-type": "json",
     },
 
     "custom/airplane_mode": {
         "return-type": "json",
         "interval": 1,
-        "exec": "fish -c check_airplane_mode",
-        "on-click": "fish -c airplane_mode_toggle",
+        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/airplane-mode.sh\"'",
+        "on-click": "bash -c '\"${HOME}/.config/waybar/scripts/airplane-mode.sh toggle\"'",
     },
 
     "custom/night_mode": {
         "return-type": "json",
         "interval": 1,
-        "exec": "fish -c check_night_mode",
-        "on-click": "fish -c night_mode_toggle",
+        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/night-mode.sh\"'",
+        "on-click": "bash -c '\"${HOME}/.config/waybar/scripts/night-mode.sh toggle\"'",
     },
     
     "custom/notifications": {
@@ -292,7 +293,7 @@
     "custom/user": {
         "format": " {}",
         "interval": 30,
-        "exec": "~/.config/waybar/scripts/user-uptime.sh",
+        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/user-uptime.sh\"'",
         "tooltip": false,
     },
 },
