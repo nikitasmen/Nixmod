@@ -1,9 +1,13 @@
+# TypeScript/Node.js Playwright dev shell (no Python)
+# Use: nix develop -f nixmod-system/playwrightConfig.nix
+# Then: npm install && npx playwright test
+
 { pkgs ? import <nixpkgs> {} }:
 
 pkgs.mkShell {
   buildInputs = [
-    pkgs.playwright-driver  # provides the Playwright driver with browsers
     pkgs.nodejs
+    pkgs.playwright-driver.browsers  # Browser binaries only (no Python)
     pkgs.glib
     pkgs.nss
     pkgs.nspr
@@ -13,7 +17,7 @@ pkgs.mkShell {
     pkgs.expat
     pkgs.at-spi2-core
     pkgs.libp11
-    pkgs.systemd # for libudev.so.1
+    pkgs.systemd
     pkgs.alsa-lib
     pkgs.gtk3
     pkgs.cairo
@@ -24,6 +28,10 @@ pkgs.mkShell {
 
   shellHook = ''
     export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}
-    echo "✅ nix-shell loaded with Playwright and NixOS-compatible browsers"
+    export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true
+    echo "✅ TypeScript Playwright shell ready"
+    echo "   Install: npm install"
+    echo "   Run tests: npx playwright test"
+    echo "   Match @playwright/test version with nixpkgs playwright-driver (see nixhub.io)"
   '';
 }
