@@ -21,6 +21,7 @@ modules/
 │   ├── audio.nix          # Audio configuration
 │   ├── boot.nix           # Boot configuration
 │   ├── fonts.nix          # Font configuration
+│   ├── input-remapper.nix # Mouse/key remapping (extra buttons)
 │   ├── locale.nix         # Locale settings
 │   ├── networking.nix     # Network configuration
 │   └── power.nix          # Power management
@@ -58,6 +59,7 @@ Core system-level configuration modules.
 | `audio.nix` | Audio system | Pipewire, PulseAudio compatibility |
 | `boot.nix` | Boot configuration | Bootloader, kernel parameters |
 | `fonts.nix` | Font management | System fonts, font configuration |
+| `input-remapper.nix` | Input remapping | Extra mouse buttons, key mapping |
 | `locale.nix` | Localization | Language, timezone, keyboard layout |
 | `networking.nix` | Network setup | NetworkManager, firewall |
 | `power.nix` | Power management | Battery, suspend, power policies |

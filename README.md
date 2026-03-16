@@ -2,9 +2,7 @@
 
 A comprehensive NixOS desktop environment configuration centered around the Hyprland Wayland compositor, featuring modern tooling, beautiful theming, and developer-friendly utilities.
 
-**⚠️ IMPORTANT: This project has been separated into two repositories for better maintainability and user experience.**
-
-[![NixOS](https://img.shields.io/badge/NixOS-23.11-blue.svg)](https://nixos.org/)
+[![NixOS](https://img.shields.io/badge/NixOS-Flakes-blue.svg)](https://nixos.org/)
 [![Hyprland](https://img.shields.io/badge/Hyprland-Wayland-green.svg)](https://hyprland.org/)
 [![Flakes](https://img.shields.io/badge/Nix-Flakes-orange.svg)](https://nixos.wiki/wiki/Flakes)
 
@@ -35,8 +33,8 @@ This project is organized into separate components for better maintainability:
 ### **1. Install System Configuration**
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/nixmod.git
-cd nixmod
+git clone https://github.com/nikitasmen/Nixmod.git
+cd Nixmod
 
 # Install the system configuration
 sudo ./toolkit/nixmod.sh install
@@ -115,6 +113,7 @@ nixmod-system/
 │   │   ├── audio.nix            # Audio system
 │   │   ├── boot.nix             # Boot configuration
 │   │   ├── fonts.nix            # Font configuration
+│   │   ├── input-remapper.nix   # Mouse/key remapping (extra buttons)
 │   │   ├── locale.nix           # Locale settings
 │   │   ├── networking.nix       # Network configuration
 │   │   └── power.nix            # Power management
@@ -145,7 +144,7 @@ nixmod-dotfiles/
 │   ├── kitty.conf               # Main configuration
 │   ├── theme.conf               # Theme settings
 │   ├── splits.conf              # Split configurations
-│   └── custom-hints.conf        # Custom key hints
+│   └── custom-hints.py          # Custom key hints (URL/path selection)
 ├── ghostty/                      # Ghostty terminal
 │   └── config                   # Terminal configuration
 ├── wofi/                         # Application launcher
@@ -295,8 +294,7 @@ sudo ../toolkit/nixmod.sh flake-update
 # Update dotfiles via toolkit (recreates individual symlinks for all discovered apps)
 sudo ./toolkit/nixmod.sh install-dotfiles
 
-# Or update directly
-cd nixmod-dotfiles
+# Or update directly (from repo root)
 git pull
 ./toolkit/dotfiles.sh install
 
@@ -392,9 +390,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **GitHub Issues**: [Create an issue](https://github.com/yourusername/nixmod/issues)
-- **Discord**: Join our community server
-- **Documentation**: Check the [Wiki](https://github.com/yourusername/nixmod/wiki)
+- **GitHub Issues**: [Create an issue](https://github.com/nikitasmen/Nixmod/issues)
+- **Documentation**: Check the [Wiki](https://github.com/nikitasmen/Nixmod/wiki)
 
 ---
 

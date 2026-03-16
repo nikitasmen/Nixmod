@@ -184,7 +184,7 @@ jobs:
           # Test help commands
           ./toolkit/nixmod.sh help || true
           ./toolkit/helper.sh help || true
-          ./toolkit/install-config.sh help || true
+          ./toolkit/dotfiles.sh help || true
           ./toolkit/add-flake.sh --help || true
           
           echo "Toolkit scripts are executable and show help correctly"

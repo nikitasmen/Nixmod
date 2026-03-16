@@ -61,6 +61,7 @@ nixmod-system/
 │   │   ├── audio.nix            # Audio system (Pipewire)
 │   │   ├── boot.nix             # Boot configuration
 │   │   ├── fonts.nix            # Font configuration
+│   │   ├── input-remapper.nix   # Mouse/key remapping (extra buttons)
 │   │   ├── locale.nix           # Locale settings
 │   │   ├── networking.nix       # Network configuration
 │   │   └── power.nix            # Power management
@@ -85,6 +86,7 @@ nixmod-system/
 | **Networking** | Network configuration | `modules/system/networking.nix` |
 | **Boot** | Boot configuration | `modules/system/boot.nix` |
 | **Power** | Power management | `modules/system/power.nix` |
+| **Input Remapper** | Mouse/key remapping | `modules/system/input-remapper.nix` |
 | **Locale** | Locale settings | `modules/system/locale.nix` |
 | **Applications** | General applications | `modules/programs/applications.nix` |
 | **Development** | Development tools | `modules/programs/development.nix` |
@@ -214,7 +216,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **GitHub Issues**: [Create an issue](https://github.com/yourusername/nixmod-system/issues)
-- **Documentation**: Check the [Wiki](https://github.com/yourusername/nixmod-system/wiki)
+- **GitHub Issues**: [Create an issue](https://github.com/nikitasmen/Nixmod/issues)
+- **Documentation**: Check the [Wiki](https://github.com/nikitasmen/Nixmod/wiki)
 
 ---

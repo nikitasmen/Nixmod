@@ -76,6 +76,41 @@ sudo ./toolkit/helper.sh clean
 ./toolkit/helper.sh setup-configs
 ```
 
+### `dotfiles.sh` - Dotfiles Management
+
+Script for installing, syncing, and managing user dotfiles from `nixmod-dotfiles/`.
+
+```bash
+./toolkit/dotfiles.sh [command] [config-name]
+```
+
+#### Commands
+
+| Command | Description | Usage |
+|---------|-------------|-------|
+| `install` | Install all or specific dotfiles (symlinks) | `./toolkit/dotfiles.sh install` or `./toolkit/dotfiles.sh install hypr` |
+| `sync` | Sync configs from ~/.config back to nixmod-dotfiles | `./toolkit/dotfiles.sh sync` |
+| `list` | List available configurations | `./toolkit/dotfiles.sh list` |
+| `status` | Check dotfiles symlink status | `./toolkit/dotfiles.sh status` |
+| `update-paths` | Update hardcoded paths for another user | `./toolkit/dotfiles.sh update-paths /home/username` |
+| `help` | Show help message | `./toolkit/dotfiles.sh help` |
+
+#### Examples
+
+```bash
+# Install all dotfiles
+./toolkit/dotfiles.sh install
+
+# Install only Hyprland config
+./toolkit/dotfiles.sh install hypr
+
+# Sync changes back to repo
+./toolkit/dotfiles.sh sync
+
+# Update paths for another user
+./toolkit/dotfiles.sh update-paths /home/newuser
+```
+
 ### `add-flake.sh` - Flake Management
 
 Script for adding new flake inputs to your configuration.
@@ -92,52 +127,6 @@ Script for adding new flake inputs to your configuration.
 
 # Add with specific branch
 ./toolkit/add-flake.sh github:owner/repo/branch my-flake
-```
-
-### `install-config.sh` - Configuration Installation
-
-Automated script for installing configuration files to user directories.
-
-```bash
-./toolkit/install-config.sh [config-type]
-```
-
-#### Supported Config Types
-
-- `hypr` - Hyprland configuration
-- `waybar` - Waybar status bar
-- `kitty` - Terminal configuration
-- `all` - All configurations (default)
-
-#### Examples
-
-```bash
-# Install all configurations
-./toolkit/install-config.sh
-
-# Install only Hyprland config
-./toolkit/install-config.sh hypr
-
-# Install only terminal configs
-./toolkit/install-config.sh kitty
-```
-
-### `set-wallpaper.sh` - Wallpaper Management
-
-Script for setting and managing wallpapers.
-
-```bash
-./toolkit/set-wallpaper.sh [wallpaper-path]
-```
-
-#### Examples
-
-```bash
-# Set a specific wallpaper
-./toolkit/set-wallpaper.sh /path/to/wallpaper.jpg
-
-# Set wallpaper from dotfiles
-./toolkit/set-wallpaper.sh ../nixmod-dotfiles/hypr/wallpapers/wallpaper.jpg
 ```
 
 ### `update-unixkit.sh` - UnixKit Updates
@@ -164,8 +153,8 @@ Script for updating UnixKit utility scripts.
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/nixmod.git
-   cd nixmod
+   git clone https://github.com/nikitasmen/Nixmod.git
+   cd Nixmod
    ```
 
 2. **Install the configuration**:
@@ -251,12 +240,10 @@ sudo ./toolkit/helper.sh clean
 ### Wallpaper Management
 
 ```bash
-# Set a new wallpaper
-./toolkit/set-wallpaper.sh /path/to/new/wallpaper.jpg
+# Set a new wallpaper (script lives in nixmod-dotfiles/hypr)
+./nixmod-dotfiles/hypr/set-wallpaper.sh /path/to/new/wallpaper.jpg
 
-# Update wallpaper in dotfiles
-cd nixmod-dotfiles
-./hypr/set-wallpaper.sh /path/to/wallpaper.jpg
+# Or if dotfiles are installed: ~/.config/hypr/set-wallpaper.sh
 ```
 
 ### UnixKit Updates
@@ -360,7 +347,7 @@ nix-env -iA nixpkgs.missing-tool
 - [NixOS Manual](https://nixos.org/manual/nixos/stable/)
 - [Nix Flakes Guide](https://nixos.wiki/wiki/Flakes)
 - [Hyprland Wiki](https://wiki.hyprland.org/)
-- [NixMod Documentation](https://github.com/yourusername/nixmod/wiki)
+- [NixMod Documentation](https://github.com/nikitasmen/Nixmod/wiki)
 
 ---
 

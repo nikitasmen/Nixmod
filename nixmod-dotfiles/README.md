@@ -36,47 +36,49 @@ User configuration files for applications and desktop environment components. Th
 
 ### Installation
 
+Dotfiles are managed from the **main Nixmod repo** via `toolkit/dotfiles.sh`. Run from the repo root:
+
 #### Automated Installation (Recommended)
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/nixmod-dotfiles.git ~/.config/dotfiles
+# Clone the repository (full Nixmod repo)
+git clone https://github.com/nikitasmen/Nixmod.git ~/.config/dotfiles
 cd ~/.config/dotfiles
 
 # Install all configurations
-./install.sh
+./toolkit/dotfiles.sh install
 
 # Or install specific configurations
-./install.sh hypr
-./install.sh waybar
-./install.sh kitty
-./install.sh ghostty
-./install.sh wofi
-./install.sh wlogout
-./install.sh superfile
-./install.sh neofetch
-./install.sh clipse
-./install.sh cava
+./toolkit/dotfiles.sh install hypr
+./toolkit/dotfiles.sh install waybar
+./toolkit/dotfiles.sh install kitty
+./toolkit/dotfiles.sh install ghostty
+./toolkit/dotfiles.sh install wofi
+./toolkit/dotfiles.sh install wlogout
+./toolkit/dotfiles.sh install superfile
+./toolkit/dotfiles.sh install neofetch
+./toolkit/dotfiles.sh install clipse
+./toolkit/dotfiles.sh install cava
 ```
 
 #### Manual Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/nixmod-dotfiles.git ~/.config/dotfiles
-cd ~/.config/dotfiles
+git clone https://github.com/nikitasmen/Nixmod.git ~/.config/dotfiles
+cd ~/.config/dotfiles/nixmod-dotfiles
 
-# Create symlinks manually
-ln -sf ~/.config/dotfiles/hypr ~/.config/hyprland
-ln -sf ~/.config/dotfiles/waybar ~/.config/waybar
-ln -sf ~/.config/dotfiles/kitty ~/.config/kitty
-ln -sf ~/.config/dotfiles/ghostty ~/.config/ghostty
-ln -sf ~/.config/dotfiles/wofi ~/.config/wofi
-ln -sf ~/.config/dotfiles/wlogout ~/.config/wlogout
-ln -sf ~/.config/dotfiles/superfile ~/.config/superfile
-ln -sf ~/.config/dotfiles/neofetch ~/.config/neofetch
-ln -sf ~/.config/dotfiles/clipse ~/.config/clipse
-ln -sf ~/.config/dotfiles/cava ~/.config/cava
+# Create symlinks manually (Hyprland expects ~/.config/hypr)
+ln -sf ~/.config/dotfiles/nixmod-dotfiles/hypr ~/.config/hypr
+ln -sf ~/.config/dotfiles/nixmod-dotfiles/waybar ~/.config/waybar
+ln -sf ~/.config/dotfiles/nixmod-dotfiles/kitty ~/.config/kitty
+ln -sf ~/.config/dotfiles/nixmod-dotfiles/ghostty ~/.config/ghostty
+ln -sf ~/.config/dotfiles/nixmod-dotfiles/wofi ~/.config/wofi
+ln -sf ~/.config/dotfiles/nixmod-dotfiles/wlogout ~/.config/wlogout
+ln -sf ~/.config/dotfiles/nixmod-dotfiles/superfile ~/.config/superfile
+ln -sf ~/.config/dotfiles/nixmod-dotfiles/neofetch ~/.config/neofetch
+ln -sf ~/.config/dotfiles/nixmod-dotfiles/clipse ~/.config/clipse
+ln -sf ~/.config/dotfiles/nixmod-dotfiles/cava ~/.config/cava
 ```
 
 ## 📁 Project Structure
@@ -84,8 +86,6 @@ ln -sf ~/.config/dotfiles/cava ~/.config/cava
 ```
 nixmod-dotfiles/
 ├── README.md
-├── install.sh
-├── sync.sh
 ├── .gitignore
 ├── hypr/                      # Hyprland ecosystem
 │   ├── hyprland.conf         # Main Hyprland config
@@ -100,12 +100,17 @@ nixmod-dotfiles/
 │   ├── style.css             # Custom styling
 │   ├── macchiato.css         # Catppuccin theme
 │   └── scripts/
-│       └── exit_menu.sh      # Exit menu script
+│       ├── exit_menu.sh      # Exit menu script
+│       ├── media.sh          # Media player status
+│       ├── webcam.sh         # Webcam status
+│       ├── recording.sh      # Recording indicator
+│       ├── geo.sh            # Location services
+│       └── user-uptime.sh    # User/uptime display
 ├── kitty/                    # Kitty terminal
 │   ├── kitty.conf            # Main configuration
 │   ├── theme.conf            # Theme settings
 │   ├── splits.conf           # Split configurations
-│   └── custom-hints.conf     # Custom key hints
+│   └── custom-hints.py      # Custom key hints (URL/path selection)
 ├── ghostty/                  # Ghostty terminal
 │   └── config                # Terminal configuration
 ├── wofi/                     # Application launcher
@@ -152,9 +157,9 @@ nixmod-dotfiles/
 │       ├── pass_through.vert
 │       ├── spectrogram.frag
 │       └── winamp_line_style_spectrum.frag
-└── scripts/                  # Management scripts
-    └── update-paths.sh       # Path update script
 ```
+
+> **Note:** Install, sync, and update-paths are run from the main Nixmod repo via `./toolkit/dotfiles.sh` (run from repo root).
 
 ## 🔧 Configuration
 
@@ -183,15 +188,14 @@ nixmod-dotfiles/
 4. **Superfile Theme**: Change theme in `superfile/superfile/config.toml`
 
 #### Path Customization
-Many configuration files contain hardcoded paths that need to be updated:
+Many configuration files contain hardcoded paths that need to be updated. Run from the **main Nixmod repo root**:
 
 ```bash
 # Update paths in all configuration files
-./scripts/update-paths.sh /home/yourusername
+./toolkit/dotfiles.sh update-paths /home/yourusername
 
-# Or update specific files
-sed -i 's|/home/nikmen/|/home/yourusername/|g' hypr/hyprland.conf
-sed -i 's|/home/nikmen/|/home/yourusername/|g' hypr/hyprlock.conf
+# Or update to current user's home
+./toolkit/dotfiles.sh update-paths
 ```
 
 #### Keyboard Shortcuts
@@ -204,54 +208,46 @@ sed -i 's|/home/nikmen/|/home/yourusername/|g' hypr/hyprlock.conf
 
 ## 🛠️ Management Tools
 
-### Installation Script
+Dotfiles are managed via `toolkit/dotfiles.sh` from the **main Nixmod repo root**:
+
+### Installation
 
 ```bash
 # Install all configurations
-./install.sh
+./toolkit/dotfiles.sh install
 
 # Install specific configuration
-./install.sh hypr
-./install.sh waybar
-./install.sh kitty
-./install.sh ghostty
-./install.sh wofi
-./install.sh wlogout
-./install.sh superfile
-./install.sh neofetch
-./install.sh clipse
-./install.sh cava
+./toolkit/dotfiles.sh install hypr
+./toolkit/dotfiles.sh install waybar
+./toolkit/dotfiles.sh install kitty
+./toolkit/dotfiles.sh install ghostty
+./toolkit/dotfiles.sh install wofi
+./toolkit/dotfiles.sh install wlogout
+./toolkit/dotfiles.sh install superfile
+./toolkit/dotfiles.sh install neofetch
+./toolkit/dotfiles.sh install clipse
+./toolkit/dotfiles.sh install cava
 ```
 
-### Synchronization Script
+### Synchronization
 
 ```bash
-# Sync changes back to repository
-./sync.sh
+# Sync changes back to repository (from ~/.config to nixmod-dotfiles)
+./toolkit/dotfiles.sh sync
 
 # Sync specific configuration
-./sync.sh hypr
-./sync.sh waybar
-./sync.sh kitty
-./sync.sh ghostty
-./sync.sh wofi
-./sync.sh wlogout
-./sync.sh superfile
-./sync.sh neofetch
-./sync.sh clipse
-./sync.sh cava
+./toolkit/dotfiles.sh sync hypr
+./toolkit/dotfiles.sh sync waybar
 ```
 
-### Path Update Script
+### Path Update
 
 ```bash
-# Update all hardcoded paths
-./scripts/update-paths.sh /home/yourusername
+# Update hardcoded paths for another user
+./toolkit/dotfiles.sh update-paths /home/username
 
-# Update specific paths
-./scripts/update-paths.sh /home/yourusername hypr
-./scripts/update-paths.sh /home/yourusername waybar
-./scripts/update-paths.sh /home/yourusername kitty
+# Update to current user's home
+./toolkit/dotfiles.sh update-paths
 ```
 
 ## 🔄 Updates
@@ -259,21 +255,21 @@ sed -i 's|/home/nikmen/|/home/yourusername/|g' hypr/hyprlock.conf
 ### Updating Configurations
 
 ```bash
-# Pull latest changes
+# From main Nixmod repo root
 git pull origin main
 
 # Reinstall configurations
-./install.sh
+./toolkit/dotfiles.sh install
 
 # Or update specific configurations
-./install.sh hypr waybar kitty ghostty wofi wlogout superfile neofetch clipse cava
+./toolkit/dotfiles.sh install hypr waybar kitty ghostty wofi wlogout superfile neofetch clipse cava
 ```
 
 ### Syncing Changes
 
 ```bash
-# Sync all changes back to repository
-./sync.sh
+# Sync changes from ~/.config back to nixmod-dotfiles
+./toolkit/dotfiles.sh sync
 
 # Commit and push changes
 git add .
@@ -372,8 +368,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **GitHub Issues**: [Create an issue](https://github.com/yourusername/nixmod-dotfiles/issues)
-- **Documentation**: Check the [Wiki](https://github.com/yourusername/nixmod-dotfiles/wiki)
+- **GitHub Issues**: [Create an issue](https://github.com/nikitasmen/Nixmod/issues)
+- **Documentation**: Check the [Wiki](https://github.com/nikitasmen/Nixmod/wiki)
 
 ---
 
