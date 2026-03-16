@@ -120,7 +120,7 @@
         "restart-interval": 2,
         "return-type": "json",
         "max-length": 35,
-        // "exec": "bash ~/.config/waybar/scripts/media.sh",
+        "exec": "bash ~/.config/waybar/scripts/media.sh",
         "tooltip": true,
         "on-click": "bash ~/.config/waybar/scripts/media.sh",
         "on-scroll-up": "playerctl volume 0.05-",
