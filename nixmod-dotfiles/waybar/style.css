@@ -252,11 +252,24 @@ window.top_bar #privacy {
   color: @subtext0;
 }
 
+#custom-media-prev,
+#custom-media-next {
+  color: @subtext0;
+  cursor: pointer;
+}
+#custom-media-play {
+  color: @green;
+  cursor: pointer;
+}
+
 /* Top bar: custom modules in group - visible icons */
 window.top_bar #custom-webcam,
 window.top_bar #custom-recording,
 window.top_bar #custom-geo,
 window.top_bar #custom-media,
+window.top_bar #custom-media-prev,
+window.top_bar #custom-media-play,
+window.top_bar #custom-media-next,
 window.top_bar #custom-notifications,
 window.top_bar #custom-night_mode,
 window.top_bar #custom-airplane_mode,

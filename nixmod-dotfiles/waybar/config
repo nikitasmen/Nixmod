@@ -115,6 +115,16 @@
         },
     },
 
+    "group/media": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/media",
+            "custom/media-prev",
+            "custom/media-play",
+            "custom/media-next",
+        ],
+    },
+
     "custom/media": {
         "format": "{}",
         "restart-interval": 2,
@@ -122,10 +132,30 @@
         "max-length": 35,
         "exec": "bash ~/.config/waybar/scripts/media.sh",
         "tooltip": true,
-        "on-click": "bash ~/.config/waybar/scripts/media.sh",
         "on-scroll-up": "playerctl volume 0.05-",
         "on-scroll-down": "playerctl volume 0.05+",
         "smooth-scrolling-threshold": "0.1",
+    },
+
+    "custom/media-prev": {
+        "format": "󰒮",
+        "tooltip": "Previous",
+        "on-click": "playerctl previous",
+    },
+
+    "custom/media-play": {
+        "format": "{}",
+        "restart-interval": 2,
+        "return-type": "json",
+        "exec": "bash ~/.config/waybar/scripts/media-play.sh",
+        "tooltip": "Play/Pause",
+        "on-click": "playerctl play-pause",
+    },
+
+    "custom/media-next": {
+        "format": "󰒭",
+        "tooltip": "Next",
+        "on-click": "playerctl next",
     },
 
     "bluetooth": {
@@ -167,7 +197,7 @@
             "privacy",
             "custom/recording",
             "custom/geo",
-            "custom/media",
+            "group/media",
             "custom/notifications",
             "custom/night_mode",
             "custom/airplane_mode",
