@@ -2,7 +2,7 @@
 # Waybar media module - icon in bar, dropdown tooltip with track + controls (like calendar)
 status=$(playerctl status 2>/dev/null)
 if [ -z "$status" ]; then
-  echo '{"text":"   󰒮 󰏤 󰒭","tooltip":"<tt>No player</tt>\n\n<span color=\"#a5adcb\">Left: Play · Right: Next · Middle: Prev</span>"}'
+  echo '{"text":"󰎆","tooltip":"<tt>No player</tt>"}'
   exit 0
 fi
 artist=$(playerctl metadata artist 2>/dev/null | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
