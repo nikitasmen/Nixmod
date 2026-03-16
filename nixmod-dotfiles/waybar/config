@@ -116,21 +116,13 @@
     },
 
     "custom/media": {
-        "format": "{icon} {text}",
+        "format": "{}",
         "restart-interval": 2,
         "return-type": "json",
-        "format-icons": {
-            "Playing": "󰐊",
-            "Paused": "󰏤",
-            "none": "󰎈",
-        },
         "max-length": 35,
         "exec": "bash ~/.config/waybar/scripts/media.sh",
         "tooltip": true,
-        "tooltip-format": "{tooltip}",
-        "on-click": "playerctl play-pause",
-        "on-click-right": "playerctl next",
-        "on-click-middle": "playerctl prev",
+      
         "on-scroll-up": "playerctl volume 0.05-",
         "on-scroll-down": "playerctl volume 0.05+",
         "smooth-scrolling-threshold": "0.1",
