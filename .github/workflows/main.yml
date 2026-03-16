@@ -84,29 +84,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Test installation script
+      - name: Test dotfiles management script
         run: |
-          cd nixmod-dotfiles
-          echo "Testing install.sh..."
-          chmod +x install.sh
-          ./install.sh help || true
-          echo "Install script is executable and shows help correctly"
+          echo "Testing toolkit/dotfiles.sh..."
+          chmod +x toolkit/dotfiles.sh
+          ./toolkit/dotfiles.sh help
+          echo "Dotfiles script is executable and shows help correctly"
 
-      - name: Test sync script
+      - name: Test dotfiles install (dry run)
         run: |
-          cd nixmod-dotfiles
-          echo "Testing sync.sh..."
-          chmod +x sync.sh
-          ./sync.sh help || true
-          echo "Sync script is executable and shows help correctly"
+          echo "Testing install command..."
+          ./toolkit/dotfiles.sh list
+          echo "Install/list commands work correctly"
 
-      - name: Test update-paths script
+      - name: Test update-paths command
         run: |
-          cd nixmod-dotfiles
-          echo "Testing update-paths.sh..."
-          chmod +x scripts/update-paths.sh
-          ./scripts/update-paths.sh help || true
-          echo "Update-paths script is executable and shows help correctly"
+          echo "Testing update-paths command..."
+          ./toolkit/dotfiles.sh help | grep -q update-paths && echo "update-paths available" || true
 
   check-dotfiles-configs:
     name: Check Dotfiles Configurations
@@ -144,18 +138,19 @@ jobs:
 
       - name: Validate directory structure
         run: |
-          cd nixmod-dotfiles
           echo "Validating directory structure..."
           
-          # Check required files exist
-          test -f README.md || (echo "README.md missing" && exit 1)
-          test -f install.sh || (echo "install.sh missing" && exit 1)
-          test -f sync.sh || (echo "sync.sh missing" && exit 1)
-          test -f .gitignore || (echo ".gitignore missing" && exit 1)
-          test -d scripts || (echo "scripts directory missing" && exit 1)
-          test -f scripts/update-paths.sh || (echo "scripts/update-paths.sh missing" && exit 1)
+          # Check toolkit/dotfiles.sh exists (dotfiles managed from main repo)
+          test -f toolkit/dotfiles.sh || (echo "toolkit/dotfiles.sh missing" && exit 1)
+          echo "✓ toolkit/dotfiles.sh found"
+          
+          # Check nixmod-dotfiles required files
+          test -f nixmod-dotfiles/README.md || (echo "nixmod-dotfiles/README.md missing" && exit 1)
+          test -f nixmod-dotfiles/.gitignore || (echo "nixmod-dotfiles/.gitignore missing" && exit 1)
+          echo "✓ nixmod-dotfiles README and .gitignore found"
           
           # Check config directories exist
+          cd nixmod-dotfiles
           for dir in hypr waybar kitty ghostty wofi wlogout superfile neofetch clipse cava; do
             if [ -d "$dir" ]; then
               echo "✓ $dir directory found"
