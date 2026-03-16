@@ -79,3 +79,12 @@ button:focus {
     background-color: #a6da95;
     color: #1e1e2e;
 }
+
+#cancel {
+    color: #6e738d;
+}
+
+#cancel:focus {
+    background-color: #6e738d;
+    color: #1e1e2e;
+}
