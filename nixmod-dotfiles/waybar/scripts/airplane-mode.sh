@@ -11,7 +11,7 @@ if [ "$1" = "toggle" ]; then
   exit 0
 fi
 if rfkill list wifi 2>/dev/null | grep -q "Soft blocked: yes"; then
-  echo '{"alt":"on","text":"󰀝"}'
+  echo '{"alt":"on","text":"󰀝","tooltip":"Airplane mode on"}'
 else
-  echo '{"alt":"off","text":""}'
+  echo '{"alt":"off","text":"","tooltip":"Airplane mode (off, click to toggle)"}'
 fi

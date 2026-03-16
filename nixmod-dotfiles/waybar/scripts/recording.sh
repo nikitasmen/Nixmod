@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Waybar recording module - check if screen recording
-if pgrep -x wl-screenrec >/dev/null 2>&1; then
-  echo '{"alt":"on","text":"󰑓"}'
+if pgrep -x wl-screenrec >/dev/null 2>&1 || pgrep -f wl-screenrec >/dev/null 2>&1; then
+  echo '{"alt":"on","text":"󰑓","tooltip":"Screen recording"}'
 else
-  echo '{"alt":"off","text":""}'
+  echo '{"alt":"off","text":"","tooltip":"Recording (off)"}'
 fi

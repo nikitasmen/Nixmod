@@ -12,7 +12,7 @@ fi
 scheme=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null)
 theme=$(gsettings get org.gnome.desktop.interface gtk-theme 2>/dev/null)
 if echo "$scheme $theme" | grep -qiE 'dark|prefer-dark'; then
-  echo '{"alt":"on","text":"󰖔"}'
+  echo '{"alt":"on","text":"󰖔","tooltip":"Dark mode"}'
 else
-  echo '{"alt":"off","text":""}'
+  echo '{"alt":"off","text":"","tooltip":"Light mode (click to toggle)"}'
 fi

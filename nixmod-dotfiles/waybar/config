@@ -179,7 +179,7 @@
 
     "custom/webcam": {
         "interval": 1,
-        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/webcam.sh\"'",
+        "exec": "bash ~/.config/waybar/scripts/webcam.sh",
         "return-type": "json",
     },
 
@@ -199,30 +199,30 @@
 
     "custom/recording": {
         "interval": 1,
-        "exec-if": "pgrep wl-screenrec",
-        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/recording.sh\"'",
+        "exec-if": "pgrep -f wl-screenrec",
+        "exec": "bash ~/.config/waybar/scripts/recording.sh",
         "return-type": "json",
     },
 
     "custom/geo": {
         "interval": 1,
-        "exec-if": "pgrep geoclue",
-        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/geo.sh\"'",
+        "exec-if": "pgrep -f geoclue",
+        "exec": "bash ~/.config/waybar/scripts/geo.sh",
         "return-type": "json",
     },
 
     "custom/airplane_mode": {
         "return-type": "json",
         "interval": 1,
-        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/airplane-mode.sh\"'",
-        "on-click": "bash -c '\"${HOME}/.config/waybar/scripts/airplane-mode.sh toggle\"'",
+        "exec": "bash ~/.config/waybar/scripts/airplane-mode.sh",
+        "on-click": "bash ~/.config/waybar/scripts/airplane-mode.sh toggle",
     },
 
     "custom/night_mode": {
         "return-type": "json",
         "interval": 1,
-        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/night-mode.sh\"'",
-        "on-click": "bash -c '\"${HOME}/.config/waybar/scripts/night-mode.sh toggle\"'",
+        "exec": "bash ~/.config/waybar/scripts/night-mode.sh",
+        "on-click": "bash ~/.config/waybar/scripts/night-mode.sh toggle",
     },
     
     "custom/notifications": {
@@ -289,7 +289,7 @@
     "custom/user": {
         "format": " {}",
         "interval": 30,
-        "exec": "bash -c '\"${HOME}/.config/waybar/scripts/user-uptime.sh\"'",
+        "exec": "bash ~/.config/waybar/scripts/user-uptime.sh",
         "tooltip": false,
     },
 },
