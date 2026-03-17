@@ -7,7 +7,7 @@ in
   programs.spicetify = {
     enable = true;
     theme = spicePkgs.themes.text;  # TUI-like terminal aesthetic
-    colorScheme = "Gruvbox";        # Warm developer palette (alt: Nord, Dracula, CatppuccinMocha)
+    colorScheme = "CatppuccinMacchiato";  # Matches waybar, helix, superfile
     enabledExtensions = with spicePkgs.extensions; [
       adblockify
       hidePodcasts
