@@ -7,4 +7,4 @@ for dev in /dev/video*; do
     exit 0
   fi
 done
-echo '{"alt":"off","text":"󰹏","tooltip":"Webcam (off)"}'
+echo '{"alt":"off","text":"󰖠","tooltip":"Webcam (off)"}'

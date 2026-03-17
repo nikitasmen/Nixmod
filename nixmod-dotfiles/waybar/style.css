@@ -260,6 +260,11 @@ window.top_bar #idle_inhibitor {
   margin-right: 3px;
 }
 
+/* Camera in use: bright red to stand out */
+#custom-webcam.on {
+  color: @red;
+}
+
 #privacy-item.screenshare {
   color: @peach;
   margin-right: 5px;
