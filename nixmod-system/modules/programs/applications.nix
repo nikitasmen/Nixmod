@@ -31,7 +31,11 @@
     btop
     bottom   # btm - system monitor (executable: btm)
     nwg-look
-        
+    ffmpeg   # Multimedia framework       
+    gum      # Tool for  glamorous shell scripts
+    mpv      # Cli media player
+    yt-dlp   # Youtube downloader
+    chafa    # Cli image converter
     # Screenshots
     flameshot
 
