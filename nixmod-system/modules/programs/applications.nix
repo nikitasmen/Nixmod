@@ -9,9 +9,7 @@
     # Browsers
     google-chrome
     
-    # Media
-    spotify
-    spicetify-cli
+    # Media (Spotify installed via spicetify.nix with themes)
     freetube
   ] ++ lib.optional (yt-x-pkg != null) yt-x-pkg ++ [
     # stremio #Insecure dependencies
