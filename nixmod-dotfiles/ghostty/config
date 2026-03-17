@@ -1,13 +1,36 @@
 # Ghostty configuration - NixMod dotfiles
 # https://ghostty.org/docs/config
 
-# Appearance (matches Kitty + Catppuccin Macchiato system theme)
+# Appearance - Tokyo Night (vibrant blues, purples, cyan)
 font-family = "JetBrains Mono Nerd Font"
 font-family = "Fira Code Nerd Font"
 font-size = 12
-theme = dark:Catppuccin Mocha,light:Catppuccin Latte
-background-opacity = 0.8
+theme = dark:TokyoNight Night,light:TokyoNight Day
+background-opacity = 0.9
 background-blur = true
+
+# Boost palette vibrancy (base 16 ANSI colors)
+palette-generate = true
+palette = 1=ff6e6e
+palette = 2=98c379
+palette = 3=e5c07b
+palette = 4=61afef
+palette = 5=c678dd
+palette = 6=56b6c2
+palette = 7=abb2bf
+palette = 8=5c6370
+palette = 9=ff6e6e
+palette = 10=98c379
+palette = 11=e5c07b
+palette = 12=61afef
+palette = 13=c678dd
+palette = 14=56b6c2
+palette = 15=ffffff
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+cursor-color = #56b6c2
 
 # Window
 window-padding-x = 12
@@ -15,10 +38,6 @@ window-padding-y = 12
 window-padding-balance = true
 window-decoration = auto
 scrollbar = never
-
-# Cursor
-cursor-style = block
-cursor-style-blink = false
 
 # Keybindings
 keybind = ctrl+d=new_split:right
