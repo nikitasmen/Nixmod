@@ -15,7 +15,7 @@ in
     ];
     enabledCustomApps = with spicePkgs.apps; [
       marketplace  # Browse themes, extensions, apps in sidebar (install from UI may not work with Nix)
-      statistics
+      stats
     ];
     experimentalFeatures = true;  # Required for marketplace and other features
     # Native Wayland support for Hyprland
