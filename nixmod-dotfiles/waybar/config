@@ -143,7 +143,7 @@
         "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t({device_battery_percentage}%)",
         "max-length": 35,
         "on-click": "blueman-manager",
-        "on-click-right": "overskride",
+        "on-click-right": "blueman-manager",
     },
 
     "network": {
@@ -159,7 +159,7 @@
         "tooltip-format-ethernet":"Interface: {ifname}\nIP: {ipaddr}\nGW: {gwaddr}\nNetmask: {netmask}\nCIDR: {cidr}\n\n<span color='#a6da95'>{bandwidthUpBits}</span>\t<span color='#ee99a0'>{bandwidthDownBits}</span>\t<span color='#c6a0f6'>󰹹{bandwidthTotalBits}</span>",
         "max-length": 35,
         "on-click": "networkmanager_dmenu ",
-        "on-click-right": "iwgtk",
+        "on-click-right": "nm-connection-editor",
     },
 
     "group/misc": {
