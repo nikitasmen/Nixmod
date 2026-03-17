@@ -19,7 +19,7 @@
     
   };
 
-  outputs = { self, nixpkgs, unixkit, yt-x, ... }@inputs: 
+  outputs = { self, nixpkgs, unixkit, yt-x, nix-ai, ... }@inputs: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
