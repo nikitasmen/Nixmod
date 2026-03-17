@@ -6,7 +6,51 @@ set -e
 
 # Source helper functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/helper.sh"
+
+# Define helper functions
+echo_error() {
+    echo -e "\033[0;31m$1\033[0m" >&2
+}
+
+echo_info() {
+    echo -e "\033[0;34m$1\033[0m"
+}
+
+echo_success() {
+    echo -e "\033[0;32m$1\033[0m"
+}
+
+echo_code() {
+    echo -e "\033[1;33m$1\033[0m"
+}
+
+# Define validation functions locally to avoid conflicts
+validate_input() {
+    local param="$1"
+    local param_name="$2"
+    if [[ -z "$param" ]]; then
+        echo_error "Error: $param_name is required"
+        exit 1
+    fi
+}
+
+validate_file() {
+    local file="$1"
+    local file_name="$2"
+    if [[ ! -f "$file" ]]; then
+        echo_error "Error: $file_name file not found: $file"
+        exit 1
+    fi
+}
+
+validate_url() {
+    local url="$1"
+    local param_name="$2"
+    if [[ ! "$url" =~ ^https?:// ]] && [[ ! "$url" =~ ^github: ]] && [[ ! "$url" =~ ^git\+ ]]; then
+        echo_error "Error: $param_name must be a valid URL or flake reference, got: $url"
+        exit 1
+    fi
+}
 
 # Default values
 FLAKE_NAME=""
@@ -30,21 +74,33 @@ print_usage() {
 }
 
 validate_inputs() {
-  if [[ -z "$FLAKE_NAME" ]]; then
-    echo_error "Flake name is required"
-    print_usage
+  validate_input "$FLAKE_NAME" "Flake name"
+  validate_input "$FLAKE_URL" "Flake URL"
+  validate_url "$FLAKE_URL" "Flake URL"
+  
+  # Validate flake name format (alphanumeric and hyphens only)
+  if [[ ! "$FLAKE_NAME" =~ ^[a-zA-Z0-9-]+$ ]]; then
+    echo_error "Flake name must contain only alphanumeric characters and hyphens, got: $FLAKE_NAME"
     exit 1
   fi
   
-  if [[ -z "$FLAKE_URL" ]]; then
-    echo_error "Flake URL is required"
-    print_usage
-    exit 1
+  # Validate module path if provided
+  if [[ -n "$MODULE_PATH" ]]; then
+    local module_dir="$(dirname "$MODULE_PATH")"
+    if [[ ! -d "$module_dir" ]]; then
+      echo_info "Module directory will be created: $module_dir"
+    fi
   fi
 }
 
 add_flake_to_inputs() {
-  local flake_nix="$NIXMOD_ROOT/nixmod-system/flake.nix"
+  # Get the repository root directory
+  local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  local repo_root="$(dirname "$script_dir")"
+  local flake_nix="$repo_root/nixmod-system/flake.nix"
+  
+  # Validate flake.nix exists
+  validate_file "$flake_nix" "Flake configuration file"
   
   echo_info "Adding $FLAKE_NAME to flake.nix inputs"
   
@@ -109,6 +165,8 @@ add_flake_to_inputs() {
 }
 
 create_module() {
+  validate_input "$MODULE_PATH" "Module path"
+  
   echo_info "Creating module for $FLAKE_NAME at $MODULE_PATH"
   
   # Create directory if it doesn't exist
@@ -149,21 +207,6 @@ EOF
   echo_code "    };"
   echo_code "  };"
 }
-
-# Parse command line arguments
-while [[ "$#" -gt 0 ]]; do
-  case $1 in
-    -n|--name) FLAKE_NAME="$2"; shift ;;
-    -u|--url) FLAKE_URL="$2"; shift ;;
-    -d|--description) FLAKE_DESCRIPTION="$2"; shift ;;
-    -m|--module) MODULE_PATH="$2"; shift ;;
-    -f|--follows-nixpkgs) FLAKE_NIXPKGS_FOLLOWS=true ;;
-    -N|--not-a-flake) NOT_A_FLAKE=true ;;
-    -h|--help) print_usage; exit 0 ;;
-    *) echo_error "Unknown parameter: $1"; print_usage; exit 1 ;;
-  esac
-  shift
-done
 
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do

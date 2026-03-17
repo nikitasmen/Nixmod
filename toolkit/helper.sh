@@ -63,13 +63,81 @@ clean_system() {
 }
 
 
-# Function to create a new module
-create_module() {
-    if [ -z "$1" ]; then
-        echo -e "${RED}Error: Module name is required.${NC}"
-        echo "Usage: $0 create-module <module_name>"
+# Validation functions
+validate_input() {
+    local param="$1"
+    local param_name="$2"
+    if [[ -z "$param" ]]; then
+        echo -e "${RED}Error: $param_name is required${NC}"
         exit 1
     fi
+}
+
+validate_directory() {
+    local dir="$1"
+    local dir_name="$2"
+    if [[ ! -d "$dir" ]]; then
+        echo -e "${RED}Error: $dir_name directory not found: $dir${NC}"
+        exit 1
+    fi
+}
+
+validate_file() {
+    local file="$1"
+    local file_name="$2"
+    if [[ ! -f "$file" ]]; then
+        echo -e "${RED}Error: $file_name file not found: $file${NC}"
+        exit 1
+    fi
+}
+
+validate_positive_integer() {
+    local num="$1"
+    local param_name="$2"
+    if ! [[ "$num" =~ ^[0-9]+$ ]] || [[ "$num" -le 0 ]]; then
+        echo -e "${RED}Error: $param_name must be a positive integer, got: $num${NC}"
+        exit 1
+    fi
+}
+
+validate_boolean() {
+    local value="$1"
+    local param_name="$2"
+    if [[ "$value" != "true" && "$value" != "false" ]]; then
+        echo -e "${RED}Error: $param_name must be 'true' or 'false', got: $value${NC}"
+        exit 1
+    fi
+}
+
+validate_url() {
+    local url="$1"
+    local param_name="$2"
+    if [[ ! "$url" =~ ^https?:// ]] && [[ ! "$url" =~ ^github: ]] && [[ ! "$url" =~ ^git\+ ]]; then
+        echo -e "${RED}Error: $param_name must be a valid URL or flake reference, got: $url${NC}"
+        exit 1
+    fi
+}
+
+validate_nixos_config() {
+    echo -e "${BLUE}Validating NixOS configuration...${NC}"
+    
+    if [ -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
+        cd "$REPO_ROOT/nixmod-system"
+        if nix flake check 2>/dev/null; then
+            echo -e "${GREEN}✓ Configuration is valid${NC}"
+        else
+            echo -e "${RED}✗ Configuration validation failed${NC}"
+            echo -e "${YELLOW}Run 'nix flake check' for detailed error information${NC}"
+            exit 1
+        fi
+    else
+        echo -e "${YELLOW}No flake.nix found, skipping validation${NC}"
+    fi
+}
+
+# Function to create a new module
+create_module() {
+    validate_input "$1" "Module name"
     
     MODULE_NAME="$1"
     MODULE_DIR="$REPO_ROOT/modules"
@@ -150,8 +218,11 @@ case "$1" in
     clean)
         clean_system
         ;;
-   create-module)
+    create-module)
         create_module "$2"
+        ;;
+    validate)
+        validate_nixos_config
         ;;
     *)
         echo "Usage: $0 <command>"
@@ -160,6 +231,7 @@ case "$1" in
         echo "  health              Check system health"
         echo "  clean               Clean the Nix store and remove old generations"
         echo "  create-module NAME  Create a new module template"
+        echo "  validate            Validate NixOS configuration"
         exit 1
         ;;
 esac
