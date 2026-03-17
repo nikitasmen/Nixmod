@@ -6,7 +6,7 @@ font-family = "JetBrains Mono Nerd Font"
 font-family = "Fira Code Nerd Font"
 font-size = 12
 theme = dark:Catppuccin Macchiato,light:Catppuccin Latte
-background-opacity = 0.7
+background-opacity = 0.8
 background-blur = true
 
 # Window
