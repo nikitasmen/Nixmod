@@ -31,6 +31,7 @@
     fastfetch
     htop
     btop
+    btm
     nwg-look
         
     # Screenshots
