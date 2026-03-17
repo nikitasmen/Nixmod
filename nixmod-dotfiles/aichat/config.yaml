@@ -1,0 +1,8 @@
+# AIChat config - uses local Ollama (run: ollama pull llama3.2)
+# Usage: ai "list large files" | aichat -e "find todos in src/"
+model: ollama:llama3.2
+clients:
+  - type: openai-compatible
+    name: ollama
+    api_base: http://localhost:11434/v1
+    api_key: ""

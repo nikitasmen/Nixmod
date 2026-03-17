@@ -16,10 +16,13 @@
 
     # yt-x - terminal YouTube client
     yt-x.url = "github:Benexl/yt-x";
-    
+
+    # Spicetify - Spotify themes and extensions
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+
   };
 
-  outputs = { self, nixpkgs, unixkit, yt-x, ... }@inputs: 
+  outputs = { self, nixpkgs, unixkit, yt-x, nix-ai, ... }@inputs: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -53,6 +56,9 @@
           
           # Import modular flake components
           unixkitModule.module
+          
+          # Spicetify (Spotify themes)
+          inputs.spicetify-nix.nixosModules.spicetify
           
           # You can add more modules here
         ];
