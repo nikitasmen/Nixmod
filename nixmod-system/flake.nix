@@ -13,10 +13,13 @@
     
     # NixAi assistant 
     nix-ai.url = "github:olafkfreund/nix-ai-help";
+
+    # yt-x - terminal YouTube client
+    yt-x.url = "github:Benexl/yt-x";
     
   };
 
-  outputs = { self, nixpkgs, unixkit, ... }@inputs: 
+  outputs = { self, nixpkgs, unixkit, yt-x, ... }@inputs: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -40,8 +43,8 @@
         inherit system;
         
         specialArgs = { 
-          # Pass all inputs to modules
           inherit inputs;
+          yt-x-pkg = yt-x.packages.${system}.default;
         };
         
         modules = [

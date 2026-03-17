@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, yt-x-pkg ? null, ... }:
 
 {
   # Enable Firefox
@@ -13,6 +13,7 @@
     spotify
     spicetify-cli
     freetube
+  ] ++ lib.optional (yt-x-pkg != null) yt-x-pkg ++ [
     # stremio #Insecure dependencies
     
     # Communication
