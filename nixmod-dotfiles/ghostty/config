@@ -1,19 +1,18 @@
 # Ghostty configuration - NixMod dotfiles
 # https://ghostty.org/docs/config
 
-# Appearance
-font-family = "JetBrains Mono Nerd Font"
-font-family = "Fira Code Nerd Font"
-font-size = 12
-theme = dark:Catppuccin Mocha,light:Catppuccin Latte
-background-opacity = 0.9
+# Appearance (matches Kitty + Catppuccin Macchiato system theme)
+font-family = "IosevkaTerm Nerd Font"
+font-size = 11
+theme = dark:Catppuccin Macchiato,light:Catppuccin Latte
+background-opacity = 0.7
 background-blur = true
 
 # Window
 window-padding-x = 12
 window-padding-y = 12
 window-padding-balance = true
-window-decoration = none
+window-decoration = auto
 scrollbar = never
 
 # Cursor
