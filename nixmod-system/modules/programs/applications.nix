@@ -30,6 +30,9 @@
     htop
     btop
     bottom   # btm - system monitor (executable: btm)
+    lsof
+    wl-screenrec
+    geoclue2 
     nwg-look
     ffmpeg   # Multimedia framework       
     gum      # Tool for  glamorous shell scripts
