@@ -21,6 +21,11 @@
     syntaxHighlighting.enable = true;
     # Fzf key bindings (Ctrl+R history, Ctrl+T files, Alt+C cd) + zoxide (smart cd)
     interactiveShellInit = ''
+      # Prompt: current path in green (replaces user@host style)
+      PROMPT='%F{green}%~%f %# '
+      # Ctrl+Arrow word navigation (for Ghostty/Kitty)
+      bindkey "^[[1;5C" forward-word
+      bindkey "^[[1;5D" backward-word
       [[ -f ${pkgs.fzf}/share/fzf/key-bindings.zsh ]] && source ${pkgs.fzf}/share/fzf/key-bindings.zsh
       [[ -f ${pkgs.fzf}/share/fzf/completion.zsh ]] && source ${pkgs.fzf}/share/fzf/completion.zsh
       eval "$(${pkgs.zoxide}/bin/zoxide init zsh)"
