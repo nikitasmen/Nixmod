@@ -13,6 +13,10 @@ in
       hidePodcasts
       shuffle
     ];
+    enabledCustomApps = with spicePkgs.apps; [
+      marketplace  # Browse themes, extensions, apps in sidebar (install from UI may not work with Nix)
+    ];
+    experimentalFeatures = true;  # Required for marketplace and other features
     # Native Wayland support for Hyprland
     wayland = true;
   };
