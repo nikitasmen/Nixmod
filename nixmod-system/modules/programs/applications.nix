@@ -31,7 +31,7 @@
     fastfetch
     htop
     btop
-    btm
+    bottom   # btm - system monitor (executable: btm)
     nwg-look
         
     # Screenshots
