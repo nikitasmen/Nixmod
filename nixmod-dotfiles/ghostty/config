@@ -22,3 +22,6 @@ cursor-style-blink = false
 
 # Keybindings
 keybind = ctrl+d=new_split:right
+# Ctrl+Arrow word navigation (Emacs-style, works with zsh default)
+keybind = ctrl+left=esc:b
+keybind = ctrl+right=esc:f
