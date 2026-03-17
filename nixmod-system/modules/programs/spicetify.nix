@@ -35,6 +35,9 @@ in
         name = "stats";
       }
     ];
+    enabledSnippets = with spicePkgs.snippets; [
+      oneko
+    ]; 
     experimentalFeatures = true;  # Required for marketplace and other features
     # Native Wayland support for Hyprland
     wayland = true;
