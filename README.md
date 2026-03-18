@@ -47,10 +47,17 @@ sudo ./toolkit/nixmod.sh install-dotfiles
 ```
 This automatically discovers all configuration directories in `nixmod-dotfiles/` and creates individual symlinks for each one in your `~/.config/` directory.
 
-### **3. Update Paths (if needed)**
+### **3. Update Paths (Required for New Users/Machines)**
 ```bash
-# Update hardcoded paths for your username
+# Dotfiles contain hardcoded paths (e.g. wallpapers). Run this after cloning on a new machine:
 ./toolkit/dotfiles.sh update-paths /home/yourusername
+```
+
+### **4. Hardware Configuration (New Machines)**
+`hardware-configuration.nix` and `nvidia-configuration.nix` contain machine-specific data (disk UUIDs, GPU bus IDs). When setting up a different machine, regenerate these:
+```bash
+sudo nixos-generate-config
+# Then merge or replace hardware-configuration.nix and nvidia-configuration.nix as needed
 ```
 
 

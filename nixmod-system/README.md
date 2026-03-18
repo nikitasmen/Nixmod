@@ -35,6 +35,17 @@ A comprehensive NixOS system configuration with Hyprland, modern tooling, and de
 - Basic knowledge of NixOS and Linux
 - Git installed
 
+## ⚠️ Hardware Configuration (New Machines)
+
+`hardware-configuration.nix` and `nvidia-configuration.nix` contain **machine-specific** data (disk UUIDs, GPU bus IDs for NVIDIA Prime). When setting up a different machine:
+
+```bash
+sudo nixos-generate-config
+# Merge or replace hardware-configuration.nix and nvidia-configuration.nix with the generated output
+```
+
+Do not copy these files directly to another machine—they will break boot or graphics.
+
 ## 📁 Project Structure
 
 ```
