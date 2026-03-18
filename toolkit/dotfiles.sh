@@ -16,12 +16,19 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 DOTFILES_DIR="$REPO_ROOT/nixmod-dotfiles"
-CONFIG_TARGET="$HOME/.config"
+
+# Use actual user's home when running with sudo (avoids installing to /root/.config)
+if [ -n "$SUDO_USER" ]; then
+    CONFIG_TARGET="$(getent passwd "$SUDO_USER" | cut -d: -f6)/.config"
+else
+    CONFIG_TARGET="$HOME/.config"
+fi
 
 # Print header
 echo -e "${BLUE}================================${NC}"
 echo -e "${BLUE}   NixMod Dotfiles Manager     ${NC}"
 echo -e "${BLUE}================================${NC}"
+echo -e "${BLUE}Installing to: $CONFIG_TARGET${NC}"
 echo ""
 
 # Function to create a backup of an existing config directory
