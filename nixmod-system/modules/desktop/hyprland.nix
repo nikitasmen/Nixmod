@@ -6,11 +6,13 @@
   programs.hyprlock.enable = true;
 
   # XDG Portal configuration for Wayland
+  # programs.hyprland adds xdg-desktop-portal-hyprland automatically
+  # xdg-desktop-portal-gtk needed for Qt/KDE app portal registration (e.g. kdeconnect-indicator)
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     config = {
-      common.default = "wlr";
+      common.default = [ "hyprland" "gtk" ];
     };
   };
   
