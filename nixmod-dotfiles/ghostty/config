@@ -39,8 +39,15 @@ window-padding-balance = true
 window-decoration = auto
 scrollbar = never
 
-# Startup: fortune with clean formatting (no figlet)
-command = zsh -c 'echo ""; echo "  ─────────────────────────"; fortune 2>/dev/null | fold -s -w 60 | sed "s/^/  /"; echo "  ─────────────────────────"; echo ""; exec zsh -i'
+# Startup: fortune with clean block-quote UI
+command = zsh -c '
+  echo ""
+  echo "  ┌─"
+  fortune 2>/dev/null | fold -s -w 52 | sed "s/^/  │ /"
+  echo "  └─"
+  echo ""
+  exec zsh -i
+'
 
 # Keybindings
 keybind = ctrl+d=new_split:right
