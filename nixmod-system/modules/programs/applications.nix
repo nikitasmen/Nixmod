@@ -45,5 +45,10 @@
 
     # ScreenSaver
     pipes-rs
+
+    # Silly / boredom killers
+    fortune       # Random quotes: fortune
+    cmatrix       # Matrix rain: cmatrix
+    figlet        # ASCII art text: figlet "NixOS"
   ];
 }

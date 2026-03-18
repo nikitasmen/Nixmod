@@ -39,6 +39,9 @@ window-padding-balance = true
 window-decoration = auto
 scrollbar = never
 
+# Startup: fortune + figlet before shell
+command = zsh -c 'fortune 2>/dev/null; figlet -f small "Ghostty" 2>/dev/null; exec zsh -i'
+
 # Keybindings
 keybind = ctrl+d=new_split:right
 # Ctrl+Arrow word navigation (Emacs-style, works with zsh default)
