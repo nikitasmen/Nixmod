@@ -34,6 +34,7 @@
     wl-screenrec
     geoclue2 
     nwg-look
+    wdisplays   # Monitor layout GUI
     ffmpeg   # Multimedia framework       
     gum      # Tool for  glamorous shell scripts
     mpv      # Cli media player

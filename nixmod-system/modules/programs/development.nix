@@ -10,12 +10,18 @@
     config = {  
       user.name = "nikitasmen";
       user.email = "menounosnikitas@gmail.com";
+      core.pager = "delta";
+      interactive.diffFilter = "delta --color-only";
     };
   };
   
   # Development tools
   environment.systemPackages = with pkgs; [
     git          # Version control
+    delta        # Better git diff
+    lazygit      # Git TUI
+    bat          # cat with syntax highlighting
+    eza          # Better ls
     docker       # Container platform
     helix        # Text editor
     vim          # Text editor
