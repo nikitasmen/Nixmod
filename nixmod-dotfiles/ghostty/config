@@ -39,8 +39,8 @@ window-padding-balance = true
 window-decoration = auto
 scrollbar = never
 
-# Startup: fortune + figlet before shell
-command = zsh -c 'fortune 2>/dev/null; figlet -f small "Ghostty" 2>/dev/null; exec zsh -i'
+# Startup: fortune + multi-line figlet before shell
+command = zsh -c 'fortune 2>/dev/null; echo ""; figlet -f slant "Ghostty" 2>/dev/null; figlet -f small "~ NixOS ~" 2>/dev/null; figlet -f block "ready" 2>/dev/null; echo ""; exec zsh -i'
 
 # Keybindings
 keybind = ctrl+d=new_split:right
