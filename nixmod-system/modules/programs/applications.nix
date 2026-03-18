@@ -51,5 +51,6 @@
     cowsay        # ASCII art animals: fortune | cowsay -f dragon
     cmatrix       # Matrix rain: cmatrix
     figlet        # ASCII art text: figlet "NixOS"
+    hollywood     # Fake hacker terminal: hollywood
   ];
 }
