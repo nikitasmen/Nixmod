@@ -17,9 +17,10 @@
     publish.addresses = true;
   };
   
-  programs.kdeconnect = {
+services.kdeconnect = {
     enable = true;
-    package = pkgs.gnomeExtensions.gsconnect;
+    package = pkgs.kdePackages.kdeconnect-kde;
+    indicator = true;
   };
   
   # Network related packages
