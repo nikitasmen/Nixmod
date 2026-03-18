@@ -57,6 +57,7 @@
   };
 
   # Install dotfiles once per user on first graphical login (runs as the logged-in user)
+  # Note: Edit the clone URL below if using a fork or private repo
   systemd.user.services.install-dotfiles = {
     description = "Install NixMod dotfiles";
     wantedBy = [ "graphical-session.target" ];

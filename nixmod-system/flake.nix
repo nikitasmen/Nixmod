@@ -33,12 +33,9 @@
       };
       lib = nixpkgs.lib;
       
-      # Create UnixKit module directly
-      unixkitModule = {
-        module = { config, ... }: {
-          imports = [ ./unixkit.nix ];
-          _module.args.unixkit = unixkit;
-        };
+      unixkitModule = { config, ... }: {
+        imports = [ ./unixkit.nix ];
+        _module.args.unixkit = unixkit;
       };
       
     in {
@@ -54,8 +51,8 @@
           # Main configuration file
           ./configuration.nix
           
-          # Import modular flake components
-          unixkitModule.module
+          # UnixKit (provides unixkit input to unixkit.nix)
+          unixkitModule
           
           # Spicetify (Spotify themes)
           inputs.spicetify-nix.nixosModules.spicetify
