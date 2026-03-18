@@ -8,6 +8,10 @@
     # wireless.enable = true;  # Uncomment to enable wireless via wpa_supplicant
   };
   
+  programs.kdeconnect = {
+    enable = true;
+  };
+
   # KDE Connect services
   services.dbus.enable = true;
   services.avahi = {
