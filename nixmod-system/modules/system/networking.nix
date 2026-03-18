@@ -19,9 +19,18 @@
   
   programs.kdeconnect = {
     enable = true;
-    package = pkgs.gnomeExtensions.gsconnect;
   };
-  
+
+  # Systemd user service for KDE Connect (programs.kdeconnect only adds package + firewall)
+  systemd.user.services.kdeconnect = {
+    description = "KDE Connect daemon";
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    serviceConfig.Type = "simple";
+    serviceConfig.Restart = "on-failure";
+    serviceConfig.ExecStart = "${pkgs.kdePackages.kdeconnect-kde}/bin/kdeconnectd";
+  };
+
   # Desktop entry for kdeconnect-indicator (fixes "App info not found" portal error on Wayland)
   environment.systemPackages = with pkgs; [
     networkmanager_dmenu
