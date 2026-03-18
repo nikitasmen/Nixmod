@@ -17,12 +17,6 @@
     publish.addresses = true;
   };
   
-services.kdeconnect = {
-    enable = true;
-    package = pkgs.kdePackages.kdeconnect-kde;
-    indicator = true;
-  };
-
   # Systemd user service for KDE Connect (programs.kdeconnect only adds package + firewall)
   systemd.user.services.kdeconnect = {
     description = "KDE Connect daemon";
