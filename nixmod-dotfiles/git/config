@@ -1,4 +1,6 @@
-# Git config - delta, user (override in local if needed)
+# Git + delta config. Git reads ~/.config/git/config (XDG).
+# See https://dandavison.github.io/delta/configuration.html
+
 [user]
 	name = nikitasmen
 	email = menounosnikitas@gmail.com
