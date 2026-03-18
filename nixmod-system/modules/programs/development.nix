@@ -14,7 +14,8 @@
     eza          # Better ls
     docker       # Container platform
     helix        # Text editor
-    vim          # Text editor
+    neovim       # Code editor (vim + Lua config)
+    vim          # Text editor (minimal, for quick edits)
     tmux         # Terminal multiplexer
     tree         # Directory display
     findutils    # File search utilities
