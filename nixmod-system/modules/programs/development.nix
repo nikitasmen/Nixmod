@@ -12,8 +12,19 @@
       user.email = "menounosnikitas@gmail.com";
       core.pager = "delta";
       interactive.diffFilter = "delta --color-only";
+      merge.conflictStyle = "zdiff3";
+
+      # Delta: syntax-highlighted diffs
+      delta = {
+        navigate = true;   # n/N to move between hunks
+        dark = true;       # dark theme (matches Tokyo Night)
+        line-numbers = true;
+      };
     };
   };
+
+  # delta ./file -> git diff for that file (delta used as pager)
+  environment.shellAliases.delta = "git diff --";
   
   # Development tools
   environment.systemPackages = with pkgs; [
