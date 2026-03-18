@@ -322,8 +322,8 @@ add_flake() {
 update_unixkit() {
     echo -e "${BLUE}Updating UnixKit to latest commit...${NC}"
     
-    # Execute the update-unixkit.sh script
-    "$SCRIPT_DIR/update-unixkit.sh"
+    # update-unixkit.sh expects to run in nixmod-system (where flake.nix lives)
+    (cd "$REPO_ROOT/nixmod-system" && "$SCRIPT_DIR/update-unixkit.sh")
 }
 
 # Main script logic
