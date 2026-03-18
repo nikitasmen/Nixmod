@@ -24,12 +24,16 @@ else
     CONFIG_TARGET="$HOME/.config"
 fi
 
-# Print header
-echo -e "${BLUE}================================${NC}"
-echo -e "${BLUE}   NixMod Dotfiles Manager     ${NC}"
-echo -e "${BLUE}================================${NC}"
-echo -e "${BLUE}Installing to: $CONFIG_TARGET${NC}"
-echo ""
+# Print header (install target only for install command)
+print_header() {
+    echo -e "${BLUE}================================${NC}"
+    echo -e "${BLUE}   NixMod Dotfiles Manager     ${NC}"
+    echo -e "${BLUE}================================${NC}"
+    if [[ "$1" == "install" ]]; then
+        echo -e "${BLUE}Installing to: $CONFIG_TARGET${NC}"
+    fi
+    echo ""
+}
 
 # Function to create a backup of an existing config directory
 backup_config() {
@@ -87,6 +91,7 @@ install_all_configs() {
         symlink_config "$source_path" "$target_path" "$dir" && ((success_count++))
     done
     
+    touch "$REPO_ROOT/.installed" 2>/dev/null || true
     echo -e "${GREEN}Successfully installed $success_count of $total_count configurations${NC}"
 }
 
@@ -296,6 +301,7 @@ show_usage() {
 }
 
 # Main script logic
+print_header "$1"
 case "$1" in
     install)
         if [ -z "$2" ]; then
