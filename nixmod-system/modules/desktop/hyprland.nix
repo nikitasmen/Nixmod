@@ -28,7 +28,6 @@
   
   # Hyprland related packages
   environment.systemPackages = with pkgs; [
-    kitty        # Terminal emulator
     waybar       # Status bar
     wofi         # Application launcher
     wlogout      # Logout menu

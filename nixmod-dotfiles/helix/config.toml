@@ -24,13 +24,35 @@ normal = "block"
 select = "underline"
 
 [editor.statusline]
-left = ["mode", "spinner", "file-name", "file-modification-indicator"]
-center = ["diagnostics"]
-right = ["selections", "position", "position-percentage", "separator", "file-encoding", "file-line-ending", "file-type"]
+    left = [
+    "mode",
+    "spinner",
+    "version-control",
+    "spacer",
+    "separator",
+    "file-name",
+    "read-only-indicator",
+    "file-modification-indicator",
+
+    ]
+    center = []
+    right = [
+    "diagnostics",
+    "workspace-diagnostics",
+    "position",
+    "total-line-numbers",
+    "position-percentage",
+    "file-encoding",
+    "file-line-ending",
+    "file-type",
+    "register",
+    "selections",
+    ]
+    separator = "│"
 
 [editor.lsp]
-display-messages = true
-display-inlay-hints = true
+    display-messages = true
+    display-inlay-hints = true
 
 [editor.whitespace]
 render = "all"
