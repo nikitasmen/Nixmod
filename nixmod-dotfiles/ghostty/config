@@ -39,8 +39,8 @@ window-padding-balance = true
 window-decoration = auto
 scrollbar = never
 
-# Startup: fortune with clean block-quote UI
-command = zsh -c "echo ''; echo '  ┌─'; fortune 2>/dev/null | fold -s -w 52 | sed 's/^/  │ /'; echo '  └─'; echo ''; exec zsh -i"
+# Startup: fortune via cowthink (random animal thinks your fortune)
+command = zsh -c "cows=(default dragon stegosaurus tux daemon bunny); c=\${cows[\$((RANDOM % \${#cows[@]}))]}; fortune 2>/dev/null | cowthink -f \$c 2>/dev/null || fortune 2>/dev/null | cowthink; echo ''; exec zsh -i"
 
 # Keybindings
 keybind = ctrl+d=new_split:right

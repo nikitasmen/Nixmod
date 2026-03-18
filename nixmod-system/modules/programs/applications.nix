@@ -48,6 +48,7 @@
 
     # Silly / boredom killers
     fortune       # Random quotes: fortune
+    cowsay        # ASCII art animals: fortune | cowsay -f dragon
     cmatrix       # Matrix rain: cmatrix
     figlet        # ASCII art text: figlet "NixOS"
   ];
