@@ -2,14 +2,28 @@
 # Uses manually downloaded JAR (skmedix.pl doesn't allow automated fetch)
 # Download from: https://skmedix.pl/downloads → put JAR in ~/.local/share/sklauncher/
 
-self: super: {
+self: super: let
+  runtimeLibs = [
+    super.libGL
+    super.gtk3
+    super.glib
+    super.xorg.libXxf86vm
+    super.xorg.libXtst
+    super.xorg.libXi
+    super.xorg.libXrender
+    super.xorg.libXrandr
+    super.xorg.libXext
+    super.xorg.libX11
+  ];
+  libPath = super.lib.makeLibraryPath runtimeLibs;
+in {
   sklauncher = super.stdenv.mkDerivation rec {
     pname = "sklauncher";
     version = "wrapper";
 
     dontUnpack = true;
 
-    buildInputs = [ super.jdk21 ];
+    buildInputs = [ super.jdk21 ] ++ runtimeLibs;
 
     installPhase = ''
       mkdir -p $out/bin $out/share/applications
@@ -22,6 +36,8 @@ if [[ ! -f "\$JAR" ]]; then
   echo "Save SKLauncher.jar to: \$JAR"
   exit 1
 fi
+export LD_LIBRARY_PATH="${libPath}:\${LD_LIBRARY_PATH:-}"
+export GSETTINGS_SCHEMA_DIR="${super.gtk3}/share/gsettings-schemas/${super.gtk3.name}/glib-2.0/schemas"
 exec ${super.jdk21}/bin/java -jar "\$JAR" "\$@"
 WRAPPER
       chmod +x $out/bin/sklauncher
