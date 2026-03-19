@@ -6,7 +6,7 @@ font-family = "JetBrains Mono Nerd Font"
 font-family = "Fira Code Nerd Font"
 font-size = 12
 theme = dark:TokyoNight Night,light:TokyoNight Day
-background-opacity = 0.9
+background-opacity = 0.7
 background-blur = true
 
 # Boost palette vibrancy (base 16 ANSI colors)
