@@ -9,7 +9,7 @@ self: super: {
 
     src = super.fetchurl {
       url = "https://skmedix.pl/SKLauncher/SKLauncher.jar";
-      sha256 = "1ix2q8a1wakgny6mda21n56hin6cqh2pkp8k6395vnir93pb15kb";
+      sha256 = "0kdh9vyamvra9gfag4in7fxm80hr5s0jvzd94zs3vwr8xhfi6gjs";
     };
 
     dontUnpack = true;
