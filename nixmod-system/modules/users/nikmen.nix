@@ -14,7 +14,7 @@
       viber   # Communication
       discord-ptb # Communication
       
-      prismlauncher  #Minecraft launcher
+      sklauncher     # Minecraft launcher 
       heroic         # Heroic Game launcher 
     ];
   };
