@@ -12,11 +12,29 @@ let
 
   launchSteam = pkgs.writeShellScript "steam-on-controller-launch" ''
     set -eu
-    runtime="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+    # User units often lack WAYLAND_DISPLAY/DISPLAY (not imported into systemd --user).
+    # Copy display-related vars from the running compositor so Steam can open a window.
+    uid=$(${pkgs.coreutils}/bin/id -u)
+    for name in Hyprland hyprland sway swayfx gnome-shell; do
+      pid=$(${pkgs.procps}/bin/pgrep -u "$uid" -o -x "$name" 2>/dev/null || true)
+      [ -n "$pid" ] || continue
+      envfile="/proc/$pid/environ"
+      [ -r "$envfile" ] || continue
+      while IFS= read -r -d '' var; do
+        case "$var" in
+          WAYLAND_DISPLAY=*|DISPLAY=*|XAUTHORITY=*|XDG_SESSION_TYPE=*|XDG_CURRENT_DESKTOP=*|SDL_VIDEODRIVER=*)
+            export "$var"
+            ;;
+        esac
+      done < "$envfile"
+      break
+    done
+
+    runtime="''${XDG_RUNTIME_DIR:-/run/user/$uid}"
     mkdir -p "$runtime"
     lock="$runtime/steam-on-controller.lock"
     exec {lock_fd}>"$lock"
-    if ! flock -n "$lock_fd"; then
+    if ! ${pkgs.util-linux}/bin/flock -n "$lock_fd"; then
       exit 0
     fi
     nohup ${lib.escapeShellArg steamBin} </dev/null >/dev/null 2>&1 &
