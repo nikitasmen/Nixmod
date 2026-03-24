@@ -288,7 +288,7 @@
     "margin-top": 10,
     "margin-bottom": 10,
     "modules-left": ["wlr/taskbar"],
-    "modules-center": ["cpu", "memory", "disk", "temperature", "battery", "backlight", "pulseaudio", "systemd-failed-units"],
+    "modules-center": ["cpu", "memory", "disk", "temperature", "battery", "backlight", "pulseaudio#sink", "pulseaudio#mic", "systemd-failed-units"],
     "modules-right": ["tray"],
 
     // Modules Config
@@ -399,7 +399,7 @@
         "reverse-mouse-scrolling": true,
     },
 
-    "pulseaudio": {
+    "pulseaudio#sink": {
         "states": {
             "high": 90,
             "upper-medium": 70,
@@ -408,12 +408,10 @@
             "low": 10,
         },
         "tooltip-format": "{desc}",
-        "format": "{icon}{volume}%\n{format_source}",  
-        "format-bluetooth": "󰂱{icon}{volume}%\n{format_source}",
-        "format-bluetooth-muted": "󰂱󰝟{volume}%\n{format_source}",
-        "format-muted": "󰝟{volume}%\n{format_source}",
-        "format-source": "󰍬{volume}%",
-        "format-source-muted": "󰍭{volume}%",
+        "format": "{icon}{volume}%",
+        "format-bluetooth": "󰂱{icon}{volume}%",
+        "format-bluetooth-muted": "󰂱󰝟{volume}%",
+        "format-muted": "󰝟{volume}%",
         "format-icons": {
             "headphone": "󰋋",
             "hands-free": "",
@@ -433,6 +431,26 @@
         "reverse-scrolling": true,
         "reverse-mouse-scrolling": true,
         "on-click": "pavucontrol",
+    },
+
+    "pulseaudio#mic": {
+        "states": {
+            "high": 90,
+            "upper-medium": 70,
+            "medium": 50,
+            "lower-medium": 30,
+            "low": 10,
+        },
+        "tooltip-format": "{source_desc}",
+        "format": "{format_source}",
+        "format-source": "󰍬 {volume}%",
+        "format-source-muted": "󰍭 {volume}%",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 2%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 2%-",
+        "reverse-scrolling": true,
+        "reverse-mouse-scrolling": true,
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
     },
 
     "systemd-failed-units": {
