@@ -1,7 +1,5 @@
-# When a game controller is plugged in, start Steam in the graphical user's session.
-#
-# SYSTEMD_USER_WANTS on joystick evdev nodes is unreliable (seat/uaccess), so we use
-# udev RUN+= and start the user unit via that user's session D-Bus socket.
+# Start Steam when a gamepad appears (udev → user's systemd → short script).
+# Wayland: add the exec-once line in hyprland.conf so systemd --user gets WAYLAND_DISPLAY.
 
 { config, lib, pkgs, ... }:
 
@@ -10,49 +8,15 @@ let
   steamCtrl = config.services.steamOnController;
   steamBin = "${cfg.package}/bin/steam";
 
-  # Built with "…" lines so |, <, and bash read -d '' do not interact badly with Nix '' strings.
-  launchSteam = pkgs.writeShellScript "steam-on-controller-launch" (
-    lib.concatStringsSep "\n" [
-      "set -eu"
-      "# User units often lack WAYLAND_DISPLAY/DISPLAY (not imported into systemd --user)."
-      "# Copy display-related vars from the running compositor so Steam can open a window."
-      "uid=$(${pkgs.coreutils}/bin/id -u)"
-      "# Match cmdline (Nix wraps compositors; -x often misses Hyprland)."
-      "for name in Hyprland hyprland sway swayfx gnome-shell; do"
-      "  pid=$(${pkgs.procps}/bin/pgrep -u \"\$uid\" -f \"\$name\" 2>/dev/null | ${pkgs.coreutils}/bin/head -n1 || true)"
-      "  [ -n \"\$pid\" ] || continue"
-      "  envfile=\"/proc/\$pid/environ\""
-      "  [ -r \"\$envfile\" ] || continue"
-      "  # Pipe would run while in a subshell — exports would not reach steam. Use process substitution."
-      "  while IFS= read -r var; do"
-      "    case \"\$var\" in"
-      "      WAYLAND_DISPLAY=*|DISPLAY=*|XAUTHORITY=*|XDG_SESSION_TYPE=*|XDG_CURRENT_DESKTOP=*|SDL_VIDEODRIVER=*|QT_QPA_PLATFORM=*|GDK_BACKEND=*)"
-      "        export \"\$var\""
-      "        ;;"
-      "    esac"
-      "  done < <(${pkgs.perl}/bin/perl -0pe 's/\\x00/\\n/g' \"\$envfile\")"
-      "  break"
-      "done"
-      "if [ -z \"\${WAYLAND_DISPLAY:-}\" ] && [ -z \"\${DISPLAY:-}\" ]; then"
-      "  shopt -s nullglob || true"
-      "  for wl in /run/user/\$uid/wayland-*; do"
-      "    [ -S \"\$wl\" ] || continue"
-      "    export WAYLAND_DISPLAY=\${wl##*/}"
-      "    break"
-      "  done"
-      "fi"
-      "runtime=\"\${XDG_RUNTIME_DIR:-/run/user/\$uid}\""
-      "mkdir -p \"\$runtime\""
-      "lock=\"\$runtime/steam-on-controller.lock\""
-      "exec {lock_fd}>\"\$lock\""
-      "if ! ${pkgs.util-linux}/bin/flock -n \"\$lock_fd\"; then"
-      "  exit 0"
-      "fi"
-      "nohup ${lib.escapeShellArg steamBin} </dev/null >/dev/null 2>&1 &"
-    ]
-  );
+  launchSteam = pkgs.writeShellScript "steam-on-controller-launch" ''
+    set -eu
+    runtime="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+    mkdir -p "$runtime"
+    exec {fd}>"$runtime/steam-on-controller.lock"
+    ${pkgs.util-linux}/bin/flock -n "$fd" || exit 0
+    ${lib.escapeShellArg steamBin} &
+  '';
 
-  # Invoked by udev (root). Starts the oneshot in the target user's systemd --user.
   udevTrigger = pkgs.writeShellScript "steam-on-controller-udev" ''
     set -eu
     user=${lib.escapeShellArg steamCtrl.user}
@@ -60,11 +24,8 @@ let
     rt="/run/user/$uid"
     [ -S "$rt/bus" ] || exit 0
 
-    # One physical pad often creates several evdev nodes; coalesce bursts.
     exec {fd}>"/run/steam-on-controller-udev.lock"
-    if ! ${pkgs.util-linux}/bin/flock -n "$fd"; then
-      exit 0
-    fi
+    ${pkgs.util-linux}/bin/flock -n "$fd" || exit 0
     ${pkgs.coreutils}/bin/sleep 0.3
 
     ${pkgs.util-linux}/bin/runuser -u "$user" -- \
@@ -79,8 +40,7 @@ in
       type = lib.types.str;
       default = "nikmen";
       description = ''
-        Account whose active login session (graphical) should receive Steam when a
-        controller is plugged in. Requires /run/user/<uid>/bus (logged in).
+        User that must be logged in (graphical session) for Steam to start.
       '';
     };
   };
@@ -98,6 +58,14 @@ in
         RemainAfterExit = false;
         TimeoutStartSec = "120";
         ExecStart = "${launchSteam}";
+        # Filled after Hyprland (or other compositor) runs dbus-update-activation-environment --systemd …
+        PassEnvironment = [
+          "WAYLAND_DISPLAY"
+          "DISPLAY"
+          "XDG_CURRENT_DESKTOP"
+          "XDG_SESSION_TYPE"
+          "XAUTHORITY"
+        ];
       };
     };
   };
