@@ -20,13 +20,14 @@ let
       [ -n "$pid" ] || continue
       envfile="/proc/$pid/environ"
       [ -r "$envfile" ] || continue
-      while IFS= read -r -d '' var; do
+      # Avoid "read -d ''" here: in Nix '' strings, '' is special; use tr to split on NUL.
+      ${pkgs.coreutils}/bin/tr ''\\0'' ''\\n'' < "$envfile" | while IFS= read -r var; do
         case "$var" in
           WAYLAND_DISPLAY=*|DISPLAY=*|XAUTHORITY=*|XDG_SESSION_TYPE=*|XDG_CURRENT_DESKTOP=*|SDL_VIDEODRIVER=*)
             export "$var"
             ;;
         esac
-      done < "$envfile"
+      done
       break
     done
 
