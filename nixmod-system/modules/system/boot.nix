@@ -1,14 +1,21 @@
 { config, pkgs, ... }:
 
 {
-  # Bootloader configuration
+  # GRUB on EFI: arrow keys / selection often work when systemd-boot’s menu is visible
+  # but the firmware console ignores the keyboard (common on laptops).
   boot.loader = {
-    systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
-    grub.enable = false;
-  };
 
-  # Workaround for GNOME autologin
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
+    grub = {
+      enable = true;
+      efiSupport = true;
+      device = "nodev";
+      configurationLimit = 30;
+    };
+
+    systemd-boot.enable = false;
+
+    # Seconds before default entry boots; increase if you need more time to read the list.
+    timeout = 10;
+  };
 }
