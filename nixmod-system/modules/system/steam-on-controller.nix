@@ -10,36 +10,37 @@ let
   steamCtrl = config.services.steamOnController;
   steamBin = "${cfg.package}/bin/steam";
 
-  launchSteam = pkgs.writeShellScript "steam-on-controller-launch" ''
-    set -eu
-    # User units often lack WAYLAND_DISPLAY/DISPLAY (not imported into systemd --user).
-    # Copy display-related vars from the running compositor so Steam can open a window.
-    uid=$(${pkgs.coreutils}/bin/id -u)
-    for name in Hyprland hyprland sway swayfx gnome-shell; do
-      pid=$(${pkgs.procps}/bin/pgrep -u "$uid" -o -x "$name" 2>/dev/null || true)
-      [ -n "$pid" ] || continue
-      envfile="/proc/$pid/environ"
-      [ -r "$envfile" ] || continue
-      # Avoid "read -d ''" here: in Nix '' strings, '' is special; use tr to split on NUL.
-      ${pkgs.coreutils}/bin/tr ''\\0'' ''\\n'' < "$envfile" | while IFS= read -r var; do
-        case "$var" in
-          WAYLAND_DISPLAY=*|DISPLAY=*|XAUTHORITY=*|XDG_SESSION_TYPE=*|XDG_CURRENT_DESKTOP=*|SDL_VIDEODRIVER=*)
-            export "$var"
-            ;;
-        esac
-      done
-      break
-    done
-
-    runtime="''${XDG_RUNTIME_DIR:-/run/user/$uid}"
-    mkdir -p "$runtime"
-    lock="$runtime/steam-on-controller.lock"
-    exec {lock_fd}>"$lock"
-    if ! ${pkgs.util-linux}/bin/flock -n "$lock_fd"; then
-      exit 0
-    fi
-    nohup ${lib.escapeShellArg steamBin} </dev/null >/dev/null 2>&1 &
-  '';
+  # Built with "…" lines so |, <, and bash read -d '' do not interact badly with Nix '' strings.
+  launchSteam = pkgs.writeShellScript "steam-on-controller-launch" (
+    lib.concatStringsSep "\n" [
+      "set -eu"
+      "# User units often lack WAYLAND_DISPLAY/DISPLAY (not imported into systemd --user)."
+      "# Copy display-related vars from the running compositor so Steam can open a window."
+      "uid=$(${pkgs.coreutils}/bin/id -u)"
+      "for name in Hyprland hyprland sway swayfx gnome-shell; do"
+      "  pid=$(${pkgs.procps}/bin/pgrep -u \"\$uid\" -o -x \"\$name\" 2>/dev/null || true)"
+      "  [ -n \"\$pid\" ] || continue"
+      "  envfile=\"/proc/\$pid/environ\""
+      "  [ -r \"\$envfile\" ] || continue"
+      "  ${pkgs.perl}/bin/perl -0pe 's/\\x00/\\n/g' \"\$envfile\" | while IFS= read -r var; do"
+      "    case \"\$var\" in"
+      "      WAYLAND_DISPLAY=*|DISPLAY=*|XAUTHORITY=*|XDG_SESSION_TYPE=*|XDG_CURRENT_DESKTOP=*|SDL_VIDEODRIVER=*)"
+      "        export \"\$var\""
+      "        ;;"
+      "    esac"
+      "  done"
+      "  break"
+      "done"
+      "runtime=\"\${XDG_RUNTIME_DIR:-/run/user/\$uid}\""
+      "mkdir -p \"\$runtime\""
+      "lock=\"\$runtime/steam-on-controller.lock\""
+      "exec {lock_fd}>\"\$lock\""
+      "if ! ${pkgs.util-linux}/bin/flock -n \"\$lock_fd\"; then"
+      "  exit 0"
+      "fi"
+      "nohup ${lib.escapeShellArg steamBin} </dev/null >/dev/null 2>&1 &"
+    ]
+  );
 
   # Invoked by udev (root). Starts the oneshot in the target user's systemd --user.
   udevTrigger = pkgs.writeShellScript "steam-on-controller-udev" ''
