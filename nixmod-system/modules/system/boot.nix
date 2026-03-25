@@ -15,7 +15,8 @@
       # on UEFI; the EFI “console” input path usually includes USB HID. This forces the
       # classic text console for the menu (no themed background). Remove if you dislike it.
       extraConfig = ''
-        terminal_input console
+        insmod at_keyboard
+        terminal_input console efi 
         terminal_output console
       '';
     };
