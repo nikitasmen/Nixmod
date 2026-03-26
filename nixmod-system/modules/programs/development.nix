@@ -14,6 +14,7 @@
     eza          # Better ls
     docker       # Container platform
     helix        # Text editor
+    claude-code
     vim          # Text editor
     tmux         # Terminal multiplexer
     tree         # Directory display
