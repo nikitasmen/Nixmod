@@ -149,7 +149,7 @@ sync_all_configs() {
             ((total_count++))
             sync_config "$dir" && ((success_count++))
         else
-            echo -e "${YELLOW}Config directory not found in ~/.config: $dir${NC}"
+            echo -e "${YELLOW}Config directory not found in $CONFIG_TARGET: $dir${NC}"
         fi
     done
     
@@ -166,7 +166,7 @@ sync_specific_config() {
         sync_config "$config_name"
     else
         echo -e "${RED}Config not found in ~/.config: $config_name${NC}"
-        echo -e "${YELLOW}Available configs in ~/.config: $(ls -1 "$CONFIG_TARGET" | tr '\n' ' ')${NC}"
+        echo -e "${YELLOW}Available configs in $CONFIG_TARGET: $(ls -1 "$CONFIG_TARGET" | tr '\n' ' ')${NC}"
         return 1
     fi
 }
@@ -185,7 +185,7 @@ check_changes() {
                 echo -e "${GREEN}No changes in $dir${NC}"
             fi
         else
-            echo -e "${RED}$dir not found in ~/.config${NC}"
+            echo -e "${RED}$dir not found in $CONFIG_TARGET${NC}"
         fi
     done
 }
@@ -209,8 +209,12 @@ update_paths() {
     
     echo -e "${BLUE}Updating hardcoded paths from $old_user_path to $new_user_path${NC}"
     
-    # Find and replace in all configuration files
-    find "$DOTFILES_DIR" -type f \( -name "*.conf" -o -name "*.json" -o -name "*.toml" -o -name "*.sh" \) -exec sed -i "s|$old_user_path|$new_user_path|g" {} \;
+    # Find and replace in all configuration files (GNU sed -i vs BSD sed -i '')
+    if sed --version >/dev/null 2>&1; then
+        find "$DOTFILES_DIR" -type f \( -name "*.conf" -o -name "*.json" -o -name "*.toml" -o -name "*.sh" \) -exec sed -i "s|$old_user_path|$new_user_path|g" {} \;
+    else
+        find "$DOTFILES_DIR" -type f \( -name "*.conf" -o -name "*.json" -o -name "*.toml" -o -name "*.sh" \) -exec sed -i '' "s|$old_user_path|$new_user_path|g" {} \;
+    fi
     
     echo -e "${GREEN}Path update completed${NC}"
 }
@@ -223,6 +227,10 @@ check_dotfiles_status() {
     # Find all directories in nixmod-dotfiles (excluding hidden files and special directories)
     local config_apps=()
     while IFS= read -r -d '' dir; do
+        # Skip the dotfiles root itself (find includes -maxdepth 1 parent)
+        if [[ "$dir" == "$DOTFILES_DIR" ]]; then
+            continue
+        fi
         # Get just the directory name (not full path)
         local dirname=$(basename "$dir")
         # Skip special directories and hidden files
@@ -244,7 +252,7 @@ check_dotfiles_status() {
     local total_count=${#config_apps[@]}
     
     for app in "${config_apps[@]}"; do
-        local target_path="$HOME/.config/$app"
+        local target_path="$CONFIG_TARGET/$app"
         local source_path="$DOTFILES_DIR/$app"
         
         if [ -L "$target_path" ]; then
