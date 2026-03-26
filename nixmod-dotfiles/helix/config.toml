@@ -16,6 +16,11 @@ indent-guides.render = true
 auto-format = true
 auto-save = true
 
+# Clipboard via clipse (`clipse -c` / `clipse -p`) so copies match clipse + `clipse -listen` history.
+[editor.clipboard-provider.custom]
+yank = { command = "clipse", args = ["-p"] }
+paste = { command = "clipse", args = ["-c"] }
+
 [editor.cursor-shape]
 insert = "bar"
 normal = "block"
@@ -62,6 +67,15 @@ git-ignore = true
 [keys.normal]
 S-down = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 S-up = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+"C-S-c" = "yank_to_clipboard"
+"C-S-v" = "paste_clipboard_after"
+
+[keys.select]
+"C-S-c" = "yank_to_clipboard"
+"C-S-v" = "paste_clipboard_after"
+
+[keys.insert]
+"C-S-v" = "paste_clipboard_after"
 
 
 # Space mode: file explorer (sidebar-like) + file picker + motions
