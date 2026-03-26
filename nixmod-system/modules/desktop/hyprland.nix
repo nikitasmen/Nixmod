@@ -23,6 +23,8 @@
   
   services.ollama = {
     enable = true;
+    package = pkgs.ollama-cuda; 
+    # ollama_vulkan = pkgs.ollama-vulkan; 
     # acceleration = "cuda";  # Uncomment for GPU
   };
   
