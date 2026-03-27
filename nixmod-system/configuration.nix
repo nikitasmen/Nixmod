@@ -17,6 +17,7 @@
   nixpkgs.overlays = [
     (import ./overlays/flameshot.nix)
     (import ./overlays/sklauncher.nix)
+    (import ./overlays/tlauncher.nix)
   ]; 
   
   # Use flakes
