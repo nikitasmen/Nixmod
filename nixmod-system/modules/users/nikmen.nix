@@ -14,7 +14,6 @@
       viber   # Communication
       discord-ptb # Communication
       
-      sklauncher     # Minecraft launcher
       tlauncher      # TLauncher (JAR in ~/Downloads/)
       heroic         # Heroic Game launcher 
     ];
