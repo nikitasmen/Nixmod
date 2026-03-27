@@ -24,5 +24,6 @@
     wl-clipboard # Clipboard controll Waylad based
     clipse       # Clipboard manager 
     scc          # Code counter
+    p7zip        # zipping tool 
   ];
 }
