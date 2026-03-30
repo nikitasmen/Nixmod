@@ -8,7 +8,7 @@
     aichat       # Shell assistant: natural language -> commands, -e to execute
     fzf          # Fuzzy finder for paths, history, files
     zoxide       # Smarter cd - learns your paths
-  ] ++ lib.optional (inputs ? nix-ai) inputs.nix-ai.packages.${pkgs.system}.default;
+  ] ++ lib.optional (inputs ? nix-ai) inputs.nix-ai.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
   # Zsh with AI-friendly autocomplete (suggestions from history, syntax highlighting)
   programs.zsh = {
@@ -24,6 +24,7 @@
       [[ -f ${pkgs.fzf}/share/fzf/key-bindings.zsh ]] && source ${pkgs.fzf}/share/fzf/key-bindings.zsh
       [[ -f ${pkgs.fzf}/share/fzf/completion.zsh ]] && source ${pkgs.fzf}/share/fzf/completion.zsh
       eval "$(${pkgs.zoxide}/bin/zoxide init zsh)"
+      export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
     '';
   };
 
