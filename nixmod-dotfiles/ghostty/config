@@ -4,14 +4,13 @@
 # Appearance - Catppuccin Macchiato
 font-family = "JetBrains Mono Nerd Font"
 font-size = 12
-theme = catppuccin-macchiato
+# theme = catppuccin-macchiato
 background-opacity = 0.7
 background-blur = true
 background = #24273a
 foreground = #cad3f5
 
 # Boost palette vibrancy (Catppuccin Macchiato Base 16)
-palette-generate = true
 palette = 0=#494d64
 palette = 1=#ed8796
 palette = 2=#a6da95
