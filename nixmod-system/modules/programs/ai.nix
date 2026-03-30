@@ -27,6 +27,11 @@
     '';
   };
 
+  # Enable Starship prompt natively
+  programs.starship = {
+    enable = true;
+  };
+
   # Use zsh as default shell for the main user
   users.users.${config.nixmod.mainUser}.shell = pkgs.zsh;
 
