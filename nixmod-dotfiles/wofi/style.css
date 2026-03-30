@@ -3,25 +3,29 @@
 }
 
 window {
-    background-color: #3B4252;
+    background-color: transparent;
 }
 
 #input {
-    margin: 5px;
-    border-radius: 0px;
-    border: none;
-    background-color: #3B4252;
-    color: white;
+    margin: 10px;
+    border-radius: 15px;
+    border: 2px solid #5b6078;
+    background-color: #24273A;
+    color: #cad3f5;
+    padding: 10px;
 }
 
 #inner-box {
-    background-color: #383C4A;
+    background-color: rgba(36, 39, 58, 0.85); /* base with transparency for blur */
+    border-radius: 15px;
 }
 
 #outer-box {
-    margin: 2px;
-    padding: 10px;
-    background-color: #383C4A;
+    margin: 5px;
+    padding: 15px;
+    background-color: rgba(36, 39, 58, 0.85);
+    border-radius: 15px;
+    border: 2px solid #494d64; /* surface1 */
 }
 
 #scroll {
@@ -29,18 +33,24 @@ window {
 }
 
 #text {
-    padding: 4px;
-    color: white;
+    padding: 8px;
+    color: #cad3f5; /* text */
+}
+
+#entry {
+    border-radius: 10px;
+    margin-bottom: 2px;
 }
 
 #entry:nth-child(even){
-    background-color: #404552;
+    background-color: rgba(54, 58, 79, 0.5); /* surface0 half-opaque */
 }
 
 #entry:selected {
-    background-color: #4C566A;
+    background-color: #c6a0f6; /* mauve */
 }
 
 #text:selected {
     background: transparent;
+    color: #24273a; /* text contrast on mauve */
 }
