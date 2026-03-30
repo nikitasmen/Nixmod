@@ -14,11 +14,13 @@
     eza          # Better ls
     docker       # Container platform
     helix        # Text editor
-    claude-code
+    claude-code  # AI coding assistant
     vim          # Text editor
     tmux         # Terminal multiplexer
     tree         # Directory display
     findutils    # File search utilities
+    fd           # Faster find alternative
+    tealdeer     # Fast tldr implementation
     coreutils    # Basic utilities
     # xclip      # Clipboard controll X11 based
     wl-clipboard # Clipboard controll Waylad based
