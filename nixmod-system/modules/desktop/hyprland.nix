@@ -34,6 +34,8 @@
     wofi         # Application launcher
     wlogout      # Logout menu
     hyprpaper    # Wallpaper utility
+    waypaper     # GUI wallpaper utility
+    swaybg       # Backend for waypaper (optional but good to have)
     hypridle     # Idle management
     hyprlock     # Screen locking
     hyprutils
