@@ -2,9 +2,9 @@
 
 {
   home.username = "nikmen";
-  home.homeDirectory = "/home/${config.home.username}";
+  home.homeDirectory = "/home/nikmen";
   home.stateVersion = "25.05"; # Match NixOS state version
-  # home.enableNixpkgsReleaseCheck = false; # Disable version mismatch warning when using unstable branch
+  home.enableNixpkgsReleaseCheck = false; # Disable version mismatch warning when using unstable branch
 
   # This is the "DRY" way to manage dotfiles.
   # Instead of a bash script creating symlinks, Home Manager manages them.
@@ -12,28 +12,32 @@
   
   xdg.configFile = {
     # Hyprland: individual files to allow scripts to write to ~/.config/hypr/ (e.g. hyprpaper.conf)
-    "hypr/hyprland.conf".source = "${dotfiles-path}/hypr/hyprland.conf";
-    "hypr/hypridle.conf".source = "${dotfiles-path}/hypr/hypridle.conf";
-    "hypr/hyprlock.conf".source = "${dotfiles-path}/hypr/hyprlock.conf";
-    "hypr/random-wallpaper.sh".source = "${dotfiles-path}/hypr/random-wallpaper.sh";
-    "hypr/set-wallpaper.sh".source = "${dotfiles-path}/hypr/set-wallpaper.sh";
+    "hypr/hyprland.conf" = { source = "${dotfiles-path}/hypr/hyprland.conf"; force = true; };
+    "hypr/hypridle.conf" = { source = "${dotfiles-path}/hypr/hypridle.conf"; force = true; };
+    "hypr/hyprlock.conf" = { source = "${dotfiles-path}/hypr/hyprlock.conf"; force = true; };
+    "hypr/random-wallpaper.sh" = { source = "${dotfiles-path}/hypr/random-wallpaper.sh"; force = true; };
+    "hypr/set-wallpaper.sh" = { source = "${dotfiles-path}/hypr/set-wallpaper.sh"; force = true; };
     
     # Other directories are managed as complete folders
-    "waybar".source = "${dotfiles-path}/waybar";
-    "kitty".source = "${dotfiles-path}/kitty";
-    "ghostty".source = "${dotfiles-path}/ghostty";
-    "wofi".source = "${dotfiles-path}/wofi";
-    "wlogout".source = "${dotfiles-path}/wlogout";
-    "fastfetch".source = "${dotfiles-path}/fastfetch";
-    "cava".source = "${dotfiles-path}/cava";
-    "starship".source = "${dotfiles-path}/starship";
-    "superfile".source = "${dotfiles-path}/superfile";
-    "bat".source = "${dotfiles-path}/bat";
-    "helix".source = "${dotfiles-path}/helix";
-    "tmux".source = "${dotfiles-path}/tmux";
-    "clipse".source = "${dotfiles-path}/clipse";
-    "aichat".source = "${dotfiles-path}/aichat";
-    "waypaper".source = "${dotfiles-path}/waypaper";
+    # 'force = true' ensures Home Manager replaces existing files without needing backups
+    "waybar" = { source = "${dotfiles-path}/waybar"; force = true; };
+    "kitty" = { source = "${dotfiles-path}/kitty"; force = true; };
+    "ghostty" = { source = "${dotfiles-path}/ghostty"; force = true; };
+    "wofi" = { source = "${dotfiles-path}/wofi"; force = true; };
+    "wlogout" = { source = "${dotfiles-path}/wlogout"; force = true; };
+    "fastfetch" = { source = "${dotfiles-path}/fastfetch"; force = true; };
+    "cava" = { source = "${dotfiles-path}/cava"; force = true; };
+    "starship" = { source = "${dotfiles-path}/starship"; force = true; };
+    "superfile" = { source = "${dotfiles-path}/superfile"; force = true; };
+    "bat" = { source = "${dotfiles-path}/bat"; force = true; };
+    "helix" = { source = "${dotfiles-path}/helix"; force = true; };
+    "tmux" = { source = "${dotfiles-path}/tmux"; force = true; };
+    "clipse" = { source = "${dotfiles-path}/clipse"; force = true; };
+    "aichat" = { source = "${dotfiles-path}/aichat"; force = true; };
+    "waypaper" = { source = "${dotfiles-path}/waypaper"; force = true; };
+    
+    # Git config replacement
+    "git/config" = { source = "${dotfiles-path}/git/config"; force = true; };
   };
 
   # Enable programs managed by Home Manager
