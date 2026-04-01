@@ -30,7 +30,8 @@ fi
 
 # Step 3: Build the system with updated inputs
 echo -e "${BLUE}Building system with latest UnixKit...${NC}"
-sudo nixos-rebuild switch --flake .#nixos
+# Use path prefix to bypass ownership issues
+sudo nixos-rebuild switch --flake "path:.#nixos"
 
 echo -e "${GREEN}System updated with latest UnixKit version!${NC}"
 

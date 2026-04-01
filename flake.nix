@@ -20,9 +20,14 @@
     # Spicetify - Spotify themes and extensions
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
 
+    # Home Manager
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, unixkit, yt-x, nix-ai, ... }@inputs: 
+  outputs = { self, nixpkgs, unixkit, yt-x, nix-ai, home-manager, ... }@inputs: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -34,7 +39,7 @@
       lib = nixpkgs.lib;
       
       unixkitModule = { config, ... }: {
-        imports = [ ./unixkit.nix ];
+        imports = [ ./nixmod-system/unixkit.nix ];
         _module.args.unixkit = unixkit;
       };
       
@@ -45,11 +50,25 @@
         specialArgs = { 
           inherit inputs;
           yt-x-pkg = yt-x.packages.${system}.default;
+          dotfiles-path = ./nixmod-dotfiles;
         };
         
         modules = [
           # Main configuration file
-          ./configuration.nix
+          ./nixmod-system/configuration.nix
+          
+          # Home Manager
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.extraSpecialArgs = { 
+              inherit inputs; 
+              dotfiles-path = ./nixmod-dotfiles;
+            };
+            home-manager.users.nikmen = import ./nixmod-system/modules/users/nikmen-home.nix;
+          }
           
           # UnixKit (provides unixkit input to unixkit.nix)
           unixkitModule

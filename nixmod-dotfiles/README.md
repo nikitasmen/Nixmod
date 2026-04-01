@@ -35,51 +35,13 @@ User configuration files for applications and desktop environment components. Th
 - Basic knowledge of Linux configuration
 
 ### Installation
+NixMod dotfiles are managed natively via **Home Manager**.
 
-Dotfiles are managed from the **main Nixmod repo** via `toolkit/dotfiles.sh`. Run from the repo root:
-
-#### Automated Installation (Recommended)
-
-```bash
-# Clone the repository (full Nixmod repo)
-git clone https://github.com/nikitasmen/Nixmod.git ~/.config/dotfiles
-cd ~/.config/dotfiles
-
-# Install all configurations
-./toolkit/dotfiles.sh install
-
-# Or install specific configurations
-./toolkit/dotfiles.sh install hypr
-./toolkit/dotfiles.sh install waybar
-./toolkit/dotfiles.sh install kitty
-./toolkit/dotfiles.sh install ghostty
-./toolkit/dotfiles.sh install wofi
-./toolkit/dotfiles.sh install wlogout
-./toolkit/dotfiles.sh install superfile
-./toolkit/dotfiles.sh install neofetch
-./toolkit/dotfiles.sh install clipse
-./toolkit/dotfiles.sh install cava
-```
-
-#### Manual Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/nikitasmen/Nixmod.git ~/.config/dotfiles
-cd ~/.config/dotfiles/nixmod-dotfiles
-
-# Create symlinks manually (Hyprland expects ~/.config/hypr)
-ln -sf ~/.config/dotfiles/nixmod-dotfiles/hypr ~/.config/hypr
-ln -sf ~/.config/dotfiles/nixmod-dotfiles/waybar ~/.config/waybar
-ln -sf ~/.config/dotfiles/nixmod-dotfiles/kitty ~/.config/kitty
-ln -sf ~/.config/dotfiles/nixmod-dotfiles/ghostty ~/.config/ghostty
-ln -sf ~/.config/dotfiles/nixmod-dotfiles/wofi ~/.config/wofi
-ln -sf ~/.config/dotfiles/nixmod-dotfiles/wlogout ~/.config/wlogout
-ln -sf ~/.config/dotfiles/nixmod-dotfiles/superfile ~/.config/superfile
-ln -sf ~/.config/dotfiles/nixmod-dotfiles/neofetch ~/.config/neofetch
-ln -sf ~/.config/dotfiles/nixmod-dotfiles/clipse ~/.config/clipse
-ln -sf ~/.config/dotfiles/nixmod-dotfiles/cava ~/.config/cava
-```
+1. Rebuild your NixOS system:
+   ```bash
+   sudo ./toolkit/nixmod.sh update
+   ```
+   This will automatically deploy all configurations to `~/.config` using Home Manager.
 
 ## 📁 Project Structure
 
@@ -95,6 +57,8 @@ nixmod-dotfiles/
 │   ├── last_wallpaper.txt    # Wallpaper tracking
 │   ├── random-wallpaper.sh   # Wallpaper rotation
 │   └── set-wallpaper.sh      # Wallpaper setting
+├── waypaper/                 # GUI Wallpaper utility
+│   └── config.ini            # Configuration for waypaper
 ├── waybar/                   # Status bar
 │   ├── config                # Main configuration
 │   ├── style.css             # Custom styling
