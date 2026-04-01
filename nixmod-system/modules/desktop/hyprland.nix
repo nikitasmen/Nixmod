@@ -58,17 +58,4 @@
     serviceConfig.Type = "simple";
     serviceConfig.ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
   };
-
-  # Install dotfiles once per user on first graphical login (runs as the logged-in user)
-  # Note: Edit the clone URL below if using a fork or private repo
-  systemd.user.services.install-dotfiles = {
-    description = "Install NixMod dotfiles";
-    wantedBy = [ "graphical-session.target" ];
-    after = [ "graphical-session.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'if [ ! -d $HOME/.config/dotfiles ]; then git clone https://github.com/nikitasmen/Nixmod.git $HOME/.config/dotfiles; fi && cd $HOME/.config/dotfiles && (git pull || true) && ./toolkit/dotfiles.sh install'";
-    };
-    unitConfig.ConditionPathExists = "!%h/.config/dotfiles/.installed";
-  };
 }
