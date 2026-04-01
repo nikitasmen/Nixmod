@@ -39,7 +39,7 @@ window-padding-x = 12
 window-padding-y = 12
 window-padding-balance = true
 window-decoration = auto
-scrollbar = never
+confirm-close-surface = false
 
 # Startup: fortune via cowthink (random animal thinks your fortune)
 command = zsh -c "cows=(default dragon bong moose koala small head-in beavis.zen  tux daemon bunny); c=\${cows[\$((RANDOM % \${#cows[@]}))]}; fortune 2>/dev/null | cowthink -f \$c 2>/dev/null || fortune 2>/dev/null | cowthink; echo ''; exec zsh -i"
