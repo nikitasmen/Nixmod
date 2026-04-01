@@ -39,7 +39,7 @@ in
       oneko
     ]; 
     experimentalFeatures = true;  # Required for marketplace and other features
-    # Native Wayland support for Hyprland
-    wayland = true;
+    # Wayland support can be buggy on NVIDIA with offload, so we use XWayland (default)
+    wayland = false;
   };
 }
