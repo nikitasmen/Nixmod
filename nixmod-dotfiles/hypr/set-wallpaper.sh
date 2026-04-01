@@ -54,8 +54,19 @@ get_monitors() {
   fi
 } > "$CONF"
 
-# Kill existing hyprpaper and restart with new config (IPC broken in some Hyprland versions)
-pkill -x hyprpaper 2>/dev/null || true
-hyprpaper &
+# Apply wallpaper live via hyprctl if hyprpaper is running
+if pgrep -x hyprpaper >/dev/null; then
+    echo "Applying live via hyprctl..."
+    hyprctl hyprpaper preload "$WALLPAPER"
+    MONS=($(get_monitors))
+    for MON in "${MONS[@]}"; do
+        hyprctl hyprpaper wallpaper "$MON,$WALLPAPER"
+    done
+    # Cleanup: unload previous wallpapers to save RAM
+    hyprctl hyprpaper unload all
+else
+    # Not running, just start it (it will read the newly written $CONF)
+    hyprpaper &
+fi
 
 echo "✅ Wallpaper set to: $WALLPAPER"
