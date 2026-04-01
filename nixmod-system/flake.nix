@@ -50,7 +50,7 @@
         specialArgs = { 
           inherit inputs;
           yt-x-pkg = yt-x.packages.${system}.default;
-          dotfiles-path = ../nixmod-dotfiles;
+          dotfiles-path = ./../nixmod-dotfiles;
         };
         
         modules = [
@@ -64,7 +64,7 @@
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = { 
               inherit inputs; 
-              dotfiles-path = ../nixmod-dotfiles;
+              dotfiles-path = ./../nixmod-dotfiles;
             };
             home-manager.users.nikmen = import ./modules/users/nikmen-home.nix;
           }
