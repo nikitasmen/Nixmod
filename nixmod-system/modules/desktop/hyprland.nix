@@ -40,7 +40,6 @@
     hyprlock     # Screen locking
     hyprutils
     hyprlang
-    hyprwire
     hyprpolkitagent  # Polkit agent for pkexec/auth dialogs (input-remapper, etc.)
     mako         # Notification daemon
     grim         # Screenshot utility (backend)
