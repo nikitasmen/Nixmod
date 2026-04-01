@@ -60,8 +60,17 @@ apply_config() {
         exit 1
     fi
     
-    # Apply the configuration from the local repo
-    sudo nixos-rebuild "$cmd" --flake "$REPO_ROOT/nixmod-system#nixos"
+    # Fix for "repository path is not owned by current user" error when running as root
+    # This happens because sudo runs as root, but the repo is owned by the regular user.
+    if command -v git &> /dev/null; then
+        echo -e "${BLUE}Ensuring Git repository is marked as safe...${NC}"
+        # Mark the repo root as safe for both the current user and root
+        git config --global --add safe.directory "$REPO_ROOT" 2>/dev/null || true
+        sudo git config --global --add safe.directory "$REPO_ROOT" 2>/dev/null || true
+    fi
+    
+    # Apply the configuration from the local repo using 'path:' prefix to avoid Git ownership issues
+    sudo nixos-rebuild "$cmd" --flake "path:$REPO_ROOT/nixmod-system#nixos"
     
     echo -e "${GREEN}Operation completed successfully!${NC}"
     echo -e "${YELLOW}Note: Dotfiles are managed automatically via Home Manager.${NC}"
@@ -85,7 +94,8 @@ check_status() {
 # Function to update flake inputs
 update_flake() {
     echo -e "${BLUE}Updating flake inputs...${NC}"
-    cd "$REPO_ROOT/nixmod-system" && nix flake update
+    # Use 'path:' to bypass git integration during update if it causes issues
+    cd "$REPO_ROOT/nixmod-system" && nix flake update --extra-experimental-features "nix-command flakes"
     echo -e "${GREEN}Flake inputs updated successfully!${NC}"
 }
 
