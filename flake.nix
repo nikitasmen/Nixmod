@@ -39,7 +39,7 @@
       lib = nixpkgs.lib;
       
       unixkitModule = { config, ... }: {
-        imports = [ ./unixkit.nix ];
+        imports = [ ./nixmod-system/unixkit.nix ];
         _module.args.unixkit = unixkit;
       };
       
@@ -50,12 +50,12 @@
         specialArgs = { 
           inherit inputs;
           yt-x-pkg = yt-x.packages.${system}.default;
-          dotfiles-path = ./../nixmod-dotfiles;
+          dotfiles-path = ./nixmod-dotfiles;
         };
         
         modules = [
           # Main configuration file
-          ./configuration.nix
+          ./nixmod-system/configuration.nix
           
           # Home Manager
           home-manager.nixosModules.home-manager
@@ -64,9 +64,9 @@
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = { 
               inherit inputs; 
-              dotfiles-path = ./../nixmod-dotfiles;
+              dotfiles-path = ./nixmod-dotfiles;
             };
-            home-manager.users.nikmen = import ./modules/users/nikmen-home.nix;
+            home-manager.users.nikmen = import ./nixmod-system/modules/users/nikmen-home.nix;
           }
           
           # UnixKit (provides unixkit input to unixkit.nix)

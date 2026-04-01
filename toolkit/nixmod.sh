@@ -55,8 +55,8 @@ apply_config() {
     echo -e "${BLUE}Applying NixMod configuration ($cmd)...${NC}"
     
     # Check if we are in the repo root
-    if [ ! -f "$REPO_ROOT/nixmod-system/flake.nix" ]; then
-        echo -e "${RED}Error: flake.nix not found in $REPO_ROOT/nixmod-system/${NC}"
+    if [ ! -f "$REPO_ROOT/flake.nix" ]; then
+        echo -e "${RED}Error: flake.nix not found in $REPO_ROOT/${NC}"
         exit 1
     fi
     
@@ -69,8 +69,8 @@ apply_config() {
         sudo git config --global --add safe.directory "$REPO_ROOT" 2>/dev/null || true
     fi
     
-    # Apply the configuration from the local repo using 'path:' prefix to avoid Git ownership issues
-    sudo nixos-rebuild "$cmd" --flake "path:$REPO_ROOT/nixmod-system#nixos"
+    # Apply the configuration from the local repo root using 'path:' prefix to avoid Git ownership issues
+    sudo nixos-rebuild "$cmd" --flake "path:$REPO_ROOT#nixos"
     
     echo -e "${GREEN}Operation completed successfully!${NC}"
     echo -e "${YELLOW}Note: Dotfiles are managed automatically via Home Manager.${NC}"
@@ -95,7 +95,7 @@ check_status() {
 update_flake() {
     echo -e "${BLUE}Updating flake inputs...${NC}"
     # Use 'path:' to bypass git integration during update if it causes issues
-    cd "$REPO_ROOT/nixmod-system" && nix flake update --extra-experimental-features "nix-command flakes"
+    cd "$REPO_ROOT" && nix flake update --extra-experimental-features "nix-command flakes"
     echo -e "${GREEN}Flake inputs updated successfully!${NC}"
 }
 
