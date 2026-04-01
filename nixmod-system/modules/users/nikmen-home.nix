@@ -5,7 +5,6 @@
   home.homeDirectory = "/home/${config.home.username}";
   home.stateVersion = "25.05"; # Match NixOS state version
   # home.enableNixpkgsReleaseCheck = false; # Disable version mismatch warning when using unstable branch
-  home.backupFileExtension = "backup"; # Automatically backup existing files that would be clobbered by Home Manager symlinks
 
   # This is the "DRY" way to manage dotfiles.
   # Instead of a bash script creating symlinks, Home Manager manages them.
