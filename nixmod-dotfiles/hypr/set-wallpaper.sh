@@ -57,10 +57,17 @@ get_monitors() {
 # Apply wallpaper live via hyprctl if hyprpaper is running
 if pgrep -x hyprpaper >/dev/null; then
     echo "Applying live via hyprctl..."
-    # Preload and set wallpaper for all monitors in one go
+    # Preload the new wallpaper
     hyprctl hyprpaper preload "$WALLPAPER"
-    hyprctl hyprpaper wallpaper ",$WALLPAPER"
-    # Cleanup: unload all except the current one to save RAM
+    
+    # Apply to all monitors individually (empty string is sometimes buggy in newer hyprpaper)
+    MONS=($(get_monitors))
+    for MON in "${MONS[@]}"; do
+        hyprctl hyprpaper wallpaper "$MON,$WALLPAPER"
+    done
+    
+    # Cleanup: unload everything EXCEPT the current wallpaper to save RAM
+    # We use 'unload all' but since $WALLPAPER is active, it should stay preloaded
     hyprctl hyprpaper unload all
 else
     # Not running, just start it (it will read the newly written $CONF)
