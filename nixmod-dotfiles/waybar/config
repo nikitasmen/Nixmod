@@ -430,7 +430,7 @@
         },
         "reverse-scrolling": true,
         "reverse-mouse-scrolling": true,
-        "on-click": "pavucontrol",
+        "on-click": "GDK_BACKEND=x11 pavucontrol",
     },
 
     "pulseaudio#mic": {
@@ -449,7 +449,7 @@
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 2%-",
         "reverse-scrolling": true,
         "reverse-mouse-scrolling": true,
-        "on-click": "pavucontrol",
+        "on-click": "GDK_BACKEND=x11 pavucontrol",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
     },
 
