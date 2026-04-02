@@ -51,7 +51,10 @@
     playerctl    # Music player controller
     cava         # Audio Visualizer
   ];
-  
+  enviroment.shellAliases = {
+    # Quick command to open audio settings
+    pavucontrol = "GDK_BACKEND=x11 pavucontrol";
+  };
   # Bluetooth configuration
   services.blueman.enable = true;
 
