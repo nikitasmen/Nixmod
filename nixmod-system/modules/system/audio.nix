@@ -51,7 +51,8 @@
     playerctl    # Music player controller
     cava         # Audio Visualizer
   ];
-  enviroment.shellAliases = {
+
+  environment.shellAliases = {
     # Quick command to open audio settings
     pavucontrol = "GDK_BACKEND=x11 pavucontrol";
   };
