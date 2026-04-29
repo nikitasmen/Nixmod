@@ -12,12 +12,14 @@ let
   };
 in
 {
+  
+  programs.nix-ld.enable = true ;
+  
   programs.spicetify = {
     enable = true;
     theme = spicePkgs.themes.text;  # TUI-like terminal aesthetic
     colorScheme = "CatppuccinMacchiato";  # Matches waybar, helix, superfile
     enabledExtensions = with spicePkgs.extensions; [
-      adblockify
       hidePodcasts
       shuffle
       # Statistics
@@ -28,13 +30,7 @@ in
     ];
     enabledCustomApps = (with spicePkgs.apps; [
       marketplace      # Browse themes, extensions, apps in sidebar (install from UI may not work with Nix)
-      historyInSidebar # Recently played shortcut in sidebar
-    ]) ++ [
-      {
-        src = "${statsAppSrc}/projects/stats";
-        name = "stats";
-      }
-    ];
+      ]);
     enabledSnippets = with spicePkgs.snippets; [
       oneko
     ]; 
