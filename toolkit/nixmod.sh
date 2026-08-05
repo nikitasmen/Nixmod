@@ -70,7 +70,13 @@ apply_config() {
     fi
     
     # Apply the configuration from the local repo root using 'path:' prefix to avoid Git ownership issues
-    sudo nixos-rebuild "$cmd" --flake "path:$REPO_ROOT#nixos"
+    # Limit parallelism so the build doesn't peg every core / exhaust RAM.
+    # Override per-machine with NIXMOD_JOBS / NIXMOD_CORES (0 = Nix default "all").
+    # ponytail: static defaults, bump env vars if a beefier box wants more throughput
+    local jobs="${NIXMOD_JOBS:-2}"
+    local cores="${NIXMOD_CORES:-4}"
+    sudo nixos-rebuild "$cmd" --flake "path:$REPO_ROOT#nixos" \
+        --max-jobs "$jobs" --cores "$cores"
     
     echo -e "${GREEN}Operation completed successfully!${NC}"
     echo -e "${YELLOW}Note: Dotfiles are managed automatically via Home Manager.${NC}"
