@@ -12,7 +12,8 @@
   
   xdg.configFile = {
     # Hyprland: individual files to allow scripts to write to ~/.config/hypr/ (e.g. hyprpaper.conf)
-    "hypr/hyprland.conf" = { source = "${dotfiles-path}/hypr/hyprland.conf"; force = true; };
+    "hypr/hyprland.lua" = { source = "${dotfiles-path}/hypr/hyprland.lua"; force = true; };
+    "hypr/hyprland.conf" = { source = "${dotfiles-path}/hypr/hyprland.conf"; force = true; }; # legacy fallback for Hyprland < 0.55
     "hypr/hypridle.conf" = { source = "${dotfiles-path}/hypr/hypridle.conf"; force = true; };
     "hypr/hyprlock.conf" = { source = "${dotfiles-path}/hypr/hyprlock.conf"; force = true; };
     "hypr/random-wallpaper.sh" = { source = "${dotfiles-path}/hypr/random-wallpaper.sh"; force = true; };
