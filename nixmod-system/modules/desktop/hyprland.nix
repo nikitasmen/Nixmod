@@ -20,15 +20,6 @@
     };
   };
   
-  # Minimal login manager that launches Hyprland directly (no GDM/GNOME)
-  services.greetd = {
-    enable = true;
-    settings.default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd start-hyprland";
-      user = "greeter";
-    };
-  };
-  
   services.ollama = {
     enable = true;
     package = pkgs.ollama-cuda; 
