@@ -191,7 +191,7 @@ in
   };
 
   systemd.services.greetd = {
-    requiresMountsFor = [ wallpaperDirectory ];
+    unitConfig.RequiresMountsFor = wallpaperDirectory;
     serviceConfig.ExecStartPre = [ selectLoginBackground ];
   };
 }
