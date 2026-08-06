@@ -44,7 +44,7 @@ in
 {
   # ReGreet provides a graphical GTK greeter while keeping greetd lightweight.
   # Its NixOS module also creates the state/log directories with safe ownership.
-  programs.regreet = {
+  services.displayManager.regreet = {
     enable = true;
     cageArgs = [ "-s" "-d" "-m" "last" ];
 
