@@ -23,7 +23,10 @@ local menu        = "wofi --show drun"
 -------------------
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("waybar & mako & blueman-manager & kdeconnectd &")
+    hl.exec_cmd("waybar")
+    hl.exec_cmd("mako")
+    hl.exec_cmd("blueman-manager")
+    hl.exec_cmd("kdeconnectd")
     -- So systemd --user units (e.g. steam-on-controller) inherit the Wayland session
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE")
     hl.exec_cmd("systemctl --user start hyprpolkitagent")
@@ -93,7 +96,6 @@ hl.config({
     },
 
     dwindle = {
-        pseudotile     = true,
         preserve_split = true,
     },
 
