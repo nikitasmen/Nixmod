@@ -2,7 +2,25 @@
 
 let
   wallpaperDirectory = "/home/nikmen/Pictures/wallpapers";
-  fallbackBackground = ./assets/aurora-login.png;
+  fallbackBackground = pkgs.writeText "regreet-fallback.svg" ''
+    <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+      <defs>
+        <linearGradient id="night" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#181926"/>
+          <stop offset="0.55" stop-color="#24273a"/>
+          <stop offset="1" stop-color="#1e2030"/>
+        </linearGradient>
+        <radialGradient id="aurora" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#c6a0f6" stop-opacity="0.55"/>
+          <stop offset="0.45" stop-color="#8aadf4" stop-opacity="0.24"/>
+          <stop offset="1" stop-color="#8bd5ca" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1920" height="1080" fill="url(#night)"/>
+      <ellipse cx="480" cy="120" rx="850" ry="500" fill="url(#aurora)"/>
+      <ellipse cx="1640" cy="920" rx="760" ry="460" fill="url(#aurora)" opacity="0.55"/>
+    </svg>
+  '';
   loginBackground = "/run/regreet-background";
 
   # ReGreet runs as an unprivileged user, which may not be able to traverse the
