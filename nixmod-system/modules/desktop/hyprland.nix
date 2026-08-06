@@ -20,10 +20,14 @@
     };
   };
   
-  # Enable required services for Hyprland
-  services.xserver.enable = true;
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = false;
+  # Minimal login manager that launches Hyprland directly (no GDM/GNOME)
+  services.greetd = {
+    enable = true;
+    settings.default_session = {
+      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+      user = "greeter";
+    };
+  };
   
   services.ollama = {
     enable = true;
