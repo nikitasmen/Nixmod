@@ -5,6 +5,8 @@
     # Base inputs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     
+    hyprland.url = "github:hyprwm/Hyprland?submodules=1";
+
     # UnixKit module inputs
     unixkit = {
       url = "github:nikitasmen/UnixKit";

@@ -1,9 +1,13 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs,  ... }:
 
 {
   # Enable hyprland
-  programs.hyprland.enable = true;
-  programs.hyprlock.enable = true;
+  programs.hyprland = {
+    enable = true; 
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+  }; 
+
+   programs.hyprlock.enable = true;
 
   # XDG Portal configuration for Wayland
   # programs.hyprland adds xdg-desktop-portal-hyprland automatically

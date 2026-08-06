@@ -15,10 +15,12 @@
     # stremio #Insecure dependencies
     
     # Communication
-    webcord
+    # webcord
+    # Use DiscordPtb as is not electron dependable 
     
     # Productivity
-    logseq
+    # logseq
+    # Use DiscordPtb as is not electron dependable
     
     # File management
     yazi
