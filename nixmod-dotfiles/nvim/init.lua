@@ -1,5 +1,6 @@
 -- NixMod Neovim Configuration
--- Plugins: git-worktree, neo-tree (filesystem), toggleterm (integrated terminal)
+-- Plugin specs live one-per-file under lua/plugins/ (each file returns a lazy.nvim
+-- spec table); require("lazy").setup("plugins") below imports the whole directory.
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
