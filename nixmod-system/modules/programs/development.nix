@@ -15,8 +15,6 @@
     docker       # Container platform
     helix        # Text editor
     neovim       # Code editor (vim + Lua config)
-    vim          # Text editor (minimal, for quick edits)
-    claude-code  # AI coding assistant
     tmux         # Terminal multiplexer
     tree         # Directory display
     findutils    # File search utilities
