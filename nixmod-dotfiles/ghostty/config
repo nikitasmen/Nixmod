@@ -41,6 +41,15 @@ window-padding-balance = true
 window-decoration = auto
 confirm-close-surface = false
 
+# Disable GTK single-instance mode. With the default "detect", every
+# ghostty launch is forwarded to one shared background GApplication
+# process; if that process ever gets stuck (e.g. after a monitor
+# hotplug/suspend leaves its GL context dead) every subsequent launch
+# silently no-ops instead of opening a window, with $mod+Q looking
+# completely dead until the stale process is killed by hand. Each
+# launch getting its own process avoids that whole failure class.
+gtk-single-instance = false
+
 # Startup: fortune via cowthink (random animal thinks your fortune)
 command = zsh -c "cows=(default dragon bong moose koala small head-in beavis.zen  tux daemon bunny); c=\${cows[\$((RANDOM % \${#cows[@]}))]}; fortune 2>/dev/null | cowthink -f \$c 2>/dev/null || fortune 2>/dev/null | cowthink; echo ''; exec zsh -i"
 
