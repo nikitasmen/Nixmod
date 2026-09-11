@@ -116,20 +116,17 @@
     },
 
     "custom/media": {
-        "format": "{icon}󰎈",
+        "format": "{}",
         "restart-interval": 2,
         "return-type": "json",
-        "format-icons": {
-            "Playing": "",
-            "Paused": "",
-        },
-        "max-length": 35,
-        "exec": "fish -c fetch_music_player_data",
-        "on-click": "playerctl play-pause",
+        "max-length": 50,
+        "exec": "bash ~/.config/waybar/scripts/media.sh",
+        "tooltip": true,
+        "on-click": "playerctl previous",
         "on-click-right": "playerctl next",
-        "on-click-middle": "playerctl prev",
-        "on-scroll-up": "playerctl volume 0.05-",
-        "on-scroll-down": "playerctl volume 0.05+",
+        "on-click-middle": "playerctl play-pause",
+        "on-scroll-up": "playerctl volume 0.05+",
+        "on-scroll-down": "playerctl volume 0.05-",
         "smooth-scrolling-threshold": "0.1",
     },
 
@@ -146,7 +143,7 @@
         "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t({device_battery_percentage}%)",
         "max-length": 35,
         "on-click": "blueman-manager",
-        "on-click-right": "overskride",
+        "on-click-right": "blueman-manager",
     },
 
     "network": {
@@ -162,7 +159,7 @@
         "tooltip-format-ethernet":"Interface: {ifname}\nIP: {ipaddr}\nGW: {gwaddr}\nNetmask: {netmask}\nCIDR: {cidr}\n\n<span color='#a6da95'>{bandwidthUpBits}</span>\t<span color='#ee99a0'>{bandwidthDownBits}</span>\t<span color='#c6a0f6'>󰹹{bandwidthTotalBits}</span>",
         "max-length": 35,
         "on-click": "networkmanager_dmenu ",
-        "on-click-right": "iwgtk",
+        "on-click-right": "nm-connection-editor",
     },
 
     "group/misc": {
@@ -174,21 +171,19 @@
             "custom/geo",
             "custom/media",
             "custom/notifications",
-            "custom/night_mode",
-            "custom/airplane_mode",
             "idle_inhibitor",
         ],
     },
 
     "custom/webcam": {
         "interval": 1,
-        "exec": "fish -c check_webcam",
+        "exec": "bash ~/.config/waybar/scripts/webcam.sh",
         "return-type": "json",
     },
 
     "privacy": {
-        "icon-spacing": 1,
-        "icon-size": 12,
+        "icon-spacing": 2,
+        "icon-size": 16,
         "transition-duration": 250,
         "modules": [
             {
@@ -202,32 +197,16 @@
 
     "custom/recording": {
         "interval": 1,
-        "exec-if": "pgrep wl-screenrec",
-        "exec": "fish -c check_recording",
+        "exec": "bash ~/.config/waybar/scripts/recording.sh",
         "return-type": "json",
     },
 
     "custom/geo": {
         "interval": 1,
-        "exec-if": "pgrep geoclue",
-        "exec": "fish -c check_geo_module",
+        "exec": "bash ~/.config/waybar/scripts/geo.sh",
         "return-type": "json",
     },
 
-    "custom/airplane_mode": {
-        "return-type": "json",
-        "interval": 1,
-        "exec": "fish -c check_airplane_mode",
-        "on-click": "fish -c airplane_mode_toggle",
-    },
-
-    "custom/night_mode": {
-        "return-type": "json",
-        "interval": 1,
-        "exec": "fish -c check_night_mode",
-        "on-click": "fish -c night_mode_toggle",
-    },
-    
     "custom/notifications": {
         "return-type": "json",
         "exec": "echo '{ \"text\":\"󰂚\", \"tooltip\": \"notifications (mako)\" }'",
@@ -263,7 +242,7 @@
     "position": "bottom", // Waybar position (top|bottom|left|right)
     "height": 36, // Waybar height (to be removed for auto height)
     "spacing": 4, // Gaps between modules (4px)
-    "modules-left": ["user"],
+    "modules-left": ["custom/user"],
     "modules-center": ["hyprland/window"],
     "modules-right": ["keyboard-state", "hyprland/language"],
 
@@ -289,9 +268,11 @@
         }
     },
 
-    "user": {
-        "format": " <span color='#8bd5ca'>{user}</span> (up <span color='#f5bde6'>{work_d} d</span> <span color='#8aadf4'>{work_H} h</span> <span color='#eed49f'>{work_M} min</span> <span color='#a6da95'>↑</span>)",
-        "icon": true,
+    "custom/user": {
+        "format": " {}",
+        "interval": 30,
+        "exec": "bash ~/.config/waybar/scripts/user-uptime.sh",
+        "tooltip": false,
     },
 },
 
@@ -369,7 +350,6 @@
 
     "temperature": {
         "tooltip": false,
-        "thermal-zone": 8,
         "critical-threshold": 80,
         "format": "{icon}{temperatureC}󰔄",
         "format-critical": "🔥{icon}{temperatureC}󰔄",

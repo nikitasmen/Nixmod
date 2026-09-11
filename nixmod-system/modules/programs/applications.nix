@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, yt-x-pkg ? null, ... }:
 
 {
   # Enable Firefox
@@ -9,10 +9,9 @@
     # Browsers
     google-chrome
     
-    # Media
-    spotify
-    spicetify-cli
+    # Media (Spotify installed via spicetify.nix with themes)
     freetube
+  ] ++ lib.optional (yt-x-pkg != null) yt-x-pkg ++ [
     # stremio #Insecure dependencies
     
     # Communication
@@ -30,6 +29,7 @@
     fastfetch
     htop
     btop
+    bottom   # btm - system monitor (executable: btm)
     nwg-look
         
     # Screenshots

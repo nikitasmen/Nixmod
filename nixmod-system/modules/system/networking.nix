@@ -25,6 +25,7 @@
   # Network related packages
   environment.systemPackages = with pkgs; [
     networkmanager_dmenu
+    networkmanagerapplet  # nm-connection-editor for Waybar network right-click
     kdePackages.kdeconnect-kde
   ];
 }

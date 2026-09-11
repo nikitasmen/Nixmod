@@ -36,6 +36,7 @@
     hyprutils
     hyprlang
     hyprwire
+    hyprpolkitagent  # Polkit agent for pkexec/auth dialogs (input-remapper, etc.)
     mako         # Notification daemon
     grim         # Screenshot utility (backend)
     slurp        # Area selection for screenshots
@@ -43,6 +44,15 @@
     #eww          # Widget system
     jq           # Command-line JSON processor
   ];
+
+  # Polkit agent - required for input-remapper-gtk, pkexec auth dialogs
+  systemd.user.services.hyprpolkitagent = {
+    description = "Hyprland PolicyKit Agent";
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    serviceConfig.Type = "simple";
+    serviceConfig.ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
+  };
 
   # Install dotfiles once per user on first graphical login (runs as the logged-in user)
   systemd.user.services.install-dotfiles = {

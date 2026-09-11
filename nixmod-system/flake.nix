@@ -13,10 +13,16 @@
     
     # NixAi assistant 
     nix-ai.url = "github:olafkfreund/nix-ai-help";
-    
+
+    # yt-x - terminal YouTube client
+    yt-x.url = "github:Benexl/yt-x";
+
+    # Spicetify - Spotify themes and extensions
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+
   };
 
-  outputs = { self, nixpkgs, unixkit, ... }@inputs: 
+  outputs = { self, nixpkgs, unixkit, yt-x, nix-ai, ... }@inputs: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -40,8 +46,8 @@
         inherit system;
         
         specialArgs = { 
-          # Pass all inputs to modules
           inherit inputs;
+          yt-x-pkg = yt-x.packages.${system}.default;
         };
         
         modules = [
@@ -50,6 +56,9 @@
           
           # Import modular flake components
           unixkitModule.module
+          
+          # Spicetify (Spotify themes)
+          inputs.spicetify-nix.nixosModules.spicetify
           
           # You can add more modules here
         ];

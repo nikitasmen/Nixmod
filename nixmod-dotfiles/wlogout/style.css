@@ -1,61 +1,97 @@
-@import url('../../.cache/wal/colors-waybar.css');
+/* wlogout - Catppuccin Macchiato, compact tiles with icons */
 * {
     all: unset;
     background-image: none;
     margin: unset;
     padding: unset;
-    transition: 200ms cubic-bezier(0, 0, 1, 1);
+    transition: 180ms ease;
 }
+
+window {
+    background-color: rgba(24, 24, 37, 0.92);
+}
+
 button {
-    font-family: 'CodeNewRoman Nerd Font Mono';
-    background-color: alpha(@color9,1);
-    border-radius: 5px;
+    font-family: "IosevkaTerm Nerd Font", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #cad3f5;
+    background-color: #363a4f;
+    border-radius: 12px;
+    padding: 72px 24px 20px 24px;
+    margin: 6px;
+    min-width: 110px;
     background-repeat: no-repeat;
-    background-position: center;
-
-
+    background-position: center 20px;
+    background-size: 64px;
 }
+
+button:hover {
+    background-color: #494d64;
+    color: #f4dbd6;
+}
+
+button:focus {
+    background-color: #8bd5ca;
+    color: #1e1e2e;
+}
+
 #lock {
-    background-image: image(url("../../.config/wlogout/lock.png"));
-    margin : 5px 5px 5px 300px;
-    padding: 5px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
-}
-#shutdown {
-    background-image: image(url("../../.config/wlogout/power.png"));
-    margin : 5px 300px 5px 5px;
-    padding: 5px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
-}
-#logout {
-    background-image: image(url("../../.config/wlogout/logout.png"));
-    margin : 5px 300px 5px 5px;
-    padding: 5px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
-}
-#reboot {
-
-    background-image: image(url("../../.config/wlogout/restart.png"));
-    margin : 5px 5px 5px 300px;
-    padding: 5px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+    color: #8bd5ca;
+    background-image: url("icons/lock.svg");
 }
 
 #lock:focus {
-    margin : 5px 5px 5px 200px;
+    background-color: #8bd5ca;
+    color: #1e1e2e;
+}
 
+#logout {
+    color: #f5a97f;
+    background-image: url("icons/logout.svg");
 }
-#shutdown:focus {
-    margin : 5px 200px 5px 5px;
-}
+
 #logout:focus {
-    margin : 5px 200px 5px 5px;
+    background-color: #f5a97f;
+    color: #1e1e2e;
 }
+
+#suspend {
+    color: #c6a0f6;
+    background-image: url("icons/suspend.svg");
+}
+
+#suspend:focus {
+    background-color: #c6a0f6;
+    color: #1e1e2e;
+}
+
+#shutdown {
+    color: #ed8796;
+    background-image: url("icons/shutdown.svg");
+}
+
+#shutdown:focus {
+    background-color: #ed8796;
+    color: #1e1e2e;
+}
+
+#reboot {
+    color: #a6da95;
+    background-image: url("icons/reboot.svg");
+}
+
 #reboot:focus {
-    margin : 5px 5px 5px 200px;
+    background-color: #a6da95;
+    color: #1e1e2e;
 }
-button:focus{
-    background-color: alpha(@color5,1);
-    color: #000000;
-    background-position:center;
+
+#cancel {
+    color: #6e738d;
+    background-image: url("icons/cancel.svg");
+}
+
+#cancel:focus {
+    background-color: #6e738d;
+    color: #1e1e2e;
 }

@@ -6,56 +6,56 @@
 
 window.bottom_bar#waybar {
   background-color: alpha(@base, 0.7);
-  border-top: solid alpha(@surface1, 0.7) 2;
+  border-top: solid alpha(@surface1, 0.7) 2px;
 }
 
 window.top_bar#waybar {
   background-color: alpha(@base, 0.7);
-  border-bottom: solid alpha(@surface1, 0.7) 2;
+  border-bottom: solid alpha(@surface1, 0.7) 2px;
 }
 
 window.left_bar#waybar {
   background-color: alpha(@base, 0.7);
-  border-top: solid alpha(@surface1, 0.7) 2;
-  border-right: solid alpha(@surface1, 0.7) 2;
-  border-bottom: solid alpha(@surface1, 0.7) 2;
-  border-radius: 0 15 15 0;
+  border-top: solid alpha(@surface1, 0.7) 2px;
+  border-right: solid alpha(@surface1, 0.7) 2px;
+  border-bottom: solid alpha(@surface1, 0.7) 2px;
+  border-radius: 0px 15px 15px 0px;
 }
 
 window.bottom_bar .modules-center {
   background-color: alpha(@surface1, 0.7);
   color: @green;
-  border-radius: 15;
-  padding-left: 20;
-  padding-right: 20;
-  margin-top: 5;
-  margin-bottom: 5;
+  border-radius: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 window.bottom_bar .modules-left {
   background-color: alpha(@surface1, 0.7);
-  border-radius: 0 15 15 0;
-  padding-left: 20;
-  padding-right: 20;
-  margin-top: 5;
-  margin-bottom: 5;
+  border-radius: 0px 15px 15px 0px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 window.bottom_bar .modules-right {
   background-color: alpha(@surface1, 0.7);
-  border-radius: 15 0 0 15;
-  padding-left: 20;
-  padding-right: 20;
-  margin-top: 5;
-  margin-bottom: 5;
+  border-radius: 15px 0px 0px 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
-#user {
-  padding-left: 10;
+#custom-user {
+  padding-left: 10px;
 }
 
 #language {
-  padding-left: 15;
+  padding-left: 15px;
 }
 
 #keyboard-state label.locked {
@@ -67,7 +67,7 @@ window.bottom_bar .modules-right {
 }
 
 #workspaces {
-  margin-left: 10;
+  margin-left: 10px;
 }
 
 #workspaces button {
@@ -85,24 +85,65 @@ window.bottom_bar .modules-right {
 
 #submap {
   background-color: alpha(@surface1, 0.7);
-  border-radius: 15;
-  padding-left: 15;
-  padding-right: 15;
-  margin-left: 20;
-  margin-right: 20;
-  margin-top: 5;
-  margin-bottom: 5;
+  border-radius: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 window.top_bar .modules-center {
   font-weight: bold;
   background-color: alpha(@surface1, 0.7);
   color: @peach;
-  border-radius: 15;
-  padding-left: 20;
-  padding-right: 20;
-  margin-top: 5;
-  margin-bottom: 5;
+  border-radius: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* Top bar right: cohesive layout */
+window.top_bar .modules-right {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+
+/* Connectivity: bluetooth + network as a unit */
+window.top_bar #bluetooth,
+window.top_bar #network {
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+/* Group misc: compact icon cluster with background */
+window.top_bar #group-misc {
+  background-color: alpha(@surface1, 0.6);
+  border-radius: 12px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* Icons in group: consistent size and spacing */
+window.top_bar #group-misc button,
+window.top_bar #group-misc > box,
+window.top_bar #group-misc #privacy {
+  min-width: 24px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+window.top_bar #privacy {
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 #custom-separator {
@@ -131,11 +172,11 @@ window.top_bar .modules-center {
 
 #bluetooth {
   background-color: alpha(@surface1, 0.7);
-  border-radius: 15;
-  padding-left: 15;
-  padding-right: 15;
-  margin-top: 5;
-  margin-bottom: 5;
+  border-radius: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 #bluetooth.disabled {
@@ -153,13 +194,13 @@ window.top_bar .modules-center {
 
 #network {
   background-color: alpha(@surface1, 0.7);
-  border-radius: 15;
-  padding-left: 15;
-  padding-right: 15;
-  margin-left: 2;
-  margin-right: 2;
-  margin-top: 5;
-  margin-bottom: 5;
+  border-radius: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 #network.disabled {
@@ -176,106 +217,122 @@ window.top_bar .modules-center {
 }
 
 #idle_inhibitor {
-  margin-right: 2;
+  margin-right: 2px;
 }
 
 #idle_inhibitor.deactivated {
   color: @subtext0;
 }
 
-#custom-dunst.off {
+#custom-notifications.off {
   color: @subtext0;
 }
 
-#custom-airplane_mode {
-  margin-right: 2;
-}
-
-#custom-airplane_mode.off {
+#custom-webcam.off,
+#custom-recording.off,
+#custom-geo.off {
   color: @subtext0;
 }
 
-#custom-night_mode {
-  margin-right: 2;
-}
-
-#custom-night_mode.off {
-  color: @subtext0;
-}
-
-#custom-dunst {
-  margin-right: 2;
+#custom-notifications {
+  margin-right: 2px;
 }
 
 #custom-media.Paused {
   color: @subtext0;
 }
 
+/* Top bar: custom modules in group - visible icons */
+window.top_bar #custom-webcam,
+window.top_bar #custom-recording,
+window.top_bar #custom-geo,
+window.top_bar #custom-media,
+window.top_bar #custom-notifications,
+window.top_bar #custom-night_mode,
+window.top_bar #custom-airplane_mode,
+window.top_bar #idle_inhibitor {
+  font-size: 1.05rem;
+  min-width: 22px;
+}
+
 #custom-webcam {
   color: @maroon;
-  margin-right: 3;
+  margin-right: 3px;
 }
 
 #privacy-item.screenshare {
   color: @peach;
-  margin-right: 5;
+  margin-right: 5px;
 }
 
 #privacy-item.audio-in {
   color: @pink;
-  margin-right: 4;
+  margin-right: 4px;
 }
 
 #custom-recording {
   color: @red;
-  margin-right: 4;
+  margin-right: 4px;
 }
 
 #custom-geo {
   color: @yellow;
-  margin-right: 4;
+  margin-right: 4px;
+}
+
+/* Logout: prominent on top bar right */
+window.top_bar #custom-logout_menu {
+  color: @red;
+  background-color: alpha(@surface1, 0.7);
+  border-radius: 12px;
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 4px;
+  font-size: 1.1rem;
 }
 
 #custom-logout_menu {
   color: @red;
   background-color: alpha(@surface1, 0.7);
-  border-radius: 15 0 0 15;
-  padding-left: 10;
-  padding-right: 5;
-  margin-top: 5;
-  margin-bottom: 5;
+  border-radius: 15px 0px 0px 15px;
+  padding-left: 10px;
+  padding-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 window.left_bar .modules-center {
   background-color: alpha(@surface1, 0.7);
-  border-radius: 0 15 15 0;
-  margin-right: 5;
-  margin-top: 15;
-  margin-bottom: 15;
-  padding-top: 5;
-  padding-bottom: 5;
+  border-radius: 0px 15px 15px 0px;
+  margin-right: 5px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 #taskbar {
-  margin-top: 10;
-  margin-right: 10;
-  margin-left: 10;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 #taskbar button.active {
   background-color: alpha(@surface1, 0.7);
-  border-radius: 10;
+  border-radius: 10px;
 }
 
 #tray {
-  margin-bottom: 10;
-  margin-right: 10;
-  margin-left: 10;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 #tray>.needs-attention {
   background-color: alpha(@maroon, 0.7);
-  border-radius: 10;
+  border-radius: 10px;
 }
 
 #cpu {
