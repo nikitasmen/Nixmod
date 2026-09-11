@@ -8,7 +8,7 @@
   users.users.nikmen = {
     isNormalUser = true;
     description = "nikmen";
-    extraGroups = [ "networkmanager" "wheel" "docker" "input" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "video" "audio" "input" ];
     packages = with pkgs; [
       slack   # Communication
       viber   # Communication
