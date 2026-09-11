@@ -23,7 +23,7 @@ A comprehensive NixOS system configuration with Hyprland, modern tooling, and de
 
 ### 🎵 **Media & Communication**
 - **Browsers**: Firefox and Google Chrome
-- **Music**: Spotify with Spicetify theming
+- **Music**: Spotify with Spicetify (TUI-style text theme, Catppuccin Macchiato, top artists/tracks/genres stats, listening history)
 - **Video**: FreeTube (YouTube alternative)
 - **Communication**: WebCord (Discord), Viber
 - **Productivity**: Logseq for note-taking
@@ -34,6 +34,17 @@ A comprehensive NixOS system configuration with Hyprland, modern tooling, and de
 - NixOS system (or NixOS Live USB)
 - Basic knowledge of NixOS and Linux
 - Git installed
+
+## ⚠️ Hardware Configuration (New Machines)
+
+`hardware-configuration.nix` and `nvidia-configuration.nix` contain **machine-specific** data (disk UUIDs, GPU bus IDs for NVIDIA Prime). When setting up a different machine:
+
+```bash
+sudo nixos-generate-config
+# Merge or replace hardware-configuration.nix and nvidia-configuration.nix with the generated output
+```
+
+Do not copy these files directly to another machine—they will break boot or graphics.
 
 ## 📁 Project Structure
 
@@ -55,7 +66,8 @@ nixmod-system/
 │   ├── programs/                # Application configurations
 │   │   ├── default.nix          # Program module imports
 │   │   ├── applications.nix     # General applications
-│   │   └── development.nix      # Development tools
+│   │   ├── development.nix      # Development tools
+│   │   └── spicetify.nix        # Spotify theming & statistics
 │   ├── system/                  # System-level configurations
 │   │   ├── default.nix          # System module imports
 │   │   ├── audio.nix            # Audio system (Pipewire)
@@ -90,6 +102,7 @@ nixmod-system/
 | **Locale** | Locale settings | `modules/system/locale.nix` |
 | **Applications** | General applications | `modules/programs/applications.nix` |
 | **Development** | Development tools | `modules/programs/development.nix` |
+| **Spicetify** | Spotify theming & statistics | `modules/programs/spicetify.nix` |
 | **User Management** | User configuration | `modules/users/nikmen.nix` |
 
 ### Customization Guide

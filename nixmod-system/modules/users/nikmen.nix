@@ -8,13 +8,13 @@
   users.users.nikmen = {
     isNormalUser = true;
     description = "nikmen";
-    extraGroups = [ "networkmanager" "wheel" "docker" "input" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "video" "audio" "input" ];
     packages = with pkgs; [
       slack   # Communication
       viber   # Communication
       discord-ptb # Communication
       
-      prismlauncher  #Minecraft launcher
+      tlauncher      # TLauncher (JAR in ~/Downloads/)
       heroic         # Heroic Game launcher 
     ];
   };

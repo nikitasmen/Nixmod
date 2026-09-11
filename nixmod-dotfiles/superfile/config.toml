@@ -4,7 +4,7 @@
 theme = 'catppuccin'
 # 
 # The editor files will be opened with. (Leave blank to use the EDITOR environment variable).
-editor = ""
+editor = "hx"
 # 
 # The editor directories will be opened with. (Leave blank to use the default editors).
 dir_editor = ""
@@ -89,4 +89,4 @@ metadata = false
 enable_md5_checksum = false
 #
 # Zoxide support for the fast navigation
-zoxide_support = false
+zoxide_support = true

@@ -15,10 +15,12 @@
     # stremio #Insecure dependencies
     
     # Communication
-    webcord
+    # webcord
+    # Use DiscordPtb as is not electron dependable 
     
     # Productivity
-    logseq
+    # logseq
+    # Use DiscordPtb as is not electron dependable
     
     # File management
     yazi
@@ -30,12 +32,27 @@
     htop
     btop
     bottom   # btm - system monitor (executable: btm)
+    lsof
+    wl-screenrec
+    geoclue2 
     nwg-look
-        
+    wdisplays   # Monitor layout GUI
+    ffmpeg   # Multimedia framework       
+    gum      # Tool for  glamorous shell scripts
+    mpv      # Cli media player
+    yt-dlp   # Youtube downloader
+    chafa    # Cli image converter
     # Screenshots
     flameshot
 
     # ScreenSaver
     pipes-rs
+
+    # Silly / boredom killers
+    fortune       # Random quotes: fortune
+    cowsay        # ASCII art animals: fortune | cowsay -f dragon
+    cmatrix       # Matrix rain: cmatrix
+    figlet        # ASCII art text: figlet "NixOS"
+    hollywood     # Fake hacker terminal: hollywood
   ];
 }

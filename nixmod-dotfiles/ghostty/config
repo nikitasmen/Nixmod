@@ -1,24 +1,60 @@
 # Ghostty configuration - NixMod dotfiles
 # https://ghostty.org/docs/config
 
-# Appearance
+# Appearance - Catppuccin Macchiato
 font-family = "JetBrains Mono Nerd Font"
-font-family = "Fira Code Nerd Font"
 font-size = 12
-theme = dark:Catppuccin Mocha,light:Catppuccin Latte
-background-opacity = 0.9
+# theme = catppuccin-macchiato
+background-opacity = 0.7
 background-blur = true
+background = #24273a
+foreground = #cad3f5
+
+# Boost palette vibrancy (Catppuccin Macchiato Base 16)
+palette = 0=#494d64
+palette = 1=#ed8796
+palette = 2=#a6da95
+palette = 3=#eed49f
+palette = 4=#8aadf4
+palette = 5=#f5bde6
+palette = 6=#8bd5ca
+palette = 7=#b8c0e0
+palette = 8=#5b6078
+palette = 9=#ed8796
+palette = 10=#a6da95
+palette = 11=#eed49f
+palette = 12=#8aadf4
+palette = 13=#f5bde6
+palette = 14=#8bd5ca
+palette = 15=#a5adcb
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+cursor-color = #f4dbd6
+cursor-text = #1e2030
 
 # Window
 window-padding-x = 12
 window-padding-y = 12
 window-padding-balance = true
-window-decoration = none
-scrollbar = never
+window-decoration = auto
+confirm-close-surface = false
 
-# Cursor
-cursor-style = block
-cursor-style-blink = false
+# Disable GTK single-instance mode. With the default "detect", every
+# ghostty launch is forwarded to one shared background GApplication
+# process; if that process ever gets stuck (e.g. after a monitor
+# hotplug/suspend leaves its GL context dead) every subsequent launch
+# silently no-ops instead of opening a window, with $mod+Q looking
+# completely dead until the stale process is killed by hand. Each
+# launch getting its own process avoids that whole failure class.
+gtk-single-instance = false
+
+# Startup: fortune via cowthink (random animal thinks your fortune)
+command = zsh -c "cows=(default dragon bong moose koala small head-in beavis.zen  tux daemon bunny); c=\${cows[\$((RANDOM % \${#cows[@]}))]}; fortune 2>/dev/null | cowthink -f \$c 2>/dev/null || fortune 2>/dev/null | cowthink; echo ''; exec zsh -i"
 
 # Keybindings
 keybind = ctrl+d=new_split:right
+# Ctrl+Arrow word navigation (Emacs-style, works with zsh default)
+keybind = ctrl+left=esc:b
+keybind = ctrl+right=esc:f

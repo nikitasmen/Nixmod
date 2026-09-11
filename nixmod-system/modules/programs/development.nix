@@ -1,32 +1,34 @@
 { config, pkgs, ... }:
 
 {
-  # Enable Docker for containerization
   virtualisation.docker.enable = true;
-  
-  # Git configuration
-  programs.git = { 
-    enable = true; 
-    config = {  
-      user.name = "nikitasmen";
-      user.email = "menounosnikitas@gmail.com";
-    };
-  };
-  
-  # Development tools
+
+  # Git, bat, delta config in dotfiles: ~/.config/git/config
+  programs.git.enable = true;
+
   environment.systemPackages = with pkgs; [
     git          # Version control
+    delta        # Better git diff
+    lazygit      # Git TUI
+    bat          # cat with syntax highlighting
+    eza          # Better ls
     docker       # Container platform
     helix        # Text editor
     neovim       # Code editor (vim + Lua config)
     vim          # Text editor (minimal, for quick edits)
+    claude-code  # AI coding assistant
     tmux         # Terminal multiplexer
     tree         # Directory display
     findutils    # File search utilities
+    fd           # Faster find alternative
+    tealdeer     # Fast tldr implementation
     coreutils    # Basic utilities
     # xclip      # Clipboard controll X11 based
     wl-clipboard # Clipboard controll Waylad based
     clipse       # Clipboard manager 
     scc          # Code counter
+    p7zip        # zipping tool
+
+    claude-code
   ];
 }

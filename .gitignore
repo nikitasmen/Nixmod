@@ -19,3 +19,8 @@ nixmod-dotfiles/hypr/last_wallpaper.txt
 #ignore all .lock files
 *.lock
 
+# Dotfiles install marker (created after first install)
+.installed
+
+#ignore all .log files
+*.log 
