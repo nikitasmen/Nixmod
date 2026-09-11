@@ -36,7 +36,21 @@
     "clipse" = { source = "${dotfiles-path}/clipse"; force = true; };
     "aichat" = { source = "${dotfiles-path}/aichat"; force = true; };
     "waypaper" = { source = "${dotfiles-path}/waypaper"; force = true; };
-    
+
+    # Neovim: mkOutOfStoreSymlink (not a plain `source`) because the other
+    # directories above become read-only symlinks into the Nix store, and
+    # lazy.nvim needs to *write* lazy-lock.json into ~/.config/nvim itself.
+    # NOTE: can't reuse `dotfiles-path` here -- it's `./nixmod-dotfiles` in
+    # flake.nix, and flakes are pure, so that relative path gets copied into
+    # the (read-only) store at eval time same as every `source` above. This
+    # needs a real absolute path on disk instead, to actually stay writable
+    # and live-editable without a rebuild.
+    "nvim" = {
+      source = config.lib.file.mkOutOfStoreSymlink
+        "${config.home.homeDirectory}/Documents/Personal/Nixmod/nixmod-dotfiles/nvim";
+      force = true;
+    };
+
     # Git config replacement
     "git/config" = { source = "${dotfiles-path}/git/config"; force = true; };
   };
