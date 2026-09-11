@@ -428,6 +428,8 @@
                 "󰕾",
             ],
         },
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-",
         "reverse-scrolling": true,
         "reverse-mouse-scrolling": true,
         "on-click": "GDK_BACKEND=x11 pavucontrol",
