@@ -42,15 +42,18 @@ sudo ./toolkit/nixmod.sh install
 
 ### **2. Install User Dotfiles**
 ```bash
-# Install user configurations by creating individual symlinks for all discovered apps
-sudo ./toolkit/nixmod.sh install-dotfiles
+# Dotfiles are now managed automatically by Home Manager. 
+# Rebuild the system to apply them:
+sudo ./toolkit/nixmod.sh update
 ```
-This automatically discovers all configuration directories in `nixmod-dotfiles/` and creates individual symlinks for each one in your `~/.config/` directory.
+This will automatically deploy all configurations to `~/.config` using Home Manager. No manual symlinking or `dotfiles.sh` script required.
 
-### **3. Update Paths (if needed)**
+
+### **4. Hardware Configuration (New Machines)**
+`hardware-configuration.nix` and `nvidia-configuration.nix` contain machine-specific data (disk UUIDs, GPU bus IDs). When setting up a different machine, regenerate these:
 ```bash
-# Update hardcoded paths for your username
-./toolkit/dotfiles.sh update-paths /home/yourusername
+sudo nixos-generate-config
+# Then merge or replace hardware-configuration.nix and nvidia-configuration.nix as needed
 ```
 
 

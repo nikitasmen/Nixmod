@@ -13,6 +13,18 @@
     wireplumber.enable = true; 
   };
 
+  # Custom WirePlumber policy to prefer internal speakers over ghost devices
+  services.pipewire.wireplumber.extraConfig = {
+    "10-default-policy" = {
+      "wireplumber.settings" = {
+        "device.restore-default-targets" = true;
+      };
+    };
+  };
+
+  # Fix for volume keys not working: ensure wireplumber is starting correctly
+  systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
+
   # Enable OBS
   programs.obs-studio = {
     enable = true;
@@ -39,7 +51,14 @@
     playerctl    # Music player controller
     cava         # Audio Visualizer
   ];
-  
+
+  environment.shellAliases = {
+    # Quick command to open audio settings
+    pavucontrol = "GDK_BACKEND=x11 pavucontrol";
+  };
   # Bluetooth configuration
   services.blueman.enable = true;
+
+  # Enable UPower for battery reporting (fixes WirePlumber warnings)
+  services.upower.enable = true;
 }
