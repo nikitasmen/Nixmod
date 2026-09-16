@@ -56,7 +56,6 @@ nixmod-system/
 ├── hardware-configuration.nix    # Hardware-specific settings
 ├── nvidia-configuration.nix      # NVIDIA driver configuration
 ├── unixkit.nix                   # UnixKit integration
-├── playwrightConfig.nix          # Playwright configuration
 ├── modules/                      # Modular configuration components
 │   ├── default.nix              # Module imports
 │   ├── desktop/                 # Desktop environment modules
