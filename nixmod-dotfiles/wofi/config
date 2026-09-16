@@ -1,6 +1,6 @@
 allow_images=true
 hide_scroll=true
 no_actions=false
+matching=fuzzy
 term=kitty
-mode=drun
---show
+show=drun
