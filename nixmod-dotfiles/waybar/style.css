@@ -234,6 +234,10 @@ window.top_bar #privacy {
   color: @subtext0;
 }
 
+#custom-kdeconnect.disconnected {
+  color: @subtext0;
+}
+
 #custom-notifications {
   margin-right: 2px;
 }
@@ -248,6 +252,7 @@ window.top_bar #custom-recording,
 window.top_bar #custom-geo,
 window.top_bar #custom-media,
 window.top_bar #custom-notifications,
+window.top_bar #custom-kdeconnect,
 window.top_bar #custom-night_mode,
 window.top_bar #custom-airplane_mode,
 window.top_bar #idle_inhibitor {
@@ -282,6 +287,11 @@ window.top_bar #idle_inhibitor {
 
 #custom-geo {
   color: @yellow;
+  margin-right: 4px;
+}
+
+#custom-kdeconnect {
+  color: @green;
   margin-right: 4px;
 }
 

@@ -171,6 +171,7 @@
             "custom/geo",
             "custom/media",
             "custom/notifications",
+            "custom/kdeconnect",
             "idle_inhibitor",
         ],
     },
@@ -212,7 +213,15 @@
         "exec": "echo '{ \"text\":\"󰂚\", \"tooltip\": \"notifications (mako)\" }'",
         "interval": "once",
         "on-click": "makoctl dismiss -a",
-    },         
+    },
+
+    "custom/kdeconnect": {
+        "interval": 5,
+        "exec": "bash ~/.config/waybar/scripts/kdeconnect.sh",
+        "return-type": "json",
+        "on-click": "kdeconnect-app",
+    },
+
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
