@@ -2,6 +2,7 @@
 
 * {
   border: none;
+  font-family: "JetBrainsMono Nerd Font";
 }
 
 window.bottom_bar#waybar {
@@ -295,9 +296,9 @@ window.top_bar #idle_inhibitor {
   margin-right: 4px;
 }
 
-/* Logout: prominent on top bar right */
+/* Logout: quiet until hovered, alarms red only on intent to click */
 window.top_bar #custom-logout_menu {
-  color: @red;
+  color: @overlay1;
   background-color: alpha(@surface1, 0.7);
   border-radius: 12px;
   padding-left: 14px;
@@ -308,14 +309,24 @@ window.top_bar #custom-logout_menu {
   font-size: 1.1rem;
 }
 
-#custom-logout_menu {
+window.top_bar #custom-logout_menu:hover {
   color: @red;
+  background-color: alpha(@red, 0.15);
+}
+
+#custom-logout_menu {
+  color: @overlay1;
   background-color: alpha(@surface1, 0.7);
   border-radius: 15px 0px 0px 15px;
   padding-left: 10px;
   padding-right: 5px;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+#custom-logout_menu:hover {
+  color: @red;
+  background-color: alpha(@red, 0.15);
 }
 
 window.left_bar .modules-center {
