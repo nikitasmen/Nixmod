@@ -40,7 +40,7 @@ let
 
   udevTrigger = pkgs.writeShellScript "steam-on-controller-udev" ''
     set -eu
-    user=${lib.escapeShellArg steamCtrl.user}
+    user=${lib.escapeShellArg "nikmen"}
     uid=$(${pkgs.coreutils}/bin/id -u "$user" 2>/dev/null) || exit 0
     rt="/run/user/$uid"
     [ -S "$rt/bus" ] || exit 0
@@ -56,16 +56,6 @@ let
   '';
 in
 {
-  options.services.steamOnController = {
-    user = lib.mkOption {
-      type = lib.types.str;
-      default = "nikmen";
-      description = ''
-        User that must be logged in (graphical session) for Steam to start.
-      '';
-    };
-  };
-
   config = lib.mkIf cfg.enable {
     # js* covers some pads that lag on ID_INPUT_JOYSTICK; flock dedupes double events.
     services.udev.extraRules = ''
