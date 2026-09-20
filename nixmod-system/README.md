@@ -147,12 +147,11 @@ The `toolkit/` directory contains scripts for managing your configuration:
 ### Flake Management
 
 ```bash
-# Add new flake input
-../toolkit/add-flake.sh [flake-url] [flake-name]
-
 # Update flake inputs
 ../toolkit/nixmod.sh flake-update
 ```
+
+New flake inputs are added by hand-editing `flake.nix` directly.
 
 ## 🔄 Updates
 

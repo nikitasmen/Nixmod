@@ -181,7 +181,6 @@ toolkit/
 ├── dotfiles.sh                  # Dotfiles management (install, sync, status)
 ├── wallpaper.sh                 # Wallpaper management (set, random)
 ├── helper.sh                    # Helper utilities
-├── add-flake.sh                 # Flake management
 └── update-unixkit.sh            # UnixKit updates
 ```
 
@@ -269,9 +268,6 @@ sudo ./toolkit/nixmod.sh sync-dotfiles       # Sync changes back to repository
 
 # Helper utilities
 ./toolkit/helper.sh [command]
-
-# Flake management
-./toolkit/add-flake.sh [options]
 
 # UnixKit updates
 ./toolkit/update-unixkit.sh
