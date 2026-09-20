@@ -5,16 +5,12 @@
 
 set -e # Exit on error
 
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
-
 # Get the directory of this script
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Colors for output
+source "$SCRIPT_DIR/colors.sh"
 
 # Print header
 echo -e "${BLUE}================================${NC}"

@@ -4,16 +4,12 @@
 
 set -e # Exit on error
 
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
-
 # Get the directory of this script
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Colors for output
+source "$SCRIPT_DIR/colors.sh"
 
 # Function to show system health
 show_health() {
@@ -120,8 +116,7 @@ EOF
             echo -e "${YELLOW}Module already included in $DEFAULT_FILE${NC}"
         else
             # Add the new module to the imports list
-            sed -i.bak "s|{|{\n  imports = [\n    ./$MODULE_NAME.nix\n  ];|" "$DEFAULT_FILE"
-            rm "$DEFAULT_FILE.bak"
+            sed -i "s|{|{\n  imports = [\n    ./$MODULE_NAME.nix\n  ];|" "$DEFAULT_FILE"
             echo -e "${GREEN}Updated $DEFAULT_FILE to include the new module.${NC}"
         fi
     else
