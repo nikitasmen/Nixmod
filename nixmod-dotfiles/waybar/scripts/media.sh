@@ -2,7 +2,7 @@
 # Waybar media module - icon in bar, dropdown tooltip with track + controls (like calendar)
 status=$(playerctl status 2>/dev/null)
 if [ -z "$status" ]; then
-  echo '{"text":"󰎆","tooltip":"<tt>No player</tt>"}'
+  jq -nc '{text:"󰎆",tooltip:"<tt>No player</tt>"}'
   exit 0
 fi
 artist=$(playerctl metadata artist 2>/dev/null | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
@@ -22,7 +22,4 @@ tooltip="<tt><b>${title:-Unknown}</b></tt>
 
 <span color='#a6da95'>⏮ Prev</span>   <span color='#8bd5ca'>⏯ Play</span>   <span color='#a6da95'>⏭ Next</span>
 <span color='#6e6c7e' size='small'>Left: Play · Right: Next · Middle: Prev</span>"
-# Escape for JSON
-text_esc="${text//\\/\\\\}"; text_esc="${text_esc//\"/\\\"}"
-tooltip_esc="${tooltip//\\/\\\\}"; tooltip_esc="${tooltip_esc//\"/\\\"}"; tooltip_esc="${tooltip_esc//$'\n'/\\n}"
-printf '{"text":"%s","tooltip":"%s"}\n' "$text_esc" "$tooltip_esc"
+jq -nc --arg text "$text" --arg tooltip "$tooltip" '{text:$text,tooltip:$tooltip}'
