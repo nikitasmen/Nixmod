@@ -7,11 +7,7 @@ if [ -z "$status" ]; then
 fi
 artist=$(playerctl metadata artist 2>/dev/null | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
 title=$(playerctl metadata title 2>/dev/null | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
-artist_short=$(echo "${artist:-Unknown}" | head -c 20)
-title_short=$(echo "${title:-Unknown}" | head -c 20)
 [ "$status" = "Playing" ] && icon="󰐊" || icon="󰏤"
-# Bar: track info + navigation buttons (all from this script)
-# text="${icon} ${artist_short} - ${title_short}   󰒮 ${icon} 󰒭"
 text="${icon}"
 # Tooltip: dropdown-style with track info + control hints (Pango markup)
 status_color="#8bd5ca"
