@@ -11,6 +11,7 @@
     delta        # Better git diff
     lazygit      # Git TUI
     bat          # cat with syntax highlighting
+    glow         # Markdown viewer for the terminal
     eza          # Better ls
     docker       # Container platform
     helix        # Text editor
