@@ -10,6 +10,7 @@
     git          # Version control
     delta        # Better git diff
     lazygit      # Git TUI
+    lazyssh      # SSH connection manager TUI
     bat          # cat with syntax highlighting
     glow         # Markdown viewer for the terminal
     eza          # Better ls
