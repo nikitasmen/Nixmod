@@ -6,25 +6,25 @@
 }
 
 window.bottom_bar#waybar {
-  background-color: alpha(@base, 0.7);
-  border-top: solid alpha(@surface1, 0.7) 2px;
+  background-color: alpha(@base, 0.55);
+  border-top: solid alpha(@surface1, 0.55) 2px;
 }
 
 window.top_bar#waybar {
-  background-color: alpha(@base, 0.7);
-  border-bottom: solid alpha(@surface1, 0.7) 2px;
+  background-color: alpha(@base, 0.55);
+  border-bottom: solid alpha(@surface1, 0.55) 2px;
 }
 
 window.left_bar#waybar {
-  background-color: alpha(@base, 0.7);
-  border-top: solid alpha(@surface1, 0.7) 2px;
-  border-right: solid alpha(@surface1, 0.7) 2px;
-  border-bottom: solid alpha(@surface1, 0.7) 2px;
+  background-color: alpha(@base, 0.55);
+  border-top: solid alpha(@surface1, 0.55) 2px;
+  border-right: solid alpha(@surface1, 0.55) 2px;
+  border-bottom: solid alpha(@surface1, 0.55) 2px;
   border-radius: 0px 15px 15px 0px;
 }
 
 window.bottom_bar .modules-center {
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   color: @green;
   border-radius: 15px;
   padding-left: 20px;
@@ -34,7 +34,7 @@ window.bottom_bar .modules-center {
 }
 
 window.bottom_bar .modules-left {
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   border-radius: 0px 15px 15px 0px;
   padding-left: 20px;
   padding-right: 20px;
@@ -43,7 +43,7 @@ window.bottom_bar .modules-left {
 }
 
 window.bottom_bar .modules-right {
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   border-radius: 15px 0px 0px 15px;
   padding-left: 20px;
   padding-right: 20px;
@@ -85,7 +85,7 @@ window.bottom_bar .modules-right {
 }
 
 #submap {
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   border-radius: 15px;
   padding-left: 15px;
   padding-right: 15px;
@@ -97,7 +97,7 @@ window.bottom_bar .modules-right {
 
 window.top_bar .modules-center {
   font-weight: bold;
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   color: @peach;
   border-radius: 15px;
   padding-left: 20px;
@@ -123,7 +123,7 @@ window.top_bar #network {
 
 /* Group misc: compact icon cluster with background */
 window.top_bar #group-misc {
-  background-color: alpha(@surface1, 0.6);
+  background-color: alpha(@surface1, 0.45);
   border-radius: 12px;
   padding-left: 8px;
   padding-right: 8px;
@@ -172,7 +172,7 @@ window.top_bar #privacy {
 }
 
 #bluetooth {
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   border-radius: 15px;
   padding-left: 15px;
   padding-right: 15px;
@@ -181,7 +181,7 @@ window.top_bar #privacy {
 }
 
 #bluetooth.disabled {
-  background-color: alpha(@surface0, 0.7);
+  background-color: alpha(@surface0, 0.55);
   color: @subtext0;
 }
 
@@ -194,7 +194,7 @@ window.top_bar #privacy {
 }
 
 #network {
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   border-radius: 15px;
   padding-left: 15px;
   padding-right: 15px;
@@ -205,7 +205,7 @@ window.top_bar #privacy {
 }
 
 #network.disabled {
-  background-color: alpha(@surface0, 0.7);
+  background-color: alpha(@surface0, 0.55);
   color: @subtext0;
 }
 
@@ -299,7 +299,7 @@ window.top_bar #idle_inhibitor {
 /* Logout: quiet until hovered, alarms red only on intent to click */
 window.top_bar #custom-logout_menu {
   color: @overlay1;
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   border-radius: 12px;
   padding-left: 14px;
   padding-right: 14px;
@@ -316,7 +316,7 @@ window.top_bar #custom-logout_menu:hover {
 
 #custom-logout_menu {
   color: @overlay1;
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   border-radius: 15px 0px 0px 15px;
   padding-left: 10px;
   padding-right: 5px;
@@ -330,7 +330,7 @@ window.top_bar #custom-logout_menu:hover {
 }
 
 window.left_bar .modules-center {
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   border-radius: 0px 15px 15px 0px;
   margin-right: 5px;
   margin-top: 15px;
@@ -346,7 +346,7 @@ window.left_bar .modules-center {
 }
 
 #taskbar button.active {
-  background-color: alpha(@surface1, 0.7);
+  background-color: alpha(@surface1, 0.55);
   border-radius: 10px;
 }
 
