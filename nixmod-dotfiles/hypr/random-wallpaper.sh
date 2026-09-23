@@ -7,7 +7,7 @@ LAST_WALL="$HOME/.config/hypr/last_wallpaper.txt"
 
 mkdir -p "$(dirname "$CONF")"
 
-WALL=$(find "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | shuf -n 1)
+WALL=$(find -L "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | shuf -n 1)
 
 if [[ -z "$WALL" ]]; then
   echo "❌ No wallpapers found in $WALLDIR" >&2
@@ -16,10 +16,10 @@ fi
 
 # Avoid repeating the same wallpaper twice in a row (when more than one is available)
 if [[ -f "$LAST_WALL" ]]; then
-  COUNT=$(find "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | wc -l)
+  COUNT=$(find -L "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | wc -l)
   if [[ "$COUNT" -gt 1 ]]; then
     while [[ "$WALL" == "$(cat "$LAST_WALL" 2>/dev/null)" ]]; do
-      WALL=$(find "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | shuf -n 1)
+      WALL=$(find -L "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | shuf -n 1)
     done
   fi
 fi

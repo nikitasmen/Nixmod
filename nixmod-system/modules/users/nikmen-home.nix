@@ -55,6 +55,10 @@
     "git/config" = { source = "${dotfiles-path}/git/config"; force = true; };
   };
 
+  # Wallpapers live in the repo; ~/Pictures/wallpapers becomes a symlink into it
+  # (random-wallpaper.sh, hyprlock.conf, waypaper all already point at this path).
+  home.file."Pictures/wallpapers" = { source = "${dotfiles-path}/wallpapers"; force = true; };
+
   # Enable programs managed by Home Manager
   programs.home-manager.enable = true;
   programs.git.enable = true;

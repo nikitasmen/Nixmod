@@ -7,7 +7,7 @@ LAST_WALL="$HOME/.config/hypr/last_wallpaper.txt"
 WALLDIR="$HOME/Pictures/wallpapers"
 
 if [[ -z "$1" ]]; then
-    WALLPAPER=$(find "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | shuf -n 1)
+    WALLPAPER=$(find -L "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | shuf -n 1)
     if [[ -z "$WALLPAPER" ]]; then
         echo "❌ No wallpapers found in $WALLDIR" >&2
         exit 1
