@@ -18,6 +18,7 @@
     helix        # Text editor
     neovim       # Code editor (vim + Lua config)
     tmux         # Terminal multiplexer
+    tuios        # Terminal window manager (config: nixmod-dotfiles/tuios)
     tree         # Directory display
     findutils    # File search utilities
     fd           # Faster find alternative
@@ -38,6 +39,7 @@
     clipse       # Clipboard manager 
     scc          # Code counter
     p7zip        # zipping tool
+    tuios        # Terminal window manager
 
     claude-code
   ];

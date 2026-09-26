@@ -1,0 +1,31 @@
+# TUIOS - terminal window manager (https://github.com/Gaurav-Gosain/tuios)
+# Minimal config: anything not set here falls back to tuios defaults.
+# Read-only (Home Manager store symlink), so `tuios --edit-config` / `--reset-config`
+# won't stick; edit this file and rebuild instead.
+# Windows float by default (tiling is off until toggled); drag/resize them with the mouse.
+
+[appearance]
+# No `theme` on purpose: any tuios theme paints an opaque background into every window,
+# which kills kitty/ghostty's background_opacity. Without it, windows use the host
+# terminal's own Catppuccin Macchiato palette and stay transparent.
+border_style = "rounded"
+hide_window_buttons = true     # no close/minimize/maximize buttons, like Hyprland
+dockbar_position = "bottom"    # same side as the tmux status bar
+window_title_position = "top"
+shared_borders = true          # less clutter when tiling
+show_clock = true              # mirror the tmux status widgets
+show_cpu = true
+show_ram = true
+scrollback_lines = 20000
+
+[keybindings]
+# tmux keeps ctrl+b, so tmux can run inside tuios without fighting over the prefix
+leader_key = "ctrl+a"
+
+# Hyprland-ish, within what tuios allows: SUPER never reaches a terminal app (Hyprland
+# grabs it), and the leader/prefix keys are hardcoded (leader+c = new, leader+q = quit),
+# so Q/C are NOT remapped to avoid window-mode and prefix-mode meaning opposite things.
+# Already Hyprland-like by default: alt+1-9 / alt+shift+1-9 (SUPER+N / SUPER+SHIFT+N),
+# mouse drag/resize, `f` fullscreen in window mode.
+[keybindings.layout]
+toggle_tiling = ["v", "t"] # V = toggle float/tile, as in hyprland.lua

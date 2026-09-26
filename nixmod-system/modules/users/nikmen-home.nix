@@ -1,4 +1,4 @@
-{ config, pkgs, dotfiles-path, ... }:
+{ config, lib, pkgs, dotfiles-path, ... }:
 
 {
   home.username = "nikmen";
@@ -10,6 +10,17 @@
   # Instead of a bash script creating symlinks, Home Manager manages them.
   # If you change the files in the repo, HM will update the symlinks in ~/.config.
   
+  # Legacy dotfiles.sh left ~/.config/{hypr,git} as symlinks into this repo. Per-file entries
+  # like "hypr/hyprland.lua" are then written *through* them, replacing repo files with
+  # store symlinks. Drop such dir links (only the link; the repo is untouched) before linking.
+  home.activation.removeLegacyDotfileLinks = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+    for d in hypr git; do
+      if [ -L "$HOME/.config/$d" ] && [[ "$(readlink "$HOME/.config/$d")" != /nix/store/* ]]; then
+        run rm "$HOME/.config/$d"
+      fi
+    done
+  '';
+
   xdg.configFile = {
     # Hyprland: individual files to allow scripts to write to ~/.config/hypr/ (e.g. hyprpaper.conf)
     "hypr/hyprland.lua" = { source = "${dotfiles-path}/hypr/hyprland.lua"; force = true; };
@@ -36,6 +47,7 @@
     "clipse" = { source = "${dotfiles-path}/clipse"; force = true; };
     "aichat" = { source = "${dotfiles-path}/aichat"; force = true; };
     "waypaper" = { source = "${dotfiles-path}/waypaper"; force = true; };
+    "tuios/config.toml" = { source = "${dotfiles-path}/tuios/config.toml"; force = true; }; # file only: tuios creates ~/.config/tuios/themes at runtime
 
     # Neovim: mkOutOfStoreSymlink (not a plain `source`) because the other
     # directories above become read-only symlinks into the Nix store, and
