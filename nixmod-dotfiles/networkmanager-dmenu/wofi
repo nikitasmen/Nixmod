@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# Sits between networkmanager_dmenu and wofi: turns nmdm's terse rows into labelled,
+# grouped ones, then maps the pick back to the exact row nmdm expects.
+# Named "wofi" on purpose: nmdm picks its flags (--dmenu, -p, -P) from the command's basename.
+
+input=$(cat)
+# Password prompt and other free-text prompts: nothing to rewrite
+[[ -z ${input//[[:space:]]/} ]] && exec wofi "$@" < /dev/null
+
+# Catppuccin Macchiato
+green='#a6da95' dim='#8087a2' head='#6e738d'
+
+esc() { local s=${1//'&'/'&amp;'}; s=${s//'<'/'&lt;'}; printf '%s' "${s//'>'/'&gt;'}"; }
+
+pretty=() orig=() shown=""
+add() { pretty+=("$1"); orig+=("$2"); }
+header() {  # once per section; picking a header returns nothing, which just closes the menu
+  [[ $shown == *"|$1|"* ]] && return
+  shown+="|$1|"
+  add "<span foreground=\"$head\" size=\"small\" weight=\"bold\">$1</span>" ""
+}
+label() {  # $1 icon, $2 name, $3 detail
+  local name
+  if ((active)); then
+    name="<span foreground=\"$green\" weight=\"bold\">$(esc "$2")</span>  <span foreground=\"$green\" size=\"small\">● connected</span>"
+  else
+    name=$(esc "$2")
+  fi
+  printf '%s  %s%s' "$1" "$name" "${3:+  <span foreground=\"$dim\" size=\"small\">$(esc "$3")</span>}"
+}
+
+while IFS= read -r line; do
+  active=0 text=$line
+  case $line in
+    "== "*) active=1 text=${line:3} ;;
+    "   "*) text=${line:3} ;;
+  esac
+  [[ -z ${text//[[:space:]]/} ]] && continue   # nmdm's blank separator rows
+
+  case $text in
+    *¦*¦*¦*)  # Wi-Fi AP, from `format` in config.ini: icon¦name¦security¦signal
+      icon=${text%%¦*} rest=${text#*¦}
+      name=${rest%%¦*} rest=${rest#*¦}
+      sec=${rest%%¦*} signal=${rest#*¦}
+      sec=${sec% } sec=${sec##* }            # "WPA1 WPA2" -> strongest, "WPA2"
+      if [[ -n $sec ]]; then sec="󰌾 $sec"; else sec="󰌿 open"; fi
+      header "WI-FI NETWORKS"
+      add "$(label "$icon" "$name" "$sec · $signal%")" "$line" ;;
+    *:Eth)       header "WIRED";     add "$(label 󰈀 "${text%:Eth}" "ethernet")" "$line" ;;
+    *:Bluetooth) header "BLUETOOTH"; add "$(label 󰂯 "${text%:Bluetooth}" "phone tethering")" "$line" ;;
+    *" WWAN") ;;  # no modem on this machine
+    "Disable WiFi")              header "ACTIONS"; add "󰖪  Turn Wi-Fi off" "$line" ;;
+    "Enable WiFi")               header "ACTIONS"; add "󰖩  Turn Wi-Fi on" "$line" ;;
+    "Disable Bluetooth")         header "ACTIONS"; add "󰂲  Turn Bluetooth off" "$line" ;;
+    "Enable Bluetooth")          header "ACTIONS"; add "󰂯  Turn Bluetooth on" "$line" ;;
+    "Disable Networking")        header "ACTIONS"; add "󰲛  Turn all networking off" "$line" ;;
+    "Enable Networking")         header "ACTIONS"; add "󰲝  Turn networking on" "$line" ;;
+    "Rescan WiFi Networks")      header "ACTIONS"; add "󰑐  Scan for networks again" "$line" ;;
+    "Show WiFi password")        header "ACTIONS"; add "󰌆  Show current Wi-Fi password" "$line" ;;
+    "Saved connections")         header "ACTIONS"; add "󰆓  Saved connections…" "$line" ;;
+    "Delete a Connection")       header "ACTIONS"; add "󰆴  Forget a saved network…" "$line" ;;
+    "Launch Connection Manager") header "ACTIONS"; add "  Advanced settings" "$line" ;;
+    *) add "$(label "" "$text" "")" "$line" ;;  # submenus (saved list, VPNs...): as-is
+  esac
+done <<< "$input"
+
+sel=$(printf '%s\n' "${pretty[@]}" | wofi "$@" -m -q); rc=$?
+# wofi may hand back the markup or the rendered text; accept either
+mapfile -t plain < <(printf '%s\n' "${pretty[@]}" | sed 's/<[^>]*>//g; s/&lt;/</g; s/&gt;/>/g; s/&amp;/\&/g')
+for i in "${!pretty[@]}"; do
+  [[ -n $sel && ( $sel == "${pretty[i]}" || $sel == "${plain[i]}" ) ]] && { printf '%s\n' "${orig[i]}"; break; }
+done
+exit $rc

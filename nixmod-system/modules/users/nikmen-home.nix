@@ -36,6 +36,8 @@
     "kitty" = { source = "${dotfiles-path}/kitty"; force = true; };
     "ghostty" = { source = "${dotfiles-path}/ghostty"; force = true; };
     "wofi" = { source = "${dotfiles-path}/wofi"; force = true; };
+    "networkmanager-dmenu/config.ini" = { source = "${dotfiles-path}/networkmanager-dmenu/config.ini"; force = true; }; # file only: ~/.config/networkmanager-dmenu already exists as a real dir
+    "networkmanager-dmenu/wofi" = { source = "${dotfiles-path}/networkmanager-dmenu/wofi"; force = true; };
     "wlogout" = { source = "${dotfiles-path}/wlogout"; force = true; };
     "fastfetch" = { source = "${dotfiles-path}/fastfetch"; force = true; };
     "cava" = { source = "${dotfiles-path}/cava"; force = true; };
