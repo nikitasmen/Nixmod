@@ -31,6 +31,16 @@
     serviceConfig.ExecStart = "${pkgs.kdePackages.kdeconnect-kde}/bin/kdeconnectd";
   };
 
+  # netscanner needs raw sockets. Capability wrapper instead of the README's setuid-root;
+  # NixOS wrappers pass caps on as ambient, so wrapping the nixpkgs launcher script
+  # (which puts `iw` on PATH) works. Installed at /run/wrappers/bin/netscanner.
+  security.wrappers.netscanner = {
+    owner = "root";
+    group = "root";
+    capabilities = "cap_net_raw,cap_net_admin+ep";
+    source = "${pkgs.netscanner}/bin/netscanner";
+  };
+
   # Desktop entry for kdeconnect-indicator (fixes "App info not found" portal error on Wayland)
   # programs.kdeconnect already adds kdeconnect-kde; no need to duplicate
   environment.systemPackages = with pkgs; [

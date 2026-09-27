@@ -121,6 +121,18 @@ window.top_bar #network {
   margin-right: 4px;
 }
 
+/* Traffic sparkline revealed from the network drawer (net-graph.sh) */
+window.top_bar #custom-net-graph {
+  color: @green;
+  padding-left: 6px;
+  padding-right: 6px;
+  margin: 5px 2px;
+}
+
+window.top_bar #custom-net-graph.idle {
+  color: @surface2;
+}
+
 /* Group misc: compact icon cluster with background */
 window.top_bar #group-misc {
   background-color: alpha(@surface1, 0.45);

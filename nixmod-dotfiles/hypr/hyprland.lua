@@ -160,7 +160,7 @@ hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("flameshot gui"))
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("waypaper"))
-hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(terminal .. " --class clipse -e clipse"))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(terminal .. " --class=com.nikmen.clipse -e clipse"))
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("$HOME/.config/hypr/set-wallpaper.sh"))
 
 -- Move focus with mainMod + arrow keys
@@ -248,10 +248,19 @@ hl.window_rule({
 
 hl.window_rule({
 	name = "float-clipse",
-	match = { class = "(clipse)" },
+	match = { class = "com.nikmen.clipse" },
 
 	float = true,
 	size = "622 652",
+})
+
+hl.window_rule({
+	name = "float-netscanner",
+	match = { class = "com.nikmen.netscanner" },
+
+	float = true,
+	size = "1400 850",
+	center = true,
 })
 
 hl.window_rule({
