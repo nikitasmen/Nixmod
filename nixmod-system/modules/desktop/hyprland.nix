@@ -26,7 +26,7 @@
     # ollama_vulkan = pkgs.ollama-vulkan; 
     # acceleration = "cuda";  # Uncomment for GPU
   };
-  
+
   # Hyprland related packages
   environment.systemPackages = with pkgs; [
     waybar       # Status bar
@@ -34,16 +34,10 @@
     wlogout      # Logout menu
     hyprpaper    # Wallpaper utility
     waypaper     # GUI wallpaper utility
-    swaybg       # Backend for waypaper (optional but good to have)
     hypridle     # Idle management
     hyprlock     # Screen locking
-    hyprutils
-    hyprlang
     hyprpolkitagent  # Polkit agent for pkexec/auth dialogs (input-remapper, etc.)
     mako         # Notification daemon
-    grim         # Screenshot utility (backend)
-    slurp        # Area selection for screenshots
-    git          # Required for dotfiles installation
     #eww          # Widget system
     jq           # Command-line JSON processor
   ];

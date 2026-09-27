@@ -185,7 +185,6 @@
             "custom/webcam",
             "privacy",
             "custom/recording",
-            "custom/geo",
             "custom/media",
             "custom/notifications",
             "custom/kdeconnect",
@@ -216,12 +215,6 @@
     "custom/recording": {
         "interval": 1,
         "exec": "bash ~/.config/waybar/scripts/recording.sh",
-        "return-type": "json",
-    },
-
-    "custom/geo": {
-        "interval": 1,
-        "exec": "bash ~/.config/waybar/scripts/geo.sh",
         "return-type": "json",
     },
 

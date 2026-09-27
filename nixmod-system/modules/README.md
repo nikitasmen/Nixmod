@@ -39,7 +39,7 @@ Modules responsible for the graphical user interface and desktop experience.
 | Module | Description | Key Features |
 |--------|-------------|--------------|
 | `hyprland.nix` | Hyprland Wayland compositor | Window management, animations, theming |
-| `terminals.nix` | Terminal emulators | Kitty, Ghostty, Alacritty configurations |
+| `terminals.nix` | Terminal emulators | Kitty, Ghostty |
 
 ### Applications (`programs/`)
 

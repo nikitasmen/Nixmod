@@ -16,7 +16,7 @@ A comprehensive NixOS system configuration with Hyprland, modern tooling, and de
 - **UnixKit Integration**: Custom utility scripts
 
 ### 🛠️ **Development Tools**
-- **Multiple Terminals**: Kitty, Ghostty, and Alacritty support
+- **Multiple Terminals**: Kitty and Ghostty
 - **Text Editors**: Helix editor with language server support
 - **Version Control**: Git with custom configuration
 - **Containerization**: Docker and Podman support

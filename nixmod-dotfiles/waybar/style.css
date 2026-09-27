@@ -242,8 +242,7 @@ window.top_bar #privacy {
 }
 
 #custom-webcam.off,
-#custom-recording.off,
-#custom-geo.off {
+#custom-recording.off {
   color: @subtext0;
 }
 
@@ -262,7 +261,6 @@ window.top_bar #privacy {
 /* Top bar: custom modules in group - visible icons */
 window.top_bar #custom-webcam,
 window.top_bar #custom-recording,
-window.top_bar #custom-geo,
 window.top_bar #custom-media,
 window.top_bar #custom-notifications,
 window.top_bar #custom-kdeconnect,
@@ -295,11 +293,6 @@ window.top_bar #idle_inhibitor {
 
 #custom-recording {
   color: @red;
-  margin-right: 4px;
-}
-
-#custom-geo {
-  color: @yellow;
   margin-right: 4px;
 }
 

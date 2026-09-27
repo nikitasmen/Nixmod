@@ -7,14 +7,12 @@
   programs.git.enable = true;
 
   environment.systemPackages = with pkgs; [
-    git          # Version control
     delta        # Better git diff
     lazygit      # Git TUI
     lazyssh      # SSH connection manager TUI
     bat          # cat with syntax highlighting
     glow         # Markdown viewer for the terminal
     eza          # Better ls
-    docker       # Container platform
     helix        # Text editor
     neovim       # Code editor (vim + Lua config)
     tmux         # Terminal multiplexer
@@ -39,7 +37,6 @@
     clipse       # Clipboard manager 
     scc          # Code counter
     p7zip        # zipping tool
-    tuios        # Terminal window manager
 
     claude-code
   ];

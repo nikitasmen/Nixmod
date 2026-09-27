@@ -16,9 +16,6 @@
     # NixAi assistant 
     nix-ai.url = "github:olafkfreund/nix-ai-help";
 
-    # yt-x - terminal YouTube client
-    yt-x.url = "github:Benexl/yt-x";
-
     # Spicetify - Spotify themes and extensions
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
 
@@ -29,7 +26,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, unixkit, yt-x, nix-ai, home-manager, ... }@inputs: 
+  outputs = { self, nixpkgs, unixkit, nix-ai, home-manager, ... }@inputs: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -51,7 +48,6 @@
         
         specialArgs = { 
           inherit inputs;
-          yt-x-pkg = yt-x.packages.${system}.default;
           dotfiles-path = ./nixmod-dotfiles;
         };
         
