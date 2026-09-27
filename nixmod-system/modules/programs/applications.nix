@@ -42,6 +42,7 @@
     mpv      # Cli media player
     yt-dlp   # Youtube downloader
     chafa    # Cli image converter
+    tigervnc # VNC client (vncviewer)
     # Screenshots
     flameshot
 
