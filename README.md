@@ -13,7 +13,7 @@ A single-machine NixOS flake built around the Hyprland Wayland compositor, with 
 | `flake.nix` | The flake: one `nixosConfigurations.nixos`, Home Manager, and inputs (nixpkgs unstable, Hyprland, UnixKit, spicetify-nix) |
 | `nixmod-system/` | NixOS modules: `configuration.nix` → `modules/{desktop,programs,system,users}/`, plus `overlays/` and the machine-specific `hardware-configuration.nix` / `nvidia-configuration.nix` |
 | `nixmod-dotfiles/` | Plain app configs (hypr, waybar, ghostty, kitty, nvim, wofi, clipse, cava, …) and `wallpapers/`, deployed by Home Manager |
-| `toolkit/` | `nixmod.sh` (rebuild wrapper) and `helper.sh` (maintenance) |
+| `toolkit/` | `nixmod.sh` (entry point: rebuild wrapper, forwards maintenance commands) and `helper.sh` (maintenance) |
 
 ## 🚀 Quick Start
 
@@ -41,9 +41,9 @@ sudo ./toolkit/nixmod.sh flake-update  # nix flake update
      ./toolkit/nixmod.sh status        # system status
      ./toolkit/nixmod.sh update-unixkit
 
-     ./toolkit/helper.sh health              # disk / memory / load
-sudo ./toolkit/helper.sh clean               # GC the Nix store and delete old generations (destructive)
-     ./toolkit/helper.sh create-module NAME  # scaffold a module and add it to its category's default.nix
+     ./toolkit/nixmod.sh health              # disk / memory / load
+sudo ./toolkit/nixmod.sh clean               # delete generations older than 14 days + GC the Nix store (destructive)
+     ./toolkit/nixmod.sh create-module NAME  # scaffold a module and add it to its category's default.nix
 ```
 
 Run these from a checkout of the repo: `nixmod.sh` builds from the working tree (`path:` flake ref).

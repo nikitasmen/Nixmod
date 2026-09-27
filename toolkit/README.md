@@ -21,6 +21,9 @@ The primary script for managing your NixOS configuration. It works directly with
 | `test` | Test configuration without applying changes | `sudo ./toolkit/nixmod.sh test` |
 | `status` | Show current system status and health | `./toolkit/nixmod.sh status` |
 | `flake-update` | Update flake inputs to latest versions | `sudo ./toolkit/nixmod.sh flake-update` |
+| `health` | Forwarded to `helper.sh` (below) | `./toolkit/nixmod.sh health` |
+| `clean` | Forwarded to `helper.sh` (below) | `sudo ./toolkit/nixmod.sh clean` |
+| `create-module` | Forwarded to `helper.sh` (below) | `./toolkit/nixmod.sh create-module NAME` |
 | `help` | Show help message and available commands | `./toolkit/nixmod.sh help` |
 
 ### 🎨 Dotfiles Management (Home Manager)
@@ -44,7 +47,7 @@ A collection of utility scripts for system maintenance.
 | Command | Description | Usage |
 |---------|-------------|-------|
 | `health` | Check system health (disk, memory, etc.) | `./toolkit/helper.sh health` |
-| `clean` | Clean Nix store and remove old generations | `sudo ./toolkit/helper.sh clean` |
+| `clean` | Delete generations older than 14 days and clean the Nix store | `sudo ./toolkit/helper.sh clean` |
 | `create-module` | Create new module template | `./toolkit/helper.sh create-module NAME` |
 
 ---

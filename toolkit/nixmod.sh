@@ -41,6 +41,9 @@ show_help() {
     echo "  status              Show the current system status"
     echo "  flake-update        Update flake inputs"
     echo "  update-unixkit      Update UnixKit to latest commit"
+    echo "  health              Check system health (disk/mem/load)"
+    echo "  clean               Remove generations older than 14 days and clean the Nix store"
+    echo "  create-module NAME  Create a new module template"
     echo "  help                Show this help message"
     echo ""
 }
@@ -116,7 +119,10 @@ case "$1" in
         update_flake
         ;;
     update-unixkit)
-        ./toolkit/update-unixkit.sh
+        "$SCRIPT_DIR/update-unixkit.sh"
+        ;;
+    health|clean|create-module)
+        "$SCRIPT_DIR/helper.sh" "$@"
         ;;
     help|--help|-h)
         show_help

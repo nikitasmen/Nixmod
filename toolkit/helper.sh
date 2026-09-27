@@ -42,18 +42,16 @@ clean_system() {
     echo -e "${BLUE}Cleaning NixOS System${NC}"
     echo -e "${BLUE}-------------------${NC}"
     
-    # Garbage collection
-    echo -e "\n${BLUE}Running garbage collection...${NC}"
-    sudo nix-collect-garbage -d
-    
+    # Drop generations older than 14 days (all profiles), then GC
+    echo -e "\n${BLUE}Removing generations older than 14 days and collecting garbage...${NC}"
+    sudo nix-collect-garbage --delete-older-than 14d
+
     # Optimize store
     echo -e "\n${BLUE}Optimizing Nix store...${NC}"
     sudo nix-store --optimize
-    
-    # Clean old generations
-    echo -e "\n${BLUE}Removing old generations...${NC}"
-    sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system
-    sudo nixos-rebuild boot
+
+    # Refresh bootloader entries so deleted generations disappear from the menu
+    sudo /run/current-system/bin/switch-to-configuration boot
     
     echo -e "\n${GREEN}System cleaned successfully!${NC}"
 }
@@ -68,7 +66,7 @@ create_module() {
     fi
     
     MODULE_NAME="$1"
-    MODULE_DIR="$REPO_ROOT/modules"
+    MODULE_DIR="$REPO_ROOT/nixmod-system/modules"
     
     # Determine the appropriate subdirectory
     echo "Select module type:"
@@ -116,7 +114,7 @@ EOF
             echo -e "${YELLOW}Module already included in $DEFAULT_FILE${NC}"
         else
             # Add the new module to the imports list
-            sed -i "s|{|{\n  imports = [\n    ./$MODULE_NAME.nix\n  ];|" "$DEFAULT_FILE"
+            sed -i "/imports = \[/a\    ./$MODULE_NAME.nix" "$DEFAULT_FILE"
             echo -e "${GREEN}Updated $DEFAULT_FILE to include the new module.${NC}"
         fi
     else
@@ -153,7 +151,7 @@ case "$1" in
         echo ""
         echo "Commands:"
         echo "  health              Check system health"
-        echo "  clean               Clean the Nix store and remove old generations"
+        echo "  clean               Remove generations older than 14 days and clean the Nix store"
         echo "  create-module NAME  Create a new module template"
         exit 1
         ;;
