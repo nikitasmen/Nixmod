@@ -44,6 +44,7 @@ sudo ./toolkit/nixmod.sh flake-update  # nix flake update
      ./toolkit/nixmod.sh health              # disk / memory / load
 sudo ./toolkit/nixmod.sh clean               # delete generations older than 14 days + GC the Nix store (destructive)
      ./toolkit/nixmod.sh create-module NAME  # scaffold a module and add it to its category's default.nix
+     ./toolkit/nixmod.sh validate            # nix flake check on the repo
 ```
 
 Run these from a checkout of the repo: `nixmod.sh` builds from the working tree (`path:` flake ref).

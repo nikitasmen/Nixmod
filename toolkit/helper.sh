@@ -57,13 +57,35 @@ clean_system() {
 }
 
 
-# Function to create a new module
-create_module() {
-    if [ -z "$1" ]; then
-        echo -e "${RED}Error: Module name is required.${NC}"
-        echo "Usage: $0 create-module <module_name>"
+validate_input() {
+    local param="$1"
+    local param_name="$2"
+    if [[ -z "$param" ]]; then
+        echo -e "${RED}Error: $param_name is required${NC}"
         exit 1
     fi
+}
+
+validate_nixos_config() {
+    echo -e "${BLUE}Validating NixOS configuration...${NC}"
+    
+    if [ -f "$REPO_ROOT/flake.nix" ]; then
+        cd "$REPO_ROOT"
+        if nix flake check "path:$REPO_ROOT" 2>/dev/null; then
+            echo -e "${GREEN}✓ Configuration is valid${NC}"
+        else
+            echo -e "${RED}✗ Configuration validation failed${NC}"
+            echo -e "${YELLOW}Run 'nix flake check' for detailed error information${NC}"
+            exit 1
+        fi
+    else
+        echo -e "${YELLOW}No flake.nix found, skipping validation${NC}"
+    fi
+}
+
+# Function to create a new module
+create_module() {
+    validate_input "$1" "Module name"
     
     MODULE_NAME="$1"
     MODULE_DIR="$REPO_ROOT/nixmod-system/modules"
@@ -143,8 +165,11 @@ case "$1" in
     clean)
         clean_system
         ;;
-   create-module)
+    create-module)
         create_module "$2"
+        ;;
+    validate)
+        validate_nixos_config
         ;;
     *)
         echo "Usage: $0 <command>"
@@ -153,6 +178,7 @@ case "$1" in
         echo "  health              Check system health"
         echo "  clean               Remove generations older than 14 days and clean the Nix store"
         echo "  create-module NAME  Create a new module template"
+        echo "  validate            Validate NixOS configuration"
         exit 1
         ;;
 esac

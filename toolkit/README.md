@@ -24,6 +24,7 @@ The primary script for managing your NixOS configuration. It works directly with
 | `health` | Forwarded to `helper.sh` (below) | `./toolkit/nixmod.sh health` |
 | `clean` | Forwarded to `helper.sh` (below) | `sudo ./toolkit/nixmod.sh clean` |
 | `create-module` | Forwarded to `helper.sh` (below) | `./toolkit/nixmod.sh create-module NAME` |
+| `validate` | Forwarded to `helper.sh` (below) | `./toolkit/nixmod.sh validate` |
 | `help` | Show help message and available commands | `./toolkit/nixmod.sh help` |
 
 ### 🎨 Dotfiles Management (Home Manager)

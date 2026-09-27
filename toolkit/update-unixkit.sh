@@ -9,10 +9,9 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/colors.sh"
 
 echo -e "${BLUE}Updating UnixKit to latest version...${NC}"
 
-# Step 1: Check if we're in a Git repository
-if [ ! -d ".git" ]; then
-  echo -e "${YELLOW}Warning: Not in a git repository root. Commands may not work as expected.${NC}"
-fi
+# Step 1: Run from the repo root (where flake.nix lives), wherever we're called from
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$(dirname "$SCRIPT_DIR")"
 
 # Step 2: Check if flake.lock exists
 if [ -f "flake.lock" ]; then
