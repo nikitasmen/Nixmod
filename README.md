@@ -10,7 +10,7 @@ A single-machine NixOS flake built around the Hyprland Wayland compositor, with 
 
 | Path | What it is |
 |------|-----------|
-| `flake.nix` | The flake: one `nixosConfigurations.nixos`, Home Manager, and inputs (nixpkgs unstable, Hyprland, UnixKit, spicetify-nix, nix-ai) |
+| `flake.nix` | The flake: one `nixosConfigurations.nixos`, Home Manager, and inputs (nixpkgs unstable, Hyprland, UnixKit, spicetify-nix) |
 | `nixmod-system/` | NixOS modules: `configuration.nix` → `modules/{desktop,programs,system,users}/`, plus `overlays/` and the machine-specific `hardware-configuration.nix` / `nvidia-configuration.nix` |
 | `nixmod-dotfiles/` | Plain app configs (hypr, waybar, ghostty, kitty, nvim, wofi, clipse, cava, …) and `wallpapers/`, deployed by Home Manager |
 | `toolkit/` | `nixmod.sh` (rebuild wrapper) and `helper.sh` (maintenance) |

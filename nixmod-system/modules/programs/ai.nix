@@ -1,6 +1,6 @@
-# AI-powered CLI tools: aichat (shell assistant, execute commands), nixai (NixOS help),
+# AI-powered CLI tools: aichat (shell assistant, execute commands),
 # fzf (fuzzy path/command finder), zoxide (smart cd). Uses local Ollama (see hyprland.nix).
-{ config, pkgs, lib, inputs ? { }, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # AI CLI tools - aichat reads paths, executes commands, suggests next steps
@@ -8,7 +8,7 @@
     aichat       # Shell assistant: natural language -> commands, -e to execute
     fzf          # Fuzzy finder for paths, history, files
     zoxide       # Smarter cd - learns your paths
-  ] ++ lib.optional (inputs ? nix-ai) inputs.nix-ai.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  ];
 
   # Zsh with AI-friendly autocomplete (suggestions from history, syntax highlighting)
   programs.zsh = {

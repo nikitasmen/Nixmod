@@ -13,9 +13,6 @@
       flake = false;
     };
     
-    # NixAi assistant 
-    nix-ai.url = "github:olafkfreund/nix-ai-help";
-
     # Spicetify - Spotify themes and extensions
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
 
@@ -26,7 +23,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, unixkit, nix-ai, home-manager, ... }@inputs: 
+  outputs = { self, nixpkgs, unixkit, home-manager, ... }@inputs: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {

@@ -26,24 +26,24 @@
   systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
 
   # Enable OBS
-  programs.obs-studio = {
-    enable = true;
+    #programs.obs-studio = {
+    #enable = true;
 
     # Optional! Nvidia Hardware acceleration 
-    package = (
-      pkgs.obs-studio.override {
-        cudaSupport = true; 
-      }
-    ); 
+    #package = (
+    # pkgs.obs-studio.override {
+    #   cudaSupport = true; 
+    # }
+    # ); 
 
-    plugins = with pkgs.obs-studio-plugins; [
-      wlrobs
-      obs-backgroundremoval
-      obs-pipewire-audio-capture
-      obs-gstreamer
-      obs-vkcapture
-    ];    
-  };
+    #plugins = with pkgs.obs-studio-plugins; [
+    # wlrobs
+    #  obs-backgroundremoval
+    #  obs-pipewire-audio-capture
+    #  obs-gstreamer
+    #  obs-vkcapture
+    # ];    
+    #};
   
   # Audio related packages (OBS is already installed via programs.obs-studio above)
   environment.systemPackages = with pkgs; [
