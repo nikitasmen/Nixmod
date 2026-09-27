@@ -238,14 +238,12 @@
 # background must also be defined in hex or remain commented out. 1 = on, 0 = off.
 # You can define as many as 8 different colors. They range from bottom to top of screen
 gradient = 1
-gradient_color_1 = '#8bd5ca'
-gradient_color_2 = '#a6da95'
-gradient_color_3 = '#eed49f'
-gradient_color_4 = '#f5a97f'
-gradient_color_5 = '#ed8796'
-gradient_color_6 = '#c6a0f6'
-gradient_color_7 = '#b7bdf8'
-gradient_color_8 = '#8aadf4'
+# Dusk: sapphire base -> blue -> lavender -> mauve -> pink peaks (Catppuccin Macchiato)
+gradient_color_1 = '#7dc4e4'
+gradient_color_2 = '#8aadf4'
+gradient_color_3 = '#b7bdf8'
+gradient_color_4 = '#c6a0f6'
+gradient_color_5 = '#f5bde6'
 
 
 # Horizontal is only supported on noncurses output.
