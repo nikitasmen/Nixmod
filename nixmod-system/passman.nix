@@ -25,7 +25,7 @@ let
     version = "unstable";
     src = passManSrc;
 
-    nativeBuildInputs = [ pkgs.cmake ];
+    nativeBuildInputs = [ pkgs.cmake pkgs.copyDesktopItems ];
     buildInputs = with pkgs; [
       fltk
       openssl
@@ -46,6 +46,17 @@ let
 
     # Upstream's binary is `password_manager`; expose it as `passman`.
     postInstall = "mv $out/bin/password_manager $out/bin/passman";
+
+    # drun launchers (wofi) only list .desktop entries.
+    desktopItems = [
+      (pkgs.makeDesktopItem {
+        name = "passman";
+        desktopName = "Passman";
+        exec = "passman";
+        icon = "dialog-password";
+        categories = [ "Utility" "Security" ];
+      })
+    ];
 
     meta.license = lib.licenses.mit;
   };
