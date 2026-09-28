@@ -3,19 +3,27 @@
 {
   # Enable Steam
   programs.steam.enable = true;
-    
+
   # Define user account
   users.users.nikmen = {
     isNormalUser = true;
     description = "nikmen";
-    extraGroups = [ "networkmanager" "wheel" "docker" "video" "audio" "input" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "video"
+      "audio"
+      "input"
+      "dialout"
+    ];
     packages = with pkgs; [
-      slack   # Communication
-      viber   # Communication
+      slack # Communication
+      viber # Communication
       discord-ptb # Communication
-      
-      tlauncher      # TLauncher (JAR in ~/Downloads/)
-      heroic         # Heroic Game launcher 
+
+      tlauncher # TLauncher (JAR in ~/Downloads/)
+      heroic # Heroic Game launcher
     ];
   };
 }

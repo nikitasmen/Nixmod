@@ -12,6 +12,11 @@
       url = "github:nikitasmen/UnixKit";
       flake = false;
     };
+
+    passman = {
+      url = "github:nikitasmen/password-manager-";
+      flake = false;
+    };
     
     # Spicetify - Spotify themes and extensions
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
@@ -23,7 +28,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, unixkit, home-manager, ... }@inputs: 
+  outputs = { self, nixpkgs, unixkit, passman, home-manager, ... }@inputs: 
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -37,6 +42,11 @@
       unixkitModule = { config, ... }: {
         imports = [ ./nixmod-system/unixkit.nix ];
         _module.args.unixkit = unixkit;
+      };
+
+      passmanModule = { config, ... }: {
+        imports = [ ./nixmod-system/passman.nix ];
+        _module.args.passman = passman;
       };
       
     in {
@@ -67,6 +77,7 @@
           
           # UnixKit (provides unixkit input to unixkit.nix)
           unixkitModule
+          passmanModule
           
           # Spicetify (Spotify themes)
           inputs.spicetify-nix.nixosModules.spicetify
