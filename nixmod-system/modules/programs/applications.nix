@@ -2,7 +2,9 @@
 
 {
   # Enable Firefox
-  programs.firefox.enable = true; 
+  programs.firefox.enable = true;
+  # Firefox enables speech-dispatcher by default (~1 GB of voices); not needed
+  services.speechd.enable = false;
   
   # Other applications
   environment.systemPackages = with pkgs; [

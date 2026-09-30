@@ -2,29 +2,45 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running 'nixos-help').
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./nvidia-configuration.nix
-      # Import all modular configurations (unixkit.nix via flake's unixkitModule)
-      ./modules
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./nvidia-configuration.nix
+    # Import all modular configurations (unixkit.nix via flake's unixkitModule)
+    ./modules
+  ];
 
   # Overlays (e.g. to patch packages)
   nixpkgs.overlays = [
     (import ./overlays/flameshot.nix)
     (import ./overlays/tlauncher.nix)
-  ]; 
-  
+  ];
+
   # Use flakes
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-  
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+
+  # Same policy as `nixmod.sh clean`, but automatic; hardlink duplicate store files
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+  nix.optimise.automatic = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
