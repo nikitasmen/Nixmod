@@ -1,11 +1,9 @@
-{ config, pkgs, lib, inputs,  ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Enable hyprland
-  programs.hyprland = {
-    enable = true; 
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-  }; 
+  # nixpkgs' release Hyprland (prebuilt), not the git-master flake: master broke the NVIDIA+AMD dual-monitor setup
+  programs.hyprland.enable = true;
 
    programs.hyprlock.enable = true;
 
@@ -22,9 +20,8 @@
   
   services.ollama = {
     enable = true;
-    package = pkgs.ollama-cuda; 
-    # ollama_vulkan = pkgs.ollama-vulkan; 
-    # acceleration = "cuda";  # Uncomment for GPU
+    # Vulkan (still GPU): prebuilt on cache.nixos.org, unlike unfree ollama-cuda which compiles locally
+    package = pkgs.ollama-vulkan;
   };
 
   # Hyprland related packages

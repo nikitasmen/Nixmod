@@ -30,6 +30,7 @@ let
       fltk
       openssl
       curl
+      nlohmann_json # found by upstream's find_package; otherwise it downloads json.hpp, which the sandbox blocks
     ];
     # FindFLTK otherwise also requires OpenGL headers and the fluid binary, neither of which the app uses.
     cmakeFlags = [
@@ -37,12 +38,6 @@ let
       "-DFLTK_SKIP_OPENGL=ON"
       "-DFLTK_SKIP_FLUID=ON"
     ];
-
-    # Upstream downloads json.hpp at configure time, which the sandbox blocks: use nixpkgs' copy.
-    postPatch = ''
-      sed -i '/^file(DOWNLOAD/,/^)/d; /^file(MAKE_DIRECTORY/d' CMakeLists.txt
-      sed -i 's|^set(JSON_INCLUDE_DIR .*|set(JSON_INCLUDE_DIR ${pkgs.nlohmann_json}/include)|' CMakeLists.txt
-    '';
 
     # Upstream's binary is `password_manager`; expose it as `passman`.
     postInstall = "mv $out/bin/password_manager $out/bin/passman";
