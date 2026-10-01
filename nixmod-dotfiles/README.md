@@ -13,7 +13,7 @@ User configuration files for applications and desktop environment components. Th
 - **Logout Menu**: Wlogout with custom styling
 
 ### 🛠️ **Terminal & Development**
-- **Multiple Terminals**: Kitty, Ghostty configurations
+- **Terminal**: Ghostty configuration
 - **File Manager**: Superfile with extensive theme collection
 - **System Information**: Neofetch with custom ASCII art
 - **Clipboard Manager**: Clipse with custom theming
@@ -70,11 +70,6 @@ nixmod-dotfiles/
 │       ├── recording.sh      # Recording indicator
 │       ├── geo.sh            # Location services
 │       └── user-uptime.sh    # User/uptime display
-├── kitty/                    # Kitty terminal
-│   ├── kitty.conf            # Main configuration
-│   ├── theme.conf            # Theme settings
-│   ├── splits.conf           # Split configurations
-│   └── custom-hints.py      # Custom key hints (URL/path selection)
 ├── ghostty/                  # Ghostty terminal
 │   └── config                # Terminal configuration
 ├── wofi/                     # Application launcher
@@ -133,7 +128,6 @@ nixmod-dotfiles/
 |-----------|-------------|-------------------|
 | **Hyprland** | Wayland compositor | `hypr/hyprland.conf` |
 | **Waybar** | Status bar | `waybar/config` |
-| **Kitty** | Terminal emulator | `kitty/kitty.conf` |
 | **Ghostty** | Terminal emulator | `ghostty/config` |
 | **Wofi** | Application launcher | `wofi/config` |
 | **Wlogout** | Logout menu | `wlogout/layout` |
@@ -148,7 +142,7 @@ nixmod-dotfiles/
 #### Changing Themes
 1. **Waybar Theme**: Edit `waybar/style.css`
 2. **Hyprland Colors**: Modify `hypr/hyprland.conf`
-3. **Terminal Theme**: Update `kitty/theme.conf`
+3. **Terminal Theme**: Update `ghostty/config`
 4. **Superfile Theme**: Change theme in `superfile/superfile/config.toml`
 
 #### Path Customization
@@ -183,7 +177,6 @@ Dotfiles are managed via `toolkit/dotfiles.sh` from the **main Nixmod repo root*
 # Install specific configuration
 ./toolkit/dotfiles.sh install hypr
 ./toolkit/dotfiles.sh install waybar
-./toolkit/dotfiles.sh install kitty
 ./toolkit/dotfiles.sh install ghostty
 ./toolkit/dotfiles.sh install wofi
 ./toolkit/dotfiles.sh install wlogout
@@ -226,7 +219,7 @@ git pull origin main
 ./toolkit/dotfiles.sh install
 
 # Or update specific configurations
-./toolkit/dotfiles.sh install hypr waybar kitty ghostty wofi wlogout superfile neofetch clipse cava
+./toolkit/dotfiles.sh install hypr waybar ghostty wofi wlogout superfile neofetch clipse cava
 ```
 
 ### Syncing Changes
@@ -300,7 +293,6 @@ chown -R $USER:$USER ~/.config/
 
 - [Hyprland Wiki](https://wiki.hyprland.org/)
 - [Waybar Documentation](https://github.com/Alexays/Waybar/wiki)
-- [Kitty Documentation](https://sw.kovidgoyal.net/kitty/)
 - [Superfile Documentation](https://github.com/MHNightCat/superfile)
 
 ## 🤝 Contributing

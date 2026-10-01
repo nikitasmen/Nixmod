@@ -6,7 +6,7 @@
 
 [appearance]
 # No `theme` on purpose: any tuios theme paints an opaque background into every window,
-# which kills kitty/ghostty's background_opacity. Without it, windows use the host
+# which kills ghostty's background_opacity. Without it, windows use the host
 # terminal's own Catppuccin Macchiato palette and stay transparent.
 border_style = "rounded"
 hide_window_buttons = true     # no close/minimize/maximize buttons, like Hyprland

@@ -335,8 +335,8 @@
             "lower-medium": 30,
             "low": 10,
         },
-        "on-click": "kitty -e btop",
-        "on-click-right": "kitty -e btm",
+        "on-click": "ghostty -e btop",
+        "on-click-right": "ghostty -e btm",
     },
 
     "memory": {
@@ -349,8 +349,8 @@
             "lower-medium": 30,
             "low": 10,
         },
-        "on-click": "kitty -e btop",
-        "on-click-right": "kitty -e btm",
+        "on-click": "ghostty -e btop",
+        "on-click-right": "ghostty -e btm",
     },
 
     "disk": {
@@ -363,8 +363,8 @@
             "lower-medium": 30,
             "low": 10,
         },
-        "on-click": "kitty -e btop",
-        "on-click-right": "kitty -e btm",
+        "on-click": "ghostty -e btop",
+        "on-click-right": "ghostty -e btm",
     },
 
     "temperature": {

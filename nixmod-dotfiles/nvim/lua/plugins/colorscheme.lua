@@ -1,4 +1,4 @@
--- Catppuccin theme (matches helix, waybar, kitty)
+-- Catppuccin theme (matches helix, waybar, ghostty)
 return {
   {
     "catppuccin/nvim",

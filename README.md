@@ -12,7 +12,7 @@ A single-machine NixOS flake built around the Hyprland Wayland compositor, with 
 |------|-----------|
 | `flake.nix` | The flake: one `nixosConfigurations.nixos`, Home Manager, and inputs (nixpkgs unstable, Hyprland, UnixKit, spicetify-nix) |
 | `nixmod-system/` | NixOS modules: `configuration.nix` → `modules/{desktop,programs,system,users}/`, plus `overlays/` and the machine-specific `hardware-configuration.nix` / `nvidia-configuration.nix` |
-| `nixmod-dotfiles/` | Plain app configs (hypr, waybar, ghostty, kitty, nvim, wofi, clipse, cava, …) and `wallpapers/`, deployed by Home Manager |
+| `nixmod-dotfiles/` | Plain app configs (hypr, waybar, ghostty, nvim, wofi, clipse, cava, …) and `wallpapers/`, deployed by Home Manager |
 | `toolkit/` | `nixmod.sh` (entry point: rebuild wrapper, forwards maintenance commands) and `helper.sh` (maintenance) |
 
 ## 🚀 Quick Start
@@ -54,7 +54,7 @@ Run these from a checkout of the repo: `nixmod.sh` builds from the working tree 
 - **Desktop**: Hyprland (Lua config, `hypr/hyprland.lua`), greetd/regreet login, hyprlock, hypridle, wlogout
 - **Waybar**: three bars (top, bottom, left) with custom script-backed modules, such as a network traffic graph that opens netscanner
 - **Wallpapers**: waypaper plus random/set wallpaper scripts over `~/Pictures/wallpapers`
-- **Terminals & editors**: Ghostty (default), Kitty, Neovim (lazy.nvim), Helix, tmux, starship
+- **Terminals & editors**: Ghostty, Neovim (lazy.nvim), Helix, tmux, starship
 - **Tools**: clipse clipboard manager, superfile, cava, fastfetch, aichat + local Ollama, UnixKit
 - **Extras**: Spotify + Spicetify, Steam auto-launch on gamepad connect, KDE Connect remote input, input-remapper
 

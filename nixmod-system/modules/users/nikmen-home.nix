@@ -33,7 +33,6 @@
     # Other directories are managed as complete folders
     # 'force = true' ensures Home Manager replaces existing files without needing backups
     "waybar" = { source = "${dotfiles-path}/waybar"; force = true; };
-    "kitty" = { source = "${dotfiles-path}/kitty"; force = true; };
     "ghostty" = { source = "${dotfiles-path}/ghostty"; force = true; };
     "wofi" = { source = "${dotfiles-path}/wofi"; force = true; };
     "networkmanager-dmenu/config.ini" = { source = "${dotfiles-path}/networkmanager-dmenu/config.ini"; force = true; }; # file only: ~/.config/networkmanager-dmenu already exists as a real dir
