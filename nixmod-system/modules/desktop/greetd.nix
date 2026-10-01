@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, dotfiles-path, ... }:
 
 let
-  wallpaperDirectory = "/home/nikmen/Pictures/wallpapers";
+  wallpaperDirectory = "${dotfiles-path}/wallpapers";
   fallbackBackground = pkgs.writeText "regreet-fallback.svg" ''
     <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
       <defs>
@@ -23,8 +23,9 @@ let
   '';
   loginBackground = "/run/regreet-background";
 
-  # ReGreet runs as an unprivileged user, which may not be able to traverse the
-  # user's home directory. Copy a random wallpaper into /run before it starts.
+  # Read wallpapers from the store, not ~/Pictures/wallpapers: that's a symlink
+  # (find won't descend it without -L) inside a home ReGreet can't traverse.
+  # Copy a random one into /run before the greeter starts.
   selectLoginBackground = pkgs.writeShellScript "select-login-background" ''
     set -eu
 
@@ -209,7 +210,6 @@ in
   };
 
   systemd.services.greetd = {
-    unitConfig.RequiresMountsFor = wallpaperDirectory;
     serviceConfig.ExecStartPre = [ selectLoginBackground ];
   };
 }
