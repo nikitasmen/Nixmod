@@ -55,7 +55,7 @@ Run these from a checkout of the repo: `nixmod.sh` builds from the working tree 
 - **Waybar**: three bars (top, bottom, left) with custom script-backed modules, such as a network traffic graph that opens netscanner
 - **Wallpapers**: waypaper plus random/set wallpaper scripts over `~/Pictures/wallpapers`
 - **Terminals & editors**: Ghostty, Neovim (lazy.nvim), Helix, tmux, starship
-- **Tools**: clipse clipboard manager, superfile, cava, fastfetch, aichat + local Ollama, UnixKit
+- **Tools**: clipse clipboard manager, superfile, cava, fastfetch, local Ollama, UnixKit
 - **Extras**: Spotify + Spicetify, Steam auto-launch on gamepad connect, KDE Connect remote input, input-remapper
 
 ## ⌨️ Keybindings

@@ -46,7 +46,6 @@
     "helix" = { source = "${dotfiles-path}/helix"; force = true; };
     "tmux" = { source = "${dotfiles-path}/tmux"; force = true; };
     "clipse" = { source = "${dotfiles-path}/clipse"; force = true; };
-    "aichat" = { source = "${dotfiles-path}/aichat"; force = true; };
     "waypaper" = { source = "${dotfiles-path}/waypaper"; force = true; };
     "tuios/config.toml" = { source = "${dotfiles-path}/tuios/config.toml"; force = true; }; # file only: tuios creates ~/.config/tuios/themes at runtime
 
@@ -75,6 +74,23 @@
   # Enable programs managed by Home Manager
   programs.home-manager.enable = true;
   programs.git.enable = true;
-  programs.zsh.enable = true;
-  programs.starship.enable = true;
+
+  # Shell: zsh + fzf (Ctrl+R history, Ctrl+T files, Alt+C cd) + zoxide (smart cd) + starship.
+  # fzf/zoxide/starship hook into whichever shell is enabled here, so switching
+  # shells means swapping programs.zsh (and users.users.nikmen.shell in programs/shell.nix).
+  programs.zsh = {
+    enable = true;
+    autosuggestion = {
+      enable = true;
+      strategy = [ "history" "completion" ];
+      highlight = "fg=8";
+    };
+    syntaxHighlighting.enable = true;
+  };
+  programs.fzf.enable = true;
+  programs.zoxide.enable = true;
+  programs.starship = {
+    enable = true;
+    configPath = "${config.xdg.configHome}/starship/starship.toml"; # deployed via xdg.configFile above
+  };
 }

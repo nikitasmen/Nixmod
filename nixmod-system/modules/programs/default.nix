@@ -4,7 +4,7 @@
   imports = [
     ./applications.nix
     ./development.nix
-    ./ai.nix
+    ./shell.nix
     ./spicetify.nix
   ];
 }
