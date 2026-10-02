@@ -48,6 +48,7 @@
     "clipse" = { source = "${dotfiles-path}/clipse"; force = true; };
     "waypaper" = { source = "${dotfiles-path}/waypaper"; force = true; };
     "tuios/config.toml" = { source = "${dotfiles-path}/tuios/config.toml"; force = true; }; # file only: tuios creates ~/.config/tuios/themes at runtime
+    "qutebrowser/config.py" = { source = "${dotfiles-path}/qutebrowser/config.py"; force = true; }; # file only: qutebrowser writes history/cookies/autoconfig under ~/.config/qutebrowser
 
     # Neovim: mkOutOfStoreSymlink (not a plain `source`) because the other
     # directories above become read-only symlinks into the Nix store, and

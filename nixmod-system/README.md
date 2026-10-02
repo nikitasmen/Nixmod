@@ -22,7 +22,7 @@ A comprehensive NixOS system configuration with Hyprland, modern tooling, and de
 - **Containerization**: Docker and Podman support
 
 ### 🎵 **Media & Communication**
-- **Browsers**: Firefox and Google Chrome
+- **Browsers**: Firefox and qutebrowser
 - **Music**: Spotify with Spicetify (TUI-style text theme, Catppuccin Macchiato, top artists/tracks/genres stats, listening history)
 - **Video**: FreeTube (YouTube alternative)
 - **Communication**: WebCord (Discord), Viber
