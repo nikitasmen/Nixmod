@@ -15,6 +15,12 @@
       url = "github:nikitasmen/password-manager-";
       flake = false;
     };
+
+    # passman's tag list: flake inputs have no .git, so the version can't come from `git describe`.
+    passman-tags = {
+      url = "file+https://api.github.com/repos/nikitasmen/password-manager-/tags?per_page=100";
+      flake = false;
+    };
     
     # Spicetify - Spotify themes and extensions
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
@@ -45,6 +51,7 @@
       passmanModule = { config, ... }: {
         imports = [ ./nixmod-system/passman.nix ];
         _module.args.passman = passman;
+        _module.args.passman-tags = inputs.passman-tags;
       };
       
     in {

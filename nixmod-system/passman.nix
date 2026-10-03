@@ -3,6 +3,7 @@
   pkgs,
   lib,
   passman ? null,
+  passman-tags ? null,
   ...
 }:
 
@@ -20,9 +21,24 @@ let
         # The flake-based approach is better for getting latest commits
       };
 
+  # Flake inputs have no .git, so upstream's `git describe` would fall back to v0.0 and the updater would
+  # always report an update. Use the highest v* tag from GitHub's tag list instead.
+  tagsJson =
+    if passman-tags != null then
+      passman-tags
+    else
+      builtins.fetchurl "https://api.github.com/repos/nikitasmen/password-manager-/tags?per_page=100";
+  version = lib.last (
+    lib.sort (a: b: builtins.compareVersions a b < 0) (
+      map (t: lib.removePrefix "v" t.name) (
+        builtins.filter (t: lib.hasPrefix "v" t.name) (builtins.fromJSON (builtins.readFile tagsJson))
+      )
+    )
+  );
+
   passManPkg = pkgs.stdenv.mkDerivation {
     pname = "passman";
-    version = "unstable";
+    inherit version;
     src = passManSrc;
 
     nativeBuildInputs = [ pkgs.cmake pkgs.copyDesktopItems ];
@@ -37,6 +53,7 @@ let
       "-DFLTK_INCLUDE_DIR=${lib.getDev pkgs.fltk}/include"
       "-DFLTK_SKIP_OPENGL=ON"
       "-DFLTK_SKIP_FLUID=ON"
+      "-DPWVAULT_VERSION=v${version}"
     ];
 
     # Upstream's binary is `password_manager`; expose it as `passman`.
