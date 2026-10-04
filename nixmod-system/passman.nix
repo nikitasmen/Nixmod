@@ -36,6 +36,13 @@ let
     )
   );
 
+  # Upstream's CMake downloads this pinned header at configure time, which the sandbox blocks; same URL and hash
+  # as its CMakeLists.txt (bump both together), placed where it looks first.
+  httplibHeader = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/yhirose/cpp-httplib/v0.18.3/httplib.h";
+    sha256 = "a0a0c13dc086663863dbe6730a19716f7d3744904b6205496e8301750814dbd5";
+  };
+
   passManPkg = pkgs.stdenv.mkDerivation {
     pname = "passman";
     inherit version;
@@ -55,6 +62,11 @@ let
       "-DFLTK_SKIP_FLUID=ON"
       "-DPWVAULT_VERSION=v${version}"
     ];
+
+    # cmake's configure phase builds in ./build (cmakeBuildDir); CMake skips the download when the header is there
+    preConfigure = ''
+      install -Dm644 ${httplibHeader} build/include/httplib/httplib.h
+    '';
 
     # Upstream's binary is `password_manager`; expose it as `passman`.
     postInstall = "mv $out/bin/password_manager $out/bin/passman";
