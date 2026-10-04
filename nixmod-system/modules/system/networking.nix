@@ -6,6 +6,27 @@
     hostName = "nixos";  # Define hostname
     networkmanager.enable = true;
     # wireless.enable = true;  # Uncomment to enable wireless via wpa_supplicant
+
+    # Pi-hole on the Raspberry Pi. NM stops writing the router's DNS into resolv.conf.
+    # glibc tries servers in order, so 1.1.1.1 is only hit if the Pi is down.
+    networkmanager.dns = "none";
+    nameservers = [ "192.168.2.7" "1.1.1.1" ];
+
+    # Static wired address (DHCP on the LAN stopped answering). Priority beats the
+    # auto-generated "Wired connection 1" DHCP profile.
+    networkmanager.ensureProfiles.profiles.wired-static = {
+      connection = {
+        id = "wired-static";
+        type = "ethernet";
+        interface-name = "enp3s0";
+        autoconnect-priority = 100;
+      };
+      ipv4 = {
+        method = "manual";
+        address1 = "192.168.2.186/24,192.168.2.1";
+      };
+      ipv6.method = "auto";
+    };
   };
   
   programs.kdeconnect = {
