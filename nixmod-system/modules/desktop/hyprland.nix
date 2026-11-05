@@ -17,12 +17,6 @@
       common.default = [ "hyprland" "gtk" ];
     };
   };
-  
-  services.ollama = {
-    enable = true;
-    # Vulkan (still GPU): prebuilt on cache.nixos.org, unlike unfree ollama-cuda which compiles locally
-    package = pkgs.ollama-vulkan;
-  };
 
   # Hyprland related packages
   environment.systemPackages = with pkgs; [
