@@ -37,9 +37,11 @@
   services.dbus.enable = true;
   services.avahi = {
     enable = true;
-    publish.enable = true;
-    publish.userServices = true;
-    publish.addresses = true;
+    settings.publish = {
+      disable-publishing = false;
+      disable-user-service-publishing = false;
+      publish-addresses = true;
+    };
   };
   
   # Systemd user service for KDE Connect (programs.kdeconnect only adds package + firewall)
@@ -52,20 +54,22 @@
     serviceConfig.ExecStart = "${pkgs.kdePackages.kdeconnect-kde}/bin/kdeconnectd";
   };
 
-  # netscanner needs raw sockets. Capability wrapper instead of the README's setuid-root;
-  # NixOS wrappers pass caps on as ambient, so wrapping the nixpkgs launcher script
-  # (which puts `iw` on PATH) works. Installed at /run/wrappers/bin/netscanner.
+  # netscanner needs raw sockets. Capability wrapper instead of the README's setuid-root.
+  # security.wrappers rejects script targets, so wrap the real ELF behind nixpkgs'
+  # launcher script and provide `iw` (which that script added to PATH) system-wide.
+  # Installed at /run/wrappers/bin/netscanner.
   security.wrappers.netscanner = {
     owner = "root";
     group = "root";
     capabilities = "cap_net_raw,cap_net_admin+ep";
-    source = "${pkgs.netscanner}/bin/netscanner";
+    source = "${pkgs.netscanner}/bin/.netscanner-wrapped";
   };
 
   # Desktop entry for kdeconnect-indicator (fixes "App info not found" portal error on Wayland)
   # programs.kdeconnect already adds kdeconnect-kde; no need to duplicate
   environment.systemPackages = with pkgs; [
     networkmanager_dmenu
+    iw  # netscanner shells out to it (see wrapper above)
     networkmanagerapplet  # nm-connection-editor for Waybar network right-click
     (writeTextFile {
       name = "org.kde.kdeconnect-indicator.desktop";
