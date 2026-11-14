@@ -15,8 +15,6 @@
   
   # Other applications
   environment.systemPackages = with pkgs; [
-    # Browsers
-    qutebrowser
     
     # stremio #Insecure dependencies
     
