@@ -35,12 +35,6 @@
   outputs = { self, nixpkgs, unixkit, passman, home-manager, ... }@inputs: 
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config = {
-          allowUnfree = true;
-        };
-      };
       lib = nixpkgs.lib;
       
       unixkitModule = { config, ... }: {
