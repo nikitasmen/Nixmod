@@ -45,8 +45,9 @@
     "bat" = { source = "${dotfiles-path}/bat"; force = true; };
     "helix" = { source = "${dotfiles-path}/helix"; force = true; };
     "tmux" = { source = "${dotfiles-path}/tmux"; force = true; };
-    "clipse" = { source = "${dotfiles-path}/clipse"; force = true; };
-    "waypaper" = { source = "${dotfiles-path}/waypaper"; force = true; };
+    "clipse/config.json" = { source = "${dotfiles-path}/clipse/config.json"; force = true; }; # file only: clipse writes history/log/tmp_files into ~/.config/clipse
+    "clipse/custom_theme.json" = { source = "${dotfiles-path}/clipse/custom_theme.json"; force = true; };
+    "waypaper/config.ini" = { source = "${dotfiles-path}/waypaper/config.ini"; force = true; }; # file only: keeps ~/.config/waypaper a real dir
     "tuios/config.toml" = { source = "${dotfiles-path}/tuios/config.toml"; force = true; }; # file only: tuios creates ~/.config/tuios/themes at runtime
 
     # Neovim: mkOutOfStoreSymlink (not a plain `source`) because the other
@@ -59,7 +60,7 @@
     # and live-editable without a rebuild.
     "nvim" = {
       source = config.lib.file.mkOutOfStoreSymlink
-        "${config.home.homeDirectory}/Documents/Personal/Nixmod/nixmod-dotfiles/nvim";
+        "${config.home.homeDirectory}/Documents/Nixmod/nixmod-dotfiles/nvim";
       force = true;
     };
 
