@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Opened by clicking waybar's systemd-failed-units module: fzf picker of failed units
-# with a details card + recent logs in the preview. Enter = restart, Ctrl-X = clear (reset-failed).
+# with a details card + recent logs in the preview. Enter = restart, Ctrl-X = clear (reset-failed;
+# journal logs are kept, it's "mark as read"). Tab marks several, Ctrl-A marks all.
 export CLICOLOR_FORCE=1   # keep gum colors inside fzf's preview pipe
 RED='#ed8796' GREEN='#a6da95' MAUVE='#c6a0f6' TEXT='#cad3f5' SUB='#a5adcb' OVL='#6e738d'
 
@@ -42,11 +43,12 @@ if [ -z "$(list)" ]; then
 fi
 
 self=$(readlink -f "$0")
-list | fzf --ansi --delimiter='\t' --with-nth=3 --no-sort --layout=reverse \
+list | fzf --ansi --delimiter='\t' --with-nth=3 --no-sort --layout=reverse --multi \
   --border=rounded --border-label=' 󰀦 Failed units ' --prompt='  ' --pointer='▌' \
-  --header='enter restart · ctrl-x clear · esc close' --header-first \
+  --header='enter restart · tab mark · ctrl-a all · ctrl-x clear marked · esc close' --header-first \
   --preview="$self preview {1} {2}" --preview-window='right,68%,wrap,border-left' \
   --bind="enter:execute(systemctl --{1} restart {2})+reload($self list)" \
-  --bind="ctrl-x:execute(systemctl --{1} reset-failed {2})+reload($self list)" \
+  --bind="ctrl-a:select-all" \
+  --bind="ctrl-x:execute(while IFS=\$'\\t' read -r s u _; do systemctl --\$s reset-failed \"\$u\"; done < {+f})+clear-selection+reload($self list)" \
   --color="bg:#24273a,bg+:#363a4f,fg:$TEXT,fg+:$TEXT,hl:$RED,hl+:$RED,header:$OVL,info:$MAUVE" \
   --color="pointer:$RED,prompt:$MAUVE,border:$OVL,label:$RED,spinner:#f4dbd6,marker:#b7bdf8"
