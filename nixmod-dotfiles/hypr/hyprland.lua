@@ -264,6 +264,15 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "float-failed-units",
+	match = { class = "com.nikmen.failed-units" },
+
+	float = true,
+	size = "1200 800",
+	center = true,
+})
+
+hl.window_rule({
 	name = "float-waypaper",
 	match = { class = "(waypaper)" },
 

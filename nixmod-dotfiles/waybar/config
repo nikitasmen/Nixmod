@@ -476,6 +476,7 @@
 
     "systemd-failed-units": {
         "format": "✗ {nr_failed}",
+        "on-click": "ghostty --class=com.nikmen.failed-units -e ~/.config/waybar/scripts/failed-units.sh",
     },
 },
 ]
