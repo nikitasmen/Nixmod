@@ -127,7 +127,7 @@ hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "default
 
 hl.config({
 	input = {
-		kb_layout = "us",
+		kb_layout = "us,gr",
 
 		follow_mouse = 1,
 
@@ -158,6 +158,8 @@ hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("flameshot gui"))
+-- Cycle keyboard layouts (us/gr) on Super+Shift; release-bind so Super+Shift+<key> combos don't trigger it
+hl.bind(mainMod .. " + Shift_L", hl.dsp.exec_cmd("hyprctl switchxkblayout all next"), { release = true })
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("waypaper"))

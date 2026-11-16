@@ -24,7 +24,9 @@ EOF_CLI")))))
       (label :limit-width 50 :text title))
     (box :class "section right" :halign "end" :space-evenly false :spacing 15
       (label :class "caps ${caps == '1' ? 'locked' : ''}" :text "Caps ${caps == '1' ? '󰌾' : '󰍀'}")
-      (eventbox :cursor "pointer" :onclick "hyprctl switchxkblayout at-translated-set-2-keyboard next"
+      (eventbox :cursor "pointer" :tooltip "Click: next layout · Right-click: pick"
+        :onclick "hyprctl switchxkblayout all next"
+        :onrightclick "hyprctl -j devices | jq -r '.keyboards[] | select(.main) | .layout' | tr , ' ' | xargs -n1 | nl -v0 -w1 -s' ' | wofi --dmenu -l bottom_right -x -48 -y 36 -W 110 -L 2 -j | cut -d' ' -f1 | xargs -r hyprctl switchxkblayout all &"
         (label :text lang)))))
 
 (defwindow bottombar [monitor]
