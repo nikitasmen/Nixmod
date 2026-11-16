@@ -22,6 +22,7 @@ local menu = "wofi --show drun"
 
 hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
+	hl.exec_cmd("bash ~/.config/eww/scripts/bar.sh")
 	hl.exec_cmd("mako")
 	hl.exec_cmd("blueman-manager")
 	hl.exec_cmd("kdeconnectd")
@@ -161,6 +162,11 @@ hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("waypaper"))
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(terminal .. " --class=com.nikmen.clipse -e clipse"))
+hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("bash ~/.config/eww/scripts/bar.sh focus")) -- focus the bottom-bar prompt
+-- While the prompt is focused via SUPER+R, Escape clears it and returns focus to the window
+hl.define_submap("cli", function()
+	hl.bind("Escape", hl.dsp.exec_cmd("eww update cli_q=x && eww update cli_q= ; bash ~/.config/eww/scripts/bar.sh unfocus"))
+end)
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("$HOME/.config/hypr/set-wallpaper.sh"))
 
 -- Move focus with mainMod + arrow keys

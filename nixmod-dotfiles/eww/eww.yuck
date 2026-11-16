@@ -1,0 +1,44 @@
+;; Bottom bar (replaces waybar's bottom_bar so it can host a real text input).
+;; "bottombar" is permanent and never takes the keyboard. Opening the prompt maps "prompt":
+;; an identical bar drawn on top with the input expanded and exclusive keyboard focus
+;; (eww can only set keyboard mode when a window opens). See scripts/bar.sh.
+(defvar cli_q "")
+(defpoll user :interval "30s" "bash ~/.config/eww/scripts/user-uptime.sh")
+(defpoll caps :interval "1s" "cat /sys/class/leds/*::capslock/brightness | sort -r | head -1")
+(deflisten title :initial "" "bash ~/.config/eww/scripts/hypr-listen.sh title")
+(deflisten lang :initial "" "bash ~/.config/eww/scripts/hypr-listen.sh lang")
+
+(defwidget bar [open]
+  (centerbox :class "bar"
+    (box :class "section left" :halign "start" :space-evenly false :spacing 14
+      (label :class "user" :markup user)
+      (eventbox :cursor "pointer" :tooltip "Search or run (Super+R)" :onclick "bash ~/.config/eww/scripts/bar.sh focus &"
+        (box :class "cli ${open ? 'open' : ''}" :space-evenly false :spacing 6
+          (label :class "cli-icon" :text "")
+          (box :width 320 :space-evenly false :visible open
+            (input :class "cli-input" :hexpand true :value cli_q
+              :onaccept "bash ~/.config/eww/scripts/cli.sh <<'EOF_CLI'
+{}
+EOF_CLI")))))
+    (box :class "section center" :halign "center"
+      (label :limit-width 50 :text title))
+    (box :class "section right" :halign "end" :space-evenly false :spacing 15
+      (label :class "caps ${caps == '1' ? 'locked' : ''}" :text "Caps ${caps == '1' ? '󰌾' : '󰍀'}")
+      (eventbox :cursor "pointer" :onclick "hyprctl switchxkblayout at-translated-set-2-keyboard next"
+        (label :text lang)))))
+
+(defwindow bottombar [monitor]
+  :monitor monitor
+  :geometry (geometry :width "100%" :height "36px" :anchor "bottom center")
+  :stacking "bottom"   ; arranged before waybar's left bar so it spans full width
+  :exclusive true
+  :namespace "eww-bottombar"
+  (bar :open false))
+
+(defwindow prompt [monitor dx dy]   ; dx/dy: negative margins that cancel the space other bars reserve
+  :monitor monitor
+  :geometry (geometry :x dx :y dy :width "100%" :height "36px" :anchor "bottom left")
+  :stacking "overlay"
+  :focusable "exclusive"
+  :namespace "eww-prompt"
+  (bar :open true))

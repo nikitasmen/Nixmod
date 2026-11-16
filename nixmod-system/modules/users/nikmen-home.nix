@@ -34,6 +34,11 @@
     # 'force = true' ensures Home Manager replaces existing files without needing backups
     "waybar" = { source = "${dotfiles-path}/waybar"; force = true; };
     "ghostty" = { source = "${dotfiles-path}/ghostty"; force = true; };
+    # files only: eww keys its daemon to the resolved config dir, so a whole-dir store symlink
+    # starts a second daemon (and a duplicate bar) after every rebuild
+    "eww/eww.yuck" = { source = "${dotfiles-path}/eww/eww.yuck"; force = true; };
+    "eww/eww.scss" = { source = "${dotfiles-path}/eww/eww.scss"; force = true; };
+    "eww/scripts" = { source = "${dotfiles-path}/eww/scripts"; force = true; };
     "wofi" = { source = "${dotfiles-path}/wofi"; force = true; };
     "networkmanager-dmenu/config.ini" = { source = "${dotfiles-path}/networkmanager-dmenu/config.ini"; force = true; }; # file only: ~/.config/networkmanager-dmenu already exists as a real dir
     "networkmanager-dmenu/wofi" = { source = "${dotfiles-path}/networkmanager-dmenu/wofi"; force = true; };

@@ -253,49 +253,6 @@
 },
 
 
-// Bottom Bar Config
-{
-    // Main Config
-    "name": "bottom_bar",
-    "layer": "top", // Waybar at top layer
-    "position": "bottom", // Waybar position (top|bottom|left|right)
-    "height": 36, // Waybar height (to be removed for auto height)
-    "spacing": 4, // Gaps between modules (4px)
-    "modules-left": ["custom/user"],
-    "modules-center": ["hyprland/window"],
-    "modules-right": ["keyboard-state", "hyprland/language"],
-
-    // Modules Config
-    "hyprland/window": {
-        "format": " {title} ",
-        "max-length": 50,
-    },
-
-    "hyprland/language": {
-        "format-en": "ENG (US)",
-        "keyboard-name": "at-translated-set-2-keyboard",
-        "on-click": "hyprctl switchxkblayout at-translated-set-2-keyboard next",
-    },
-
-    "keyboard-state": {
-        "capslock": true,
-        // "numlock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "󰌾",
-            "unlocked": "󰍀"
-        }
-    },
-
-    "custom/user": {
-        "format": " {}",
-        "interval": 30,
-        "exec": "bash ~/.config/waybar/scripts/user-uptime.sh",
-        "tooltip": false,
-    },
-},
-
-
 // Left Bar Config
 {
     // Main Config

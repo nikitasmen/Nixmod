@@ -5,11 +5,6 @@
   font-family: "JetBrainsMono Nerd Font";
 }
 
-window.bottom_bar#waybar {
-  background-color: alpha(@base, 0.55);
-  border-top: solid alpha(@surface1, 0.55) 2px;
-}
-
 window.top_bar#waybar {
   background-color: alpha(@base, 0.55);
   border-bottom: solid alpha(@surface1, 0.55) 2px;
@@ -21,50 +16,6 @@ window.left_bar#waybar {
   border-right: solid alpha(@surface1, 0.55) 2px;
   border-bottom: solid alpha(@surface1, 0.55) 2px;
   border-radius: 0px 15px 15px 0px;
-}
-
-window.bottom_bar .modules-center {
-  background-color: alpha(@surface1, 0.55);
-  color: @green;
-  border-radius: 15px;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-window.bottom_bar .modules-left {
-  background-color: alpha(@surface1, 0.55);
-  border-radius: 0px 15px 15px 0px;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-window.bottom_bar .modules-right {
-  background-color: alpha(@surface1, 0.55);
-  border-radius: 15px 0px 0px 15px;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-#custom-user {
-  padding-left: 10px;
-}
-
-#language {
-  padding-left: 15px;
-}
-
-#keyboard-state label.locked {
-  color: @yellow;
-}
-
-#keyboard-state label {
-  color: @subtext0;
 }
 
 #workspaces {

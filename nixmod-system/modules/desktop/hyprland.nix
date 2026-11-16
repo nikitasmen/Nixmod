@@ -29,7 +29,9 @@
     hyprlock     # Screen locking
     hyprpolkitagent  # Polkit agent for pkexec/auth dialogs (input-remapper, etc.)
     mako         # Notification daemon
-    #eww          # Widget system
+    eww          # Widget system (bottom bar)
+    socat        # eww bottom bar: Hyprland event socket
+    libnotify    # notify-send (eww bottom bar command output)
     jq           # Command-line JSON processor
   ];
 

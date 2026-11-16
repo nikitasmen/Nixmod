@@ -1,0 +1,31 @@
+// Catppuccin Macchiato, mirrors waybar/style.css bottom_bar
+$base: #24273a; $surface0: #363a4f; $surface1: #494d64; $text: #cad3f5;
+$subtext0: #a5adcb; $green: #a6da95; $yellow: #eed49f; $blue: #8aadf4;
+
+* { all: unset; font-family: "JetBrainsMono Nerd Font"; color: $text; }
+
+.bar {
+  background-color: rgba($base, 0.55);
+  border-top: 2px solid rgba($surface1, 0.55);
+}
+
+.section {
+  background-color: rgba($surface1, 0.55);
+  padding: 0 20px;
+  margin: 5px 0;
+}
+.left   { border-radius: 0 15px 15px 0; }
+.center { border-radius: 15px; label { color: $green; } }
+.right  { border-radius: 15px 0 0 15px; }
+
+.cli { padding: 0 6px; margin: 3px 0; border-radius: 10px; border: 1px solid transparent; }  // same box size open/closed
+.cli.open {   // prompt open
+  background-color: rgba($base, 0.8);
+  border: 1px solid $blue;
+}
+.cli-icon { color: $blue; }
+.cli-input { caret-color: $blue; min-height: 0; padding: 0; }
+.cli-input selection { background-color: $surface1; }
+
+.caps { color: $subtext0; }
+.caps.locked { color: $yellow; }
