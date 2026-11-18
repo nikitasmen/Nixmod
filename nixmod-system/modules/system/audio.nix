@@ -58,6 +58,25 @@
   # Bluetooth configuration
   services.blueman.enable = true;
 
+  # Auto-connect the SBS E2500 speaker after login (speakers don't reconnect to the host themselves).
+  # Retries for ~5 min in case the speaker is switched on after boot.
+  systemd.user.services.bt-speaker-autoconnect = {
+    description = "Auto-connect SBS E2500 Bluetooth speaker";
+    wantedBy = [ "default.target" ];
+    after = [ "pipewire.service" "wireplumber.service" ];
+    path = [ pkgs.bluez pkgs.gnugrep ];
+    script = ''
+      mac=00:02:3C:8C:AC:E5
+      bluetoothctl trust "$mac" >/dev/null || true  # script runs under set -e
+      for _ in $(seq 30); do
+        bluetoothctl connect "$mac" >/dev/null || true
+        bluetoothctl info "$mac" | grep -q "Connected: yes" && exit 0
+        sleep 10
+      done
+      exit 1
+    '';
+  };
+
   # Enable UPower for battery reporting (fixes WirePlumber warnings)
   services.upower.enable = true;
 }

@@ -24,7 +24,6 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("bash ~/.config/eww/scripts/bar.sh")
 	hl.exec_cmd("mako")
-	hl.exec_cmd("blueman-manager")
 	hl.exec_cmd("kdeconnectd")
 	-- So systemd --user units (e.g. steam-on-controller) inherit the Wayland session
 	hl.exec_cmd(
