@@ -699,7 +699,8 @@ class Window(Gtk.ApplicationWindow):
         self.sidebar.remove_all()
         pending = {p["list"] for a, p in self.desired.items() if a not in self.applied}
         pending |= {p["list"] for a, p in self.applied.items() if a not in self.desired}
-        entries = [(None, "All packages", len(self.desired), bool(pending))]
+        entries = [(None, "All packages", len(self.desired), bool(pending)),
+                   ("changes", "Changes to apply", len(self.desired.keys() ^ self.applied.keys()), False)]
         entries += [(l["id"], l["label"], len([a for a in self.desired if self.desired[a]["list"] == l["id"]]),
                      l["id"] in pending) for l in self.lists]
         entries.append(("heading", "Turned on with options", None, False))
@@ -826,18 +827,23 @@ class Window(Gtk.ApplicationWindow):
                 self.pkg_list.append(ProgramRow(self, prog))
             return self.refresh_changes_bar()
         if not query:
-            self.list_note.set_visible(False)
-            shown = [l for l in self.lists if self.selected_list in (None, l["id"])]
-            single = self.selected_list is not None and shown
-            self.list_title.set_text(shown[0]["label"] if single else "All packages")
+            review = self.selected_list == "changes"
+            self.list_note.set_text("Undo anything you don't want, then Apply changes.")
+            self.list_note.set_visible(review)
+            shown = [l for l in self.lists if self.selected_list in (None, "changes", l["id"])]
+            single = not review and self.selected_list is not None and shown
+            self.list_title.set_text("Changes to apply" if review else shown[0]["label"] if single else "All packages")
             self.list_path.set_text(shown[0]["rel"] if single else "")
-            self.pkg_empty.set_text(shown[0]["error"] if single and shown[0]["error"] else
+            self.pkg_empty.set_text("Nothing to apply. Packages you add or remove show up here." if review else
+                                    shown[0]["error"] if single and shown[0]["error"] else
                                     "This list is empty. Search above to add a package to it." if single
                                     else "No package lists found in nixmod-system/modules.")
             for lst in shown:
                 # what's in the file, then entries removed since the last rebuild
                 attrs = [a for a, p in self.desired.items() if p["list"] == lst["id"]]
                 attrs += [a for a, p in self.applied.items() if p["list"] == lst["id"] and a not in self.desired]
+                if review:
+                    attrs = [a for a in attrs if (a in self.desired) != (a in self.applied)]
                 if not attrs:
                     continue
                 if not single:
@@ -1081,11 +1087,13 @@ class Window(Gtk.ApplicationWindow):
         bar = Gtk.Box(spacing=10, css_classes=["changes"])
         self.changes_text = label()
         self.changes_text.set_hexpand(True)
+        review = Gtk.Button(label="Review", css_classes=["flat"])
+        review.connect("clicked", self.review_changes)
         discard = Gtk.Button(label="Discard")
         discard.connect("clicked", self.discard_changes)
         apply = Gtk.Button(label="Apply changes", css_classes=["primary"])
         apply.connect("clicked", lambda *_: self.start("apply"))
-        for w in (self.changes_text, discard, apply):
+        for w in (self.changes_text, review, discard, apply):
             bar.append(w)
         self.changes_bar = Gtk.Revealer(child=bar, transition_type=Gtk.RevealerTransitionType.SLIDE_UP)
         return self.changes_bar
@@ -1096,6 +1104,13 @@ class Window(Gtk.ApplicationWindow):
                  if n]
         self.changes_text.set_text(", ".join(parts))
         self.changes_bar.set_reveal_child(bool(parts) and not self.run_panel.get_reveal_child())
+
+    def review_changes(self, *_):
+        self.selected_list = "changes"
+        if self.search.get_text():
+            self.search.set_text("")  # search-changed refreshes
+        else:
+            self.refresh_packages()
 
     def discard_changes(self, *_):
         for attr in self.desired.keys() - self.applied.keys():
