@@ -1,0 +1,16 @@
+{
+  "packages": [
+    {
+      "name": "pavucontrol",
+      "note": "Sound control panel"
+    },
+    {
+      "name": "playerctl",
+      "note": "Music player controller"
+    },
+    {
+      "name": "cava",
+      "note": "Audio Visualizer"
+    }
+  ]
+}

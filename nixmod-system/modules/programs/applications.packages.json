@@ -1,0 +1,72 @@
+{
+  "packages": [
+    {
+      "name": "superfile"
+    },
+    {
+      "name": "fastfetch"
+    },
+    {
+      "name": "btop"
+    },
+    {
+      "name": "bottom",
+      "note": "btm - system monitor (executable: btm)"
+    },
+    {
+      "name": "lsof"
+    },
+    {
+      "name": "wl-screenrec"
+    },
+    {
+      "name": "nwg-look"
+    },
+    {
+      "name": "wdisplays",
+      "note": "Monitor layout GUI"
+    },
+    {
+      "name": "ffmpeg",
+      "note": "Multimedia framework"
+    },
+    {
+      "name": "gum",
+      "note": "Tool for  glamorous shell scripts"
+    },
+    {
+      "name": "chafa",
+      "note": "Cli image converter"
+    },
+    {
+      "name": "tigervnc",
+      "note": "VNC client (vncviewer)"
+    },
+    {
+      "name": "flameshot"
+    },
+    {
+      "name": "pipes-rs"
+    },
+    {
+      "name": "fortune",
+      "note": "Random quotes: fortune"
+    },
+    {
+      "name": "cowsay",
+      "note": "ASCII art animals: fortune | cowsay -f dragon"
+    },
+    {
+      "name": "cmatrix",
+      "note": "Matrix rain: cmatrix"
+    },
+    {
+      "name": "figlet",
+      "note": "ASCII art text: figlet \"NixOS\""
+    },
+    {
+      "name": "hollywood",
+      "note": "Fake hacker terminal: hollywood"
+    }
+  ]
+}

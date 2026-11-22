@@ -1,0 +1,127 @@
+{
+  "packages": [
+    {
+      "name": "delta",
+      "note": "Better git diff"
+    },
+    {
+      "name": "lazygit",
+      "note": "Git TUI"
+    },
+    {
+      "name": "lazyssh",
+      "note": "SSH connection manager TUI"
+    },
+    {
+      "name": "bat",
+      "note": "cat with syntax highlighting"
+    },
+    {
+      "name": "glow",
+      "note": "Markdown viewer for the terminal"
+    },
+    {
+      "name": "eza",
+      "note": "Better ls"
+    },
+    {
+      "name": "helix",
+      "note": "Text editor"
+    },
+    {
+      "name": "neovim",
+      "note": "Code editor (vim + Lua config)"
+    },
+    {
+      "name": "tmux",
+      "note": "Terminal multiplexer"
+    },
+    {
+      "name": "tuios",
+      "note": "Terminal window manager (config: nixmod-dotfiles/tuios)"
+    },
+    {
+      "name": "tree",
+      "note": "Directory display"
+    },
+    {
+      "name": "findutils",
+      "note": "File search utilities"
+    },
+    {
+      "name": "fd",
+      "note": "Faster find alternative"
+    },
+    {
+      "name": "ripgrep",
+      "note": "Fast grep alternative (needed by Neovim Telescope live_grep/grep_string)"
+    },
+    {
+      "name": "tealdeer",
+      "note": "Fast tldr implementation"
+    },
+    {
+      "name": "coreutils",
+      "note": "Basic utilities"
+    },
+    {
+      "name": "gcc",
+      "note": "C compiler (needed by Neovim Treesitter to build parsers)"
+    },
+    {
+      "name": "tree-sitter",
+      "note": "`tree-sitter` CLI (needed by Neovim Treesitter to build parsers)"
+    },
+    {
+      "name": "nixfmt",
+      "note": "Nix formatter (`nixfmt`), used by Neovim conform.nvim + nixd"
+    },
+    {
+      "name": "statix",
+      "note": "Nix linter, used by Neovim nvim-lint"
+    },
+    {
+      "name": "nixd",
+      "note": "Nix LSP, used by Neovim (NOT in Mason's registry, so it's declared here instead)"
+    },
+    {
+      "name": "nodejs",
+      "note": "needed by Neovim Mason to install npm-based LSP servers/formatters (ts_ls, html, cssls, tailwindcss, jsonls, prettier(d), eslint_d)"
+    },
+    {
+      "name": "python3",
+      "note": "needed by Neovim Mason to install pyright"
+    },
+    {
+      "name": "unzip",
+      "note": "needed by Neovim Mason to install some tools (e.g. stylua)"
+    },
+    {
+      "name": "wl-clipboard",
+      "note": "Clipboard controll Waylad based"
+    },
+    {
+      "name": "clipse",
+      "note": "Clipboard manager"
+    },
+    {
+      "name": "scc",
+      "note": "Code counter"
+    },
+    {
+      "name": "p7zip",
+      "note": "zipping tool"
+    },
+    {
+      "name": "esptool",
+      "note": "ESP Manager"
+    },
+    {
+      "name": "arduino-cli",
+      "note": "Arduino connector interface"
+    },
+    {
+      "name": "claude-code"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "packages": [
+    {
+      "name": "nerd-fonts.fira-code"
+    },
+    {
+      "name": "nerd-fonts.jetbrains-mono"
+    }
+  ]
+}

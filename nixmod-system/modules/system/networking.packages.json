@@ -1,0 +1,15 @@
+{
+  "packages": [
+    {
+      "name": "networkmanager_dmenu"
+    },
+    {
+      "name": "iw",
+      "note": "netscanner shells out to it (see wrapper above)"
+    },
+    {
+      "name": "networkmanagerapplet",
+      "note": "nm-connection-editor for Waybar network right-click"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "packages": [
+    {
+      "name": "slack",
+      "note": "Communication"
+    },
+    {
+      "name": "viber",
+      "note": "Communication"
+    },
+    {
+      "name": "discord-ptb",
+      "note": "Communication"
+    },
+    {
+      "name": "tlauncher",
+      "note": "TLauncher (JAR in ~/Downloads/)"
+    },
+    {
+      "name": "heroic",
+      "note": "Heroic Game launcher"
+    }
+  ]
+}
