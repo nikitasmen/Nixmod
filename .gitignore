@@ -24,3 +24,7 @@ nixmod-dotfiles/hypr/last_wallpaper.txt
 
 #ignore all .log files
 *.log 
+
+
+#ignore pycache
+__pycache__/
