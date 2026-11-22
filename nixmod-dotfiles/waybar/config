@@ -293,7 +293,7 @@
             "low": 10,
         },
         "on-click": "ghostty -e btop",
-        "on-click-right": "ghostty -e btm",
+        "on-click-right": "ghostty -e btop",
     },
 
     "memory": {
@@ -307,7 +307,7 @@
             "low": 10,
         },
         "on-click": "ghostty -e btop",
-        "on-click-right": "ghostty -e btm",
+        "on-click-right": "ghostty -e btop",
     },
 
     "disk": {
@@ -321,7 +321,7 @@
             "low": 10,
         },
         "on-click": "ghostty -e btop",
-        "on-click-right": "ghostty -e btm",
+        "on-click-right": "ghostty -e btop",
     },
 
     "temperature": {
