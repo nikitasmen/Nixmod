@@ -124,17 +124,13 @@ packages_cmd() {
         done
         return 0
     }
-    # Rewrite $1 with jq filter $2 (+ args); refuse instead of clobbering a file that doesn't parse
+    # Rewrite $1 with a jq filter (+ args). Callers run require_valid first, so the file parses.
     jq_edit() {
         local f="$1" tmp
         shift
         tmp=$(mktemp)
-        if ! jq "$@" "$f" > "$tmp"; then
-            rm -f "$tmp"
-            echo -e "${RED}${f#"$REPO_ROOT"/} isn't valid JSON; fix it in an editor first.${NC}"
-            exit 1
-        fi
-        cat "$tmp" > "$f" && rm -f "$tmp"
+        jq "$@" "$f" > "$tmp" || { rm -f "$tmp"; exit 1; }
+        cat "$tmp" > "$f"; rm -f "$tmp"
     }
     list_name() { basename "$1" .packages.json; }
     # add/remove need every list readable: a broken file could hide (or already hold) the package

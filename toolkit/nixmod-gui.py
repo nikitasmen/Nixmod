@@ -465,10 +465,6 @@ def humanize_age(seconds):
     return "just now"
 
 
-def gb(n):
-    return f"{n / 1e9:.0f} GB" if n >= 10e9 else f"{n / 1e9:.1f} GB"
-
-
 def label(text="", *classes, wrap=False, xalign=0.0, ellipsize=False):
     lbl = Gtk.Label(label=text, xalign=xalign, wrap=wrap, css_classes=list(classes))
     if ellipsize:
@@ -553,9 +549,18 @@ class FlakeRow(Gtk.ListBoxRow):
             btn = Gtk.Button(label="Update", valign=Gtk.Align.CENTER, css_classes=["flat"])
             btn.set_tooltip_text(f"Update {flake['name']} to its latest commit in flake.lock")
             btn.connect("clicked", lambda *_: win.update_input(flake))
-            win.action_buttons.append(btn)
+            win.flake_buttons.append(btn)
             box.append(btn)
         self.set_child(box)
+
+
+def program_box(program):
+    """Where an option-enabled program is turned on: the option, file:line and the line itself."""
+    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
+    box.append(label(f"Turned on with programs.{program['name']}", "name"))
+    box.append(label(f"{program['rel']}:{program['line']}", "faint"))
+    box.append(label(program["code"], "mono", "dim"))
+    return box
 
 
 def style_state(state, attr, chip, button, name=None):
@@ -586,6 +591,7 @@ class Window(Gtk.ApplicationWindow):
         self.index_error = None
         self.programs = None  # None = still loading; [] = none found
         self.flakes, self.flakes_error = None, None
+        self.flake_buttons = []
         self.programs_error = None
         self.followup_action = None
         self.result_rows = []
@@ -613,8 +619,8 @@ class Window(Gtk.ApplicationWindow):
 
         self.refresh_packages()
         self.refresh_facts()
-        threading.Thread(target=self.fetch_index, daemon=True).start()
-        threading.Thread(target=self.fetch_programs, daemon=True).start()
+        self.in_background(load_index, "index")
+        self.in_background(enabled_programs, "programs")
         self.refresh_flakes()
         self.search.grab_focus()
 
@@ -672,11 +678,6 @@ class Window(Gtk.ApplicationWindow):
         elif isinstance(row, ProgramRow):
             self.show_details(row.prog["package"] or row.prog["name"], program=row.prog)
 
-    def list_entries(self, lst):
-        """Packages shown for a list: what's in the file, then entries removed since the last rebuild."""
-        attrs = [a for a, p in self.desired.items() if p["list"] == lst["id"]]
-        return attrs + [a for a, p in self.applied.items() if p["list"] == lst["id"] and a not in self.desired]
-
     def refresh_sidebar(self):
         self.sidebar_ready = False
         self.sidebar.remove_all()
@@ -732,40 +733,29 @@ class Window(Gtk.ApplicationWindow):
         self.search.grab_focus()
         return True
 
-    def fetch_index(self):
-        try:
-            index, error = load_index(), None
-        except (subprocess.CalledProcessError, OSError, ValueError, KeyError) as e:
-            index, error = None, getattr(e, "stderr", None) or str(e)
-        GLib.idle_add(self.index_ready, index, error)
+    def in_background(self, fn, attr):
+        """Run fn in a thread; store its result in self.<attr> (or the last stderr line in self.<attr>_error)."""
+        def work():
+            try:
+                result, error = fn(), None
+            except (subprocess.CalledProcessError, OSError, ValueError, KeyError) as e:
+                lines = (getattr(e, "stderr", None) or str(e)).strip().splitlines()
+                result, error = None, (lines[-1] if lines else f"loading {attr} failed")
+            GLib.idle_add(self.loaded, attr, result, error)
+        threading.Thread(target=work, daemon=True).start()
 
-    def fetch_programs(self):
-        try:
-            programs, error = enabled_programs(), None
-        except (subprocess.CalledProcessError, OSError, ValueError, KeyError) as e:
-            stderr = (getattr(e, "stderr", None) or str(e)).strip().splitlines()
-            programs, error = [], (stderr[-1] if stderr else "evaluation failed")
-        GLib.idle_add(self.programs_ready, programs, error)
-
-    def programs_ready(self, programs, error):
-        self.programs, self.programs_error = programs, error
-        if not self.search.get_text().strip():
+    def loaded(self, attr, result, error):
+        setattr(self, attr, result if error is None else [])
+        setattr(self, f"{attr}_error", error)
+        if attr == "index":
+            self.search_rows = search_table(result) if result else []
+            if result:
+                self.search.set_placeholder_text(f"Search {len(result):,} packages")
+        if attr == "index" or not self.search.get_text().strip():
             self.refresh_packages()
 
     def refresh_flakes(self):
-        def work():
-            try:
-                flakes, error = flake_inputs(), None
-            except (subprocess.CalledProcessError, OSError, ValueError, KeyError) as e:
-                lines = (getattr(e, "stderr", None) or str(e)).strip().splitlines()
-                flakes, error = [], (lines[-1] if lines else "nix flake metadata failed")
-            GLib.idle_add(self.flakes_ready, flakes, error)
-        threading.Thread(target=work, daemon=True).start()
-
-    def flakes_ready(self, flakes, error):
-        self.flakes, self.flakes_error = flakes, error
-        if not self.search.get_text().strip():
-            self.refresh_packages()
+        self.in_background(flake_inputs, "flakes")
 
     def update_input(self, flake):
         names = [flake["name"], *flake["companions"]]
@@ -780,15 +770,7 @@ class Window(Gtk.ApplicationWindow):
         """Sidebar entries for option-enabled programs: one per scope (system, each user's Home Manager)."""
         scopes = sorted({p["scope"] for p in self.programs or []}, key=lambda s: (s != "system", s))
         return [(f"programs:{s}", "System programs" if s == "system" else f"Home Manager ({s.split(':', 1)[1]})")
-                for s in scopes] or [("programs:system", "System programs")]
-
-    def index_ready(self, index, error):
-        self.index = index
-        self.search_rows = search_table(index) if index else []
-        self.index_error = (error or "").strip().splitlines()[-1:] if error else None
-        if index:
-            self.search.set_placeholder_text(f"Search {len(index):,} packages")
-        self.refresh_packages()
+                for s in scopes]
 
     def refresh_packages(self):
         query = self.search.get_text().strip()
@@ -806,10 +788,10 @@ class Window(Gtk.ApplicationWindow):
             self.pkg_empty.set_text("Reading flake.lock…" if self.flakes is None else
                                     f"Couldn't read flake.lock: {self.flakes_error}" if self.flakes_error else
                                     "This flake has no inputs.")
-            self.action_buttons = [b for b in self.action_buttons if not isinstance(b.get_ancestor(FlakeRow), FlakeRow)]
+            self.flake_buttons = []
             for flake in self.flakes or []:
                 self.pkg_list.append(FlakeRow(self, flake))
-            for b in self.action_buttons:
+            for b in self.flake_buttons:
                 b.set_sensitive(not self.running)
             return self.refresh_changes_bar()
         if not query and str(self.selected_list).startswith("programs:"):
@@ -837,7 +819,9 @@ class Window(Gtk.ApplicationWindow):
                                     "This list is empty. Search above to add a package to it." if single
                                     else "No package lists found in nixmod-system/modules.")
             for lst in shown:
-                attrs = self.list_entries(lst)
+                # what's in the file, then entries removed since the last rebuild
+                attrs = [a for a, p in self.desired.items() if p["list"] == lst["id"]]
+                attrs += [a for a, p in self.applied.items() if p["list"] == lst["id"] and a not in self.desired]
                 if not attrs:
                     continue
                 if not single:
@@ -851,12 +835,12 @@ class Window(Gtk.ApplicationWindow):
                     self.result_rows.append(row)
                     self.pkg_list.append(row)
             return self.refresh_changes_bar()
-        elif self.index is None:
+        elif not self.index:
             attrs = []
             self.list_title.set_text("Results")
             self.list_note.set_text("")
             self.pkg_empty.set_text(
-                f"Couldn't load the package list: {self.index_error[0]}" if self.index_error
+                f"Couldn't load the package list: {self.index_error}" if self.index_error
                 else "Loading the package list. The first time takes about 30 seconds.")
         else:
             attrs = search(self.search_rows, query)
@@ -941,10 +925,7 @@ class Window(Gtk.ApplicationWindow):
         def fill(d):
             body.remove(loading)
             if "error" in d and program:  # e.g. programs.spicetify: configured by a module, no single package
-                box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
-                box.append(label(f"Turned on with programs.{program['name']}", "name"))
-                box.append(label(f"{program['rel']}:{program['line']}", "faint"))
-                box.append(label(program["code"], "mono", "dim"))
+                box = program_box(program)
                 box.append(label("A module sets this program up, so there's no single package to show details "
                                  "for. Its settings are in the file above.", "dim", wrap=True))
                 body.append(box)
@@ -1005,11 +986,7 @@ class Window(Gtk.ApplicationWindow):
         # Where and how it's used
         used = []
         if program:
-            where = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
-            where.append(label(f"Turned on with programs.{program['name']}", "name"))
-            where.append(label(f"{program['rel']}:{program['line']}", "faint"))
-            where.append(label(program["code"], "mono", "dim"))
-            used.append(where)
+            used.append(program_box(program))
         if lst:
             where = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
             where.append(label(f"In the {lst['label']} list", "name"))
@@ -1173,8 +1150,8 @@ class Window(Gtk.ApplicationWindow):
         for key in ("disk", "mem"):
             used, total = f[key]
             value, sub, bar = self.fact[key]
-            value.set_text(f"{gb(total - used)} free")
-            sub.set_text(f"{gb(used)} of {gb(total)} used")
+            value.set_text(f"{fmt_size(total - used)} free")
+            sub.set_text(f"{fmt_size(used)} of {fmt_size(total)} used")
             bar.set_value(used / total)
 
     # ----- running actions -----
@@ -1233,14 +1210,13 @@ class Window(Gtk.ApplicationWindow):
             return go()
         dialog = Gtk.AlertDialog(message=spec["confirm"], buttons=["Cancel", "Delete"], cancel_button=0,
                                  default_button=0)
-        dialog.choose(self, None, lambda d, res: go() if self.choice(d, res) == 1 else None)
-
-    @staticmethod
-    def choice(dialog, res):
-        try:
-            return dialog.choose_finish(res)
-        except GLib.Error:
-            return 0  # dismissed
+        def chosen(d, res):
+            try:
+                if d.choose_finish(res) == 1:
+                    go()
+            except GLib.Error:
+                pass  # dismissed
+        dialog.choose(self, None, chosen)
 
     def ask_password(self, then):
         win = Gtk.Window(transient_for=self, modal=True, title="Authenticate", default_width=400, resizable=False)
@@ -1293,7 +1269,7 @@ class Window(Gtk.ApplicationWindow):
 
     def set_running(self, running):
         self.running = running
-        for b in self.action_buttons:
+        for b in self.action_buttons + self.flake_buttons:
             b.set_sensitive(not running)
         self.close_run.set_visible(not running)
         (self.run_spinner.start if running else self.run_spinner.stop)()
