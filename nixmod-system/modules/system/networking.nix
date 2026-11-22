@@ -37,6 +37,7 @@
   services.dbus.enable = true;
   services.avahi = {
     enable = true;
+    nssmdns4 = true;  # resolve *.local names (e.g. raspberrypi.local) in browsers and apps
     settings.publish = {
       disable-publishing = false;
       disable-user-service-publishing = false;
