@@ -463,6 +463,49 @@ def flake_inputs():
     return found
 
 
+# ---------- auto-commit of the package lists after a successful switch (GUI only, not nixmod.sh) ----------
+LISTS_SPEC = ":(glob)nixmod-system/modules/**/*.packages.json"
+
+
+def git(*args):
+    # BatchMode / no prompt: a push without a usable SSH key fails fast instead of hanging the thread.
+    env = dict(os.environ, GIT_TERMINAL_PROMPT="0", GIT_SSH_COMMAND="ssh -o BatchMode=yes")
+    return subprocess.run(["git", "-C", REPO, *args], capture_output=True, text=True, env=env)
+
+
+def commit_message(diff):
+    """`git diff -U0` of the lists → "packages: +a -b". A package moved between lists cancels out."""
+    added, removed = set(), set()
+    for line in diff.splitlines():
+        m = re.match(r'([+-])\s*"name":\s*"([^"]+)"', line)
+        if m and not line.startswith(("+++", "---")):
+            (added if m.group(1) == "+" else removed).add(m.group(2))
+    added, removed = added - removed, removed - added
+    parts = [f"+{n}" for n in sorted(added)] + [f"-{n}" for n in sorted(removed)]
+    return "packages: " + (" ".join(parts) if parts else "update package notes")
+
+
+def commit_package_lists():
+    """Commit only the changed *.packages.json files (other staged work is left alone), then push.
+    → log text. Never raises: the switch already succeeded, git trouble is just a warning."""
+    try:
+        changed = git("status", "--porcelain", "--", LISTS_SPEC).stdout.split("\n")
+        paths = [ln[3:] for ln in changed if ln.strip()]
+        if not paths:
+            return ""
+        git("add", "--", *paths)
+        msg = commit_message(git("diff", "--cached", "-U0", "--", *paths).stdout)
+        c = git("commit", "-m", msg, "--only", "--", *paths)
+        if c.returncode:
+            return f"\nWarning: auto-commit failed:\n{(c.stderr or c.stdout).strip()}\n"
+        p = git("push")
+        err = (p.stderr.strip().splitlines() or ["unknown error"])[-1]
+        pushed = "pushed" if p.returncode == 0 else f"NOT pushed: {err}"
+        return f"\nCommitted \"{msg}\" ({pushed})\n"
+    except OSError as e:  # e.g. git missing from PATH
+        return f"\nWarning: auto-commit failed: {e}\n"
+
+
 def fmt_size(n):
     for unit in ("B", "KB", "MB", "GB"):
         if n < 1024 or unit == "GB":
@@ -1416,6 +1459,8 @@ class Window(Gtk.ApplicationWindow):
             self.state.update(generation=current_generation(), packages=snapshot)
             write_json(STATE_FILE, self.state)
             self.refresh_packages()
+            threading.Thread(target=lambda: GLib.idle_add(self.log_append, commit_package_lists()),
+                             daemon=True).start()
         if ok and spec.get("after"):
             spec["after"]()
         if ok and "followup" in spec:
