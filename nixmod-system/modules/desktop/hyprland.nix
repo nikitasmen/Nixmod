@@ -19,7 +19,7 @@
   };
 
   # Hyprland related packages
-  # Package list: hyprland.packages.json (edited by nixmod-gui and `nixmod.sh packages`)
+  # Package list: hyprland.packages.json (edited by nixmod-gui or by hand)
   environment.systemPackages = nixmod.readPackages ./hyprland.packages.json;
 
   # Polkit agent - required for input-remapper-gtk, pkexec auth dialogs

@@ -45,7 +45,7 @@
     #};
   
   # Audio related packages (OBS is already installed via programs.obs-studio above)
-  # Package list: audio.packages.json (edited by nixmod-gui and `nixmod.sh packages`)
+  # Package list: audio.packages.json (edited by nixmod-gui or by hand)
   environment.systemPackages = nixmod.readPackages ./audio.packages.json;
 
   environment.shellAliases = {

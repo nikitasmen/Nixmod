@@ -10,10 +10,10 @@ A single-machine NixOS flake built around the Hyprland Wayland compositor, with 
 
 | Path | What it is |
 |------|-----------|
-| `flake.nix` | The flake: one `nixosConfigurations.nixos`, Home Manager, and inputs (nixpkgs unstable, Hyprland, UnixKit, spicetify-nix) |
+| `flake.nix` | The flake: one `nixosConfigurations.nixos`, Home Manager, and inputs (nixpkgs unstable, Home Manager, UnixKit, passman, spicetify-nix) |
 | `nixmod-system/` | NixOS modules: `configuration.nix` → `modules/{desktop,programs,system,users}/`, plus `overlays/` and the machine-specific `hardware-configuration.nix` / `nvidia-configuration.nix` |
 | `nixmod-dotfiles/` | Plain app configs (hypr, waybar, ghostty, nvim, wofi, clipse, cava, …) and `wallpapers/`, deployed by Home Manager |
-| `toolkit/` | `nixmod.sh` (entry point: rebuild wrapper, forwards maintenance commands) and `helper.sh` (maintenance) |
+| `toolkit/` | `nixmod.sh` (entry point: rebuild wrapper, forwards maintenance commands), `helper.sh` (maintenance), `nixmod-gui.py` (GUI). See [toolkit/README.md](toolkit/README.md) |
 
 ## 🚀 Quick Start
 
@@ -42,10 +42,12 @@ sudo ./toolkit/nixmod.sh flake-update  # nix flake update
      ./toolkit/nixmod.sh update-unixkit
 
      ./toolkit/nixmod.sh health              # disk / memory / load
-sudo ./toolkit/nixmod.sh clean               # delete generations older than 14 days + GC the Nix store (destructive)
+sudo ./toolkit/nixmod.sh clean [DAYS]        # delete generations older than DAYS (default 14) + GC the Nix store (destructive)
      ./toolkit/nixmod.sh create-module NAME  # scaffold a module and add it to its category's default.nix
      ./toolkit/nixmod.sh validate            # nix flake check on the repo
 ```
+
+**NixMod GUI**: `nixmod-gui` ("NixMod" in wofi) is a GTK4 front end: search nixpkgs, add/remove packages, view package details, enabled programs and flake inputs, and run the toolkit actions with a live log.
 
 Run these from a checkout of the repo: `nixmod.sh` builds from the working tree (`path:` flake ref).
 
@@ -55,7 +57,7 @@ Run these from a checkout of the repo: `nixmod.sh` builds from the working tree 
 - **Waybar**: three bars (top, bottom, left) with custom script-backed modules, such as a network traffic graph that opens netscanner
 - **Wallpapers**: waypaper plus random/set wallpaper scripts over `~/Pictures/wallpapers`
 - **Terminals & editors**: Ghostty, Neovim (lazy.nvim), Helix, tmux, starship
-- **Tools**: clipse clipboard manager, superfile, cava, fastfetch, local Ollama, UnixKit
+- **Tools**: NixMod GUI, clipse clipboard manager, superfile, cava, fastfetch, local Ollama, UnixKit
 - **Extras**: Spotify + Spicetify, Steam auto-launch on gamepad connect, KDE Connect remote input, input-remapper
 
 ## ⌨️ Keybindings
@@ -77,7 +79,7 @@ Run these from a checkout of the repo: `nixmod.sh` builds from the working tree 
 
 ## 🔧 Customizing
 
-- **Add a package**: edit `nixmod-system/modules/programs/applications.nix`, then `sudo ./toolkit/nixmod.sh update`.
+- **Add a package**: add it to a module's `*.packages.json`, by hand or with the NixMod GUI (see [modules/README.md](nixmod-system/modules/README.md)). Then `sudo ./toolkit/nixmod.sh update`.
 - **Edit a dotfile**: change it under `nixmod-dotfiles/` and rebuild. Files are linked read-only from the Nix store, so edits have no effect until the rebuild. The exception is `nvim`, which links straight to the repo and updates immediately.
 - **Theme**: Catppuccin Macchiato everywhere (`waybar/macchiato.css` has the palette). Reuse those hex values.
 

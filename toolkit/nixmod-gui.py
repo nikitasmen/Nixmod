@@ -143,8 +143,8 @@ textview { padding: 10px; border-radius: 8px; }
 
 
 # ---------- package lists: modules/**/<module>.packages.json (single source of truth) ----------
-# Each module loads its file with `nixmod.readPackages` (configuration.nix); `nixmod.sh packages` edits the
-# same files with jq. Both write jq's default format (2-space indent, raw UTF-8) so diffs stay clean.
+# Each module loads its file with `nixmod.readPackages` (configuration.nix). Written in jq's default
+# format (2-space indent, raw UTF-8) so hand edits with jq and GUI edits produce the same layout.
 def scan_lists():
     """→ (lists, packages). lists: [{id, path, rel, label}], packages: {name: {list, index, note}}."""
     lists, packages = [], {}

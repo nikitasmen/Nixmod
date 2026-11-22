@@ -14,7 +14,7 @@
   services.speechd.enable = false;
   
   # Other applications
-  # Package list: applications.packages.json (edited by nixmod-gui and `nixmod.sh packages`)
+  # Package list: applications.packages.json (edited by nixmod-gui or by hand)
   # Not installed: stremio (insecure dependencies), webcord and logseq (discord-ptb is used
   # instead; not Electron-dependent), neofetch (replaced by fastfetch).
   environment.systemPackages = nixmod.readPackages ./applications.packages.json;

@@ -44,10 +44,6 @@ show_help() {
     echo "  health              Check system health (disk/mem/load)"
     echo "  clean [DAYS]        Remove generations older than DAYS (default 14) and clean the Nix store"
     echo "  create-module NAME  Create a new module template"
-    echo "  packages [list]     List packages from the modules' *.packages.json files"
-    echo "  packages add NAME [LIST] [NOTE]"
-    echo "                      Add a nixpkgs package to a list (default: applications)"
-    echo "  packages remove NAME  Remove a package from whichever list has it"
     echo "  validate            Validate NixOS configuration (nix flake check)"
     echo "  help                Show this help message"
     echo ""
@@ -109,99 +105,6 @@ update_flake() {
     echo -e "${GREEN}Flake inputs updated successfully!${NC}"
 }
 
-# Package lists: nixmod-system/modules/**/<list>.packages.json, the single source of truth shared with
-# nixmod-gui. jq's default output format matches what the GUI writes, so the two never fight over layout.
-packages_cmd() {
-    local modules="$REPO_ROOT/nixmod-system/modules" name="${2:-}" file
-    local -a files owners
-    mapfile -d '' files < <(find "$modules" -name '*.packages.json' -print0 | sort -z)
-
-    # Files whose list contains $1 (parsed with jq, so hand-formatted entries are found too)
-    lists_with() {
-        local f
-        for f in "${files[@]}"; do
-            jq -e --arg n "$1" 'any(.packages[]; .name == $n)' "$f" >/dev/null 2>&1 && printf '%s\n' "$f"
-        done
-        return 0
-    }
-    # Rewrite $1 with a jq filter (+ args). Callers run require_valid first, so the file parses.
-    jq_edit() {
-        local f="$1" tmp
-        shift
-        tmp=$(mktemp)
-        jq "$@" "$f" > "$tmp" || { rm -f "$tmp"; exit 1; }
-        cat "$tmp" > "$f"; rm -f "$tmp"
-    }
-    list_name() { basename "$1" .packages.json; }
-    # add/remove need every list readable: a broken file could hide (or already hold) the package
-    require_valid() {
-        local f bad=0
-        for f in "${files[@]}"; do
-            if ! jq empty "$f" >/dev/null 2>&1; then
-                echo -e "${RED}${f#"$REPO_ROOT"/} isn't valid JSON; fix it in an editor first.${NC}"
-                bad=1
-            fi
-        done
-        [ "$bad" -eq 0 ] || exit 1
-    }
-
-    case "${1:-list}" in
-        list)
-            for file in "${files[@]}"; do
-                echo -e "${BLUE}$(list_name "$file")${NC}  ${file#"$REPO_ROOT"/}"
-                jq -r '.packages[] | "  \(.name)" + (if .note then "  # \(.note)" else "" end)' "$file" \
-                    || echo -e "  ${RED}isn't valid JSON${NC}"
-            done
-            ;;
-        add)
-            [ -n "$name" ] || { echo -e "${RED}Usage: $0 packages add NAME [LIST] [NOTE]${NC}"; exit 1; }
-            require_valid
-            local list="${3:-applications}" note="${4:-}" target=""
-            for file in "${files[@]}"; do
-                [ "$(list_name "$file")" = "$list" ] && target="$file"
-            done
-            if [ -z "$target" ]; then
-                echo -e "${RED}No package list named '$list'.${NC} Lists: $(for f in "${files[@]}"; do printf '%s ' "$(list_name "$f")"; done)"
-                exit 1
-            fi
-            mapfile -t owners < <(lists_with "$name")
-            if [ ${#owners[@]} -gt 0 ]; then
-                echo -e "${YELLOW}$name is already in $(list_name "${owners[0]}").${NC}"
-                exit 0
-            fi
-            # Check against this config's own package set (pinned nixpkgs + overlays + allowUnfree), the same
-            # one nixmod.readPackages resolves names in, not whatever the nixpkgs registry points at.
-            if ! nix --extra-experimental-features "nix-command flakes" eval --raw \
-                    "path:${REPO_ROOT// /%20}#nixosConfigurations.nixos.pkgs.$name.name" >/dev/null 2>&1; then
-                echo -e "${RED}'$name' isn't a package in this configuration's nixpkgs.${NC} Search with: nix search nixpkgs $name"
-                exit 1
-            fi
-            jq_edit "$target" --arg n "$name" --arg note "$note" \
-                '.packages += [{name: $n} + (if $note != "" then {note: $note} else {} end)]'
-            echo -e "${GREEN}Added $name to $list.${NC} Run 'sudo $0 update' to install it."
-            ;;
-        remove)
-            [ -n "$name" ] || { echo -e "${RED}Usage: $0 packages remove NAME${NC}"; exit 1; }
-            require_valid
-            mapfile -t owners < <(lists_with "$name")
-            if [ ${#owners[@]} -eq 0 ]; then
-                echo -e "${RED}$name isn't in any package list.${NC}"
-                exit 1
-            fi
-            for file in "${owners[@]}"; do  # every list that has it, or it would stay installed
-                jq_edit "$file" --arg n "$name" 'del(.packages[] | select(.name == $n))'
-                echo -e "${GREEN}Removed $name from $(list_name "$file").${NC}"
-            done
-            echo "Run 'sudo $0 update' to uninstall it."
-            ;;
-        *)
-            echo -e "${RED}Unknown packages command: $1${NC}"
-            show_help
-            exit 1
-            ;;
-    esac
-}
-
 # Main script logic
 case "$1" in
     install|update)
@@ -215,9 +118,6 @@ case "$1" in
         ;;
     flake-update)
         update_flake
-        ;;
-    packages)
-        packages_cmd "${@:2}"
         ;;
     update-unixkit)
         "$SCRIPT_DIR/update-unixkit.sh"

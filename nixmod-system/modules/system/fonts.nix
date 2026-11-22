@@ -2,6 +2,6 @@
 
 {
   # Fonts configuration
-  # Package list: fonts.packages.json (edited by nixmod-gui and `nixmod.sh packages`)
+  # Package list: fonts.packages.json (edited by nixmod-gui or by hand)
   fonts.packages = nixmod.readPackages ./fonts.packages.json;
 }

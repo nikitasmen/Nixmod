@@ -17,7 +17,7 @@
       "input"
       "dialout"
     ];
-    # Package list: nikmen.packages.json (edited by nixmod-gui and `nixmod.sh packages`)
+    # Package list: nikmen.packages.json (edited by nixmod-gui or by hand)
     packages = nixmod.readPackages ./nikmen.packages.json;
   };
 }
