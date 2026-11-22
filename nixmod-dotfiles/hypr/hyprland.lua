@@ -280,6 +280,15 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "float-nixmod-gui",
+	match = { class = "com.nikmen.NixmodGui" },
+
+	float = true,
+	size = "1040 780",
+	center = true,
+})
+
+hl.window_rule({
 	name = "float-waypaper",
 	match = { class = "(waypaper)" },
 

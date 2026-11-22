@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, nixmod, lib, ... }:
 
 {
   # Enable Firefox
@@ -14,45 +14,8 @@
   services.speechd.enable = false;
   
   # Other applications
-  environment.systemPackages = with pkgs; [
-    
-    # stremio #Insecure dependencies
-    
-    # Communication
-    # webcord
-    # Use DiscordPtb as is not electron dependable 
-    
-    # Productivity
-    # logseq
-    # Use DiscordPtb as is not electron dependable
-    
-    # File management
-    superfile
-    
-    # System tools
-    # neofetch
-    fastfetch
-    btop
-    bottom   # btm - system monitor (executable: btm)
-    lsof
-    wl-screenrec
-    nwg-look
-    wdisplays   # Monitor layout GUI
-    ffmpeg   # Multimedia framework       
-    gum      # Tool for  glamorous shell scripts
-    chafa    # Cli image converter
-    tigervnc # VNC client (vncviewer)
-    # Screenshots
-    flameshot
-
-    # ScreenSaver
-    pipes-rs
-
-    # Silly / boredom killers
-    fortune       # Random quotes: fortune
-    cowsay        # ASCII art animals: fortune | cowsay -f dragon
-    cmatrix       # Matrix rain: cmatrix
-    figlet        # ASCII art text: figlet "NixOS"
-    hollywood     # Fake hacker terminal: hollywood
-  ];
+  # Package list: applications.packages.json (edited by nixmod-gui and `nixmod.sh packages`)
+  # Not installed: stremio (insecure dependencies), webcord and logseq (discord-ptb is used
+  # instead; not Electron-dependent), neofetch (replaced by fastfetch).
+  environment.systemPackages = nixmod.readPackages ./applications.packages.json;
 }

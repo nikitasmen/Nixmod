@@ -39,12 +39,17 @@ show_health() {
 
 # Function to clean the system
 clean_system() {
+    local days="${1:-14}"
+    if ! [[ "$days" =~ ^[0-9]+$ ]]; then
+        echo -e "${RED}Days must be a whole number, e.g. '$0 clean 7'.${NC}"
+        exit 1
+    fi
     echo -e "${BLUE}Cleaning NixOS System${NC}"
     echo -e "${BLUE}-------------------${NC}"
     
-    # Drop generations older than 14 days (all profiles), then GC
-    echo -e "\n${BLUE}Removing generations older than 14 days and collecting garbage...${NC}"
-    sudo nix-collect-garbage --delete-older-than 14d
+    # Drop generations older than $days days (all profiles; the current one is always kept), then GC
+    echo -e "\n${BLUE}Removing generations older than $days days and collecting garbage...${NC}"
+    sudo nix-collect-garbage --delete-older-than "${days}d"
 
     # Optimize store
     echo -e "\n${BLUE}Optimizing Nix store...${NC}"
@@ -163,7 +168,7 @@ case "$1" in
         show_health
         ;;
     clean)
-        clean_system
+        clean_system "$2"
         ;;
     create-module)
         create_module "$2"
@@ -176,7 +181,7 @@ case "$1" in
         echo ""
         echo "Commands:"
         echo "  health              Check system health"
-        echo "  clean               Remove generations older than 14 days and clean the Nix store"
+        echo "  clean [DAYS]        Remove generations older than DAYS (default 14) and clean the Nix store"
         echo "  create-module NAME  Create a new module template"
         echo "  validate            Validate NixOS configuration"
         exit 1

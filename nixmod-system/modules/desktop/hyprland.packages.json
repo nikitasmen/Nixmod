@@ -1,0 +1,56 @@
+{
+  "packages": [
+    {
+      "name": "waybar",
+      "note": "Status bar"
+    },
+    {
+      "name": "wofi",
+      "note": "Application launcher"
+    },
+    {
+      "name": "wlogout",
+      "note": "Logout menu"
+    },
+    {
+      "name": "hyprpaper",
+      "note": "Wallpaper utility"
+    },
+    {
+      "name": "waypaper",
+      "note": "GUI wallpaper utility"
+    },
+    {
+      "name": "hypridle",
+      "note": "Idle management"
+    },
+    {
+      "name": "hyprlock",
+      "note": "Screen locking"
+    },
+    {
+      "name": "hyprpolkitagent",
+      "note": "Polkit agent for pkexec/auth dialogs (input-remapper, etc.)"
+    },
+    {
+      "name": "mako",
+      "note": "Notification daemon"
+    },
+    {
+      "name": "eww",
+      "note": "Widget system (bottom bar)"
+    },
+    {
+      "name": "socat",
+      "note": "eww bottom bar: Hyprland event socket"
+    },
+    {
+      "name": "libnotify",
+      "note": "notify-send (eww bottom bar command output)"
+    },
+    {
+      "name": "jq",
+      "note": "Command-line JSON processor"
+    }
+  ]
+}

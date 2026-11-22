@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixmod, ... }:
 
 {
   # Enable networking
@@ -67,10 +67,7 @@
 
   # Desktop entry for kdeconnect-indicator (fixes "App info not found" portal error on Wayland)
   # programs.kdeconnect already adds kdeconnect-kde; no need to duplicate
-  environment.systemPackages = with pkgs; [
-    networkmanager_dmenu
-    iw  # netscanner shells out to it (see wrapper above)
-    networkmanagerapplet  # nm-connection-editor for Waybar network right-click
+  environment.systemPackages = nixmod.readPackages ./networking.packages.json ++ (with pkgs; [
     (writeTextFile {
       name = "org.kde.kdeconnect-indicator.desktop";
       destination = "/share/applications/org.kde.kdeconnect-indicator.desktop";
@@ -83,5 +80,5 @@
         X-Desktop-File-Install-Version=0.26
       '';
     })
-  ];
+  ]);
 }

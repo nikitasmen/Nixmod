@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixmod, ... }:
 
 {
   # Enable sound with pipewire
@@ -45,11 +45,8 @@
     #};
   
   # Audio related packages (OBS is already installed via programs.obs-studio above)
-  environment.systemPackages = with pkgs; [
-    pavucontrol  # Sound control panel
-    playerctl    # Music player controller
-    cava         # Audio Visualizer
-  ];
+  # Package list: audio.packages.json (edited by nixmod-gui and `nixmod.sh packages`)
+  environment.systemPackages = nixmod.readPackages ./audio.packages.json;
 
   environment.shellAliases = {
     # Quick command to open audio settings
