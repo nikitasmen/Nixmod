@@ -81,6 +81,15 @@
   programs.home-manager.enable = true;
   programs.git.enable = true;
 
+  # Automount USB sticks/disks (needs services.udisks2 in system/storage.nix).
+  # Unmount before unplugging: `udiskie-umount /run/media/nikmen/<label>`.
+  services.udiskie = {
+    enable = true;
+    automount = true;
+    notify = true;
+    tray = "never";
+  };
+
   # Shell: zsh + fzf (Ctrl+R history, Ctrl+T files, Alt+C cd) + zoxide (smart cd) + starship.
   # fzf/zoxide/starship hook into whichever shell is enabled here, so switching
   # shells means swapping programs.zsh (and users.users.nikmen.shell in programs/shell.nix).
