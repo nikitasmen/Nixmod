@@ -21,10 +21,6 @@
       "note": "Markdown viewer for the terminal"
     },
     {
-      "name": "eza",
-      "note": "Better ls"
-    },
-    {
       "name": "helix",
       "note": "Text editor"
     },
@@ -35,10 +31,6 @@
     {
       "name": "tmux",
       "note": "Terminal multiplexer"
-    },
-    {
-      "name": "tuios",
-      "note": "Terminal window manager (config: nixmod-dotfiles/tuios)"
     },
     {
       "name": "tree",
@@ -55,10 +47,6 @@
     {
       "name": "ripgrep",
       "note": "Fast grep alternative (needed by Neovim Telescope live_grep/grep_string)"
-    },
-    {
-      "name": "tealdeer",
-      "note": "Fast tldr implementation"
     },
     {
       "name": "coreutils",
