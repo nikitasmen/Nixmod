@@ -92,9 +92,17 @@
       highlight = "fg=8";
     };
     syntaxHighlighting.enable = true;
+    # bat acts like plain cat when piped; --paging=never keeps it from opening less.
+    shellAliases.cat = "bat --paging=never";
   };
   programs.fzf.enable = true;
   programs.zoxide.enable = true;
+  # Installs eza and aliases ls/ll/la/lt/lla to it in zsh.
+  programs.eza = {
+    enable = true;
+    icons = "auto";
+    git = true;
+  };
   programs.starship = {
     enable = true;
     configPath = "${config.xdg.configHome}/starship/starship.toml"; # deployed via xdg.configFile above
