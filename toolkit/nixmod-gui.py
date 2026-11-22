@@ -615,6 +615,8 @@ class Window(Gtk.ApplicationWindow):
         keys = Gtk.ShortcutController()
         keys.add_shortcut(Gtk.Shortcut(trigger=Gtk.ShortcutTrigger.parse_string("<Control>f"),
                                        action=Gtk.CallbackAction.new(self.focus_search)))
+        keys.add_shortcut(Gtk.Shortcut(trigger=Gtk.ShortcutTrigger.parse_string("Escape"),
+                                       action=Gtk.CallbackAction.new(lambda *_: self.close() or True)))
         self.add_controller(keys)
 
         self.refresh_packages()
@@ -629,7 +631,8 @@ class Window(Gtk.ApplicationWindow):
         page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16, css_classes=["page"])
         self.search = Gtk.SearchEntry(placeholder_text="Search packages", css_classes=["search"])
         self.search.connect("search-changed", lambda *_: self.refresh_packages())
-        self.search.connect("stop-search", lambda e: e.set_text(""))
+        # Escape in the search box: clear it, or close the window if it's already empty
+        self.search.connect("stop-search", lambda e: e.set_text("") if e.get_text() else self.close())
         page.append(self.search)
 
         split = Gtk.Box(spacing=24, vexpand=True)
