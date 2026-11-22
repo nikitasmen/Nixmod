@@ -42,7 +42,7 @@ show_help() {
     echo "  flake-update        Update flake inputs"
     echo "  update-unixkit      Update UnixKit to latest commit"
     echo "  health              Check system health (disk/mem/load)"
-    echo "  clean               Remove generations older than 14 days and clean the Nix store"
+    echo "  clean [DAYS]        Remove generations older than DAYS (default 14) and clean the Nix store"
     echo "  create-module NAME  Create a new module template"
     echo "  packages [list]     List packages from the modules' *.packages.json files"
     echo "  packages add NAME [LIST] [NOTE]"

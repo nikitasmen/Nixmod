@@ -46,9 +46,7 @@ ACTIONS = {
     "check": dict(argv=NIX + ["flake", "check", f"path:{REPO}"], root=False, running="Checking configuration…",
                   done="No errors found", fail="The configuration has errors"),
     "clean": dict(argv=toolkit("clean"), root=True, running="Freeing disk space…",
-                  done="Disk space freed", fail="Cleanup failed",
-                  confirm="Delete system generations older than 14 days? You won't be able to boot into them "
-                          "afterwards."),
+                  done="Disk space freed", fail="Cleanup failed"),  # ask_clean() appends the chosen days
 }
 
 SYSTEM_ROWS = [  # (action, title, explanation, button label)
@@ -58,7 +56,8 @@ SYSTEM_ROWS = [  # (action, title, explanation, button label)
     ("update", "Update package versions", "Pull newer nixpkgs and inputs into flake.lock. Rebuild afterwards "
                                           "to install them.", "Update"),
     ("check", "Check configuration", "Evaluate the configuration for errors without changing anything.", "Check"),
-    ("clean", "Free up disk space", "Delete generations older than 14 days and unused store paths.", "Clean up"),
+    ("clean", "Free up disk space", "Delete old generations (you choose how old) and unused store paths.",
+     "Clean up"),
 ]
 
 # Catppuccin Macchiato
@@ -93,6 +92,10 @@ button:hover { background: #494d64; }
 button:focus-visible { outline: 2px solid #c6a0f6; outline-offset: 1px; }
 button:disabled { background: #1e2030; color: #6e738d; }
 button.flat { background: transparent; color: #a5adcb; }
+spinbutton { background: #363a4f; border-radius: 8px; border: none; box-shadow: none; }
+spinbutton text { color: #cad3f5; }
+spinbutton text selection, entry text selection { background: #c6a0f6; color: #181926; }
+spinbutton button { min-width: 0; padding: 4px 10px; background: transparent; }
 button.flat:hover { background: #363a4f; color: #cad3f5; }
 button.destructive { color: #ed8796; }
 button.add { color: #a6da95; }
@@ -192,6 +195,16 @@ def remove_package(lst, name):
     def change(ps):
         ps[:] = [e for e in ps if e.get("name") != name]
     edit_list(lst, change)
+
+
+def system_generations():
+    """[(number, age in seconds)] of the system generations on disk."""
+    now, gens = time.time(), []
+    for link in glob.glob("/nix/var/nix/profiles/system-*-link"):
+        m = re.search(r"system-(\d+)-link$", link)
+        if m:
+            gens.append((int(m.group(1)), now - os.lstat(link).st_mtime))
+    return sorted(gens)
 
 
 def current_generation():
@@ -1127,7 +1140,7 @@ class Window(Gtk.ApplicationWindow):
             text.append(label(desc, "dim", wrap=True))
             btn = Gtk.Button(label=btn_label, valign=Gtk.Align.CENTER,
                              css_classes=["destructive"] if action == "clean" else [])
-            btn.connect("clicked", lambda _b, a=action: self.start(a))
+            btn.connect("clicked", lambda _b, a=action: self.ask_clean() if a == "clean" else self.start(a))
             self.action_buttons.append(btn)
             box.append(text)
             box.append(btn)
@@ -1202,24 +1215,65 @@ class Window(Gtk.ApplicationWindow):
         if self.running:
             return
         spec = ACTIONS[action] if isinstance(action, str) else action
+        if spec["root"]:
+            self.ask_password(lambda pw: self.run(action, pw))
+        else:
+            self.run(action, None)
 
-        def go():
-            if spec["root"]:
-                self.ask_password(lambda pw: self.run(action, pw))
-            else:
-                self.run(action, None)
+    def ask_clean(self):
+        """Clean up: pick how old a generation must be to delete it, seeing what that removes."""
+        win = Gtk.Window(transient_for=self, modal=True, title="Free up disk space", default_width=440,
+                         resizable=False)
+        win.set_titlebar(Gtk.HeaderBar(decoration_layout=":close"))
+        keys = Gtk.ShortcutController()
+        keys.add_shortcut(Gtk.Shortcut(trigger=Gtk.ShortcutTrigger.parse_string("Escape"),
+                                       action=Gtk.CallbackAction.new(lambda *_: win.close() or True)))
+        win.add_controller(keys)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12,
+                      margin_top=20, margin_bottom=20, margin_start=22, margin_end=22)
+        box.append(label("Delete old system generations, then remove files nothing uses anymore.", "dim",
+                         wrap=True))
+        row = Gtk.Box(spacing=10)
+        row.append(label("Delete generations older than"))
+        days = Gtk.SpinButton.new_with_range(0, 3650, 1)
+        days.set_value(14)
+        days.set_width_chars(4)
+        row.append(days)
+        row.append(label("days"))
+        box.append(row)
+        summary = label("", "dim", wrap=True)
+        box.append(summary)
+        buttons = Gtk.Box(spacing=8, halign=Gtk.Align.END, margin_top=6)
+        cancel = Gtk.Button(label="Cancel", css_classes=["flat"])
+        ok = Gtk.Button(label="Clean up", css_classes=["destructive"])
+        buttons.append(cancel)
+        buttons.append(ok)
+        box.append(buttons)
+        win.set_child(box)
 
-        if "confirm" not in spec:
-            return go()
-        dialog = Gtk.AlertDialog(message=spec["confirm"], buttons=["Cancel", "Delete"], cancel_button=0,
-                                 default_button=0)
-        def chosen(d, res):
-            try:
-                if d.choose_finish(res) == 1:
-                    go()
-            except GLib.Error:
-                pass  # dismissed
-        dialog.choose(self, None, chosen)
+        gens, current = system_generations(), current_generation()
+
+        def update(*_):
+            n = int(days.get_value())
+            doomed = [g for g, age in gens if age > n * 86400 and str(g) != current]
+            summary.set_text(
+                f"Deletes {len(doomed)} of {len(gens)} system generations. The current one (#{current}) is always "
+                "kept, and you can't boot into deleted ones." if doomed else
+                f"No system generation is older than {n} days, so only unused store files will be removed.")
+
+        def go(*_):
+            n = int(days.get_value())
+            win.destroy()
+            self.start(dict(ACTIONS["clean"], argv=toolkit("clean") + [str(n)],
+                            running=f"Deleting generations older than {n} days…"))
+
+        days.connect("value-changed", update)
+        days.connect("activate", go)
+        ok.connect("clicked", go)
+        cancel.connect("clicked", lambda *_: win.destroy())
+        update()
+        win.present()
+        days.grab_focus()
 
     def ask_password(self, then):
         win = Gtk.Window(transient_for=self, modal=True, title="Authenticate", default_width=400, resizable=False)
