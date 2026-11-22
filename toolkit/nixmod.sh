@@ -44,6 +44,10 @@ show_help() {
     echo "  health              Check system health (disk/mem/load)"
     echo "  clean               Remove generations older than 14 days and clean the Nix store"
     echo "  create-module NAME  Create a new module template"
+    echo "  packages [list]     List packages from the modules' *.packages.json files"
+    echo "  packages add NAME [LIST] [NOTE]"
+    echo "                      Add a nixpkgs package to a list (default: applications)"
+    echo "  packages remove NAME  Remove a package from whichever list has it"
     echo "  validate            Validate NixOS configuration (nix flake check)"
     echo "  help                Show this help message"
     echo ""
@@ -105,6 +109,60 @@ update_flake() {
     echo -e "${GREEN}Flake inputs updated successfully!${NC}"
 }
 
+# Package lists: nixmod-system/modules/**/<list>.packages.json, the single source of truth shared with
+# nixmod-gui. jq's default output format matches what the GUI writes, so the two never fight over layout.
+packages_cmd() {
+    local modules="$REPO_ROOT/nixmod-system/modules" name="$2" file
+    local files
+    files=$(find "$modules" -name '*.packages.json' | sort)
+    case "${1:-list}" in
+        list)
+            for file in $files; do
+                echo -e "${BLUE}$(basename "$file" .packages.json)${NC}  ${file#"$REPO_ROOT"/}"
+                jq -r '.packages[] | "  \(.name)" + (if .note then "  # \(.note)" else "" end)' "$file"
+            done
+            ;;
+        add)
+            [ -n "$name" ] || { echo -e "${RED}Usage: $0 packages add NAME [LIST] [NOTE]${NC}"; exit 1; }
+            local list="${3:-applications}" note="${4:-}" target owner
+            target=$(echo "$files" | grep "/$list.packages.json$" || true)
+            if [ -z "$target" ]; then
+                echo -e "${RED}No package list named '$list'.${NC} Lists: $(for f in $files; do basename "$f" .packages.json; done | tr '\n' ' ')"
+                exit 1
+            fi
+            owner=$(grep -l -F "\"name\": \"$name\"" $files | head -1 || true)
+            if [ -n "$owner" ]; then
+                echo -e "${YELLOW}$name is already in $(basename "$owner" .packages.json).${NC}"
+                exit 0
+            fi
+            if ! nix --extra-experimental-features "nix-command flakes" eval --raw "nixpkgs#$name.name" >/dev/null 2>&1; then
+                echo -e "${RED}'$name' isn't a package in nixpkgs.${NC} Search with: nix search nixpkgs $name"
+                exit 1
+            fi
+            jq --arg n "$name" --arg note "$note" \
+                '.packages += [{name: $n} + (if $note != "" then {note: $note} else {} end)]' "$target" > "$target.tmp"
+            cat "$target.tmp" > "$target" && rm "$target.tmp"
+            echo -e "${GREEN}Added $name to $list.${NC} Run 'sudo $0 update' to install it."
+            ;;
+        remove)
+            [ -n "$name" ] || { echo -e "${RED}Usage: $0 packages remove NAME${NC}"; exit 1; }
+            file=$(grep -l -F "\"name\": \"$name\"" $files | head -1 || true)
+            if [ -z "$file" ]; then
+                echo -e "${RED}$name isn't in any package list.${NC}"
+                exit 1
+            fi
+            jq --arg n "$name" 'del(.packages[] | select(.name == $n))' "$file" > "$file.tmp"
+            cat "$file.tmp" > "$file" && rm "$file.tmp"
+            echo -e "${GREEN}Removed $name from $(basename "$file" .packages.json).${NC} Run 'sudo $0 update' to uninstall it."
+            ;;
+        *)
+            echo -e "${RED}Unknown packages command: $1${NC}"
+            show_help
+            exit 1
+            ;;
+    esac
+}
+
 # Main script logic
 case "$1" in
     install|update)
@@ -118,6 +176,9 @@ case "$1" in
         ;;
     flake-update)
         update_flake
+        ;;
+    packages)
+        packages_cmd "${@:2}"
         ;;
     update-unixkit)
         "$SCRIPT_DIR/update-unixkit.sh"
