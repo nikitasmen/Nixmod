@@ -103,6 +103,9 @@
     icons = "auto";
     git = true;
   };
+  # nix-shell / nix develop start bash by default; this makes them run zsh so
+  # aliases, starship and fzf/zoxide still work inside dev shells.
+  programs.nix-your-shell.enable = true;
   programs.starship = {
     enable = true;
     configPath = "${config.xdg.configHome}/starship/starship.toml"; # deployed via xdg.configFile above

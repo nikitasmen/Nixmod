@@ -3,7 +3,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-[╭─](#b7bdf8) $os$directory$git_branch$git_status
+[╭─](#b7bdf8) $os$directory$git_branch$git_status$nix_shell$python$nodejs$rust$c$cmd_duration$jobs
 [╰─](#b7bdf8) $character
 """
 
@@ -65,3 +65,38 @@ style = "bold peach"
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
 vicmd_symbol = "[❮](bold yellow)"
+
+[nix_shell]
+format = "[$symbol$state ]($style)"
+symbol = " "
+style = "bold sapphire"
+
+[python]
+format = "[$symbol$version(\\($virtualenv\\)) ]($style)"
+symbol = " "
+style = "bold yellow"
+
+[nodejs]
+format = "[$symbol$version ]($style)"
+symbol = " "
+style = "bold green"
+
+[rust]
+format = "[$symbol$version ]($style)"
+symbol = " "
+style = "bold maroon"
+
+[c]
+format = "[$symbol$version ]($style)"
+symbol = " "
+style = "bold blue"
+
+[cmd_duration]
+min_time = 2000
+format = "[ $duration ]($style)"
+style = "bold mauve"
+
+[jobs]
+format = "[$symbol$number ]($style)"
+symbol = " "
+style = "bold teal"
