@@ -24,6 +24,13 @@
     (import ./overlays/tlauncher.nix)
   ];
 
+  # Package lists live in modules/**/<module>.packages.json, the single source of truth that
+  # nixmod-gui and `nixmod.sh packages` edit. Modules load theirs with `nixmod.readPackages ./x.packages.json`.
+  _module.args.nixmod.readPackages = file:
+    map (p: lib.attrByPath (lib.splitString "." p.name)
+      (throw "${baseNameOf (toString file)}: '${p.name}' is not a package in nixpkgs") pkgs)
+      (lib.importJSON file).packages;
+
   # Use flakes
   nix.settings.experimental-features = [
     "nix-command"

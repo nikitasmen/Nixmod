@@ -1,9 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixmod, ... }:
 
 {
   # Fonts configuration
-  fonts.packages = with pkgs; [
-    pkgs.nerd-fonts.fira-code
-    pkgs.nerd-fonts.jetbrains-mono
-  ];
+  # Package list: fonts.packages.json (edited by nixmod-gui and `nixmod.sh packages`)
+  fonts.packages = nixmod.readPackages ./fonts.packages.json;
 }

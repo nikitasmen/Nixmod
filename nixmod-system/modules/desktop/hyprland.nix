@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, nixmod, lib, ... }:
 
 {
   # Enable hyprland
@@ -19,21 +19,8 @@
   };
 
   # Hyprland related packages
-  environment.systemPackages = with pkgs; [
-    waybar       # Status bar
-    wofi         # Application launcher
-    wlogout      # Logout menu
-    hyprpaper    # Wallpaper utility
-    waypaper     # GUI wallpaper utility
-    hypridle     # Idle management
-    hyprlock     # Screen locking
-    hyprpolkitagent  # Polkit agent for pkexec/auth dialogs (input-remapper, etc.)
-    mako         # Notification daemon
-    eww          # Widget system (bottom bar)
-    socat        # eww bottom bar: Hyprland event socket
-    libnotify    # notify-send (eww bottom bar command output)
-    jq           # Command-line JSON processor
-  ];
+  # Package list: hyprland.packages.json (edited by nixmod-gui and `nixmod.sh packages`)
+  environment.systemPackages = nixmod.readPackages ./hyprland.packages.json;
 
   # Polkit agent - required for input-remapper-gtk, pkexec auth dialogs
   systemd.user.services.hyprpolkitagent = {

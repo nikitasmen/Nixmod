@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixmod, ... }:
 
 {
   # Enable Steam
@@ -17,13 +17,7 @@
       "input"
       "dialout"
     ];
-    packages = with pkgs; [
-      slack # Communication
-      viber # Communication
-      discord-ptb # Communication
-
-      tlauncher # TLauncher (JAR in ~/Downloads/)
-      heroic # Heroic Game launcher
-    ];
+    # Package list: nikmen.packages.json (edited by nixmod-gui and `nixmod.sh packages`)
+    packages = nixmod.readPackages ./nikmen.packages.json;
   };
 }
