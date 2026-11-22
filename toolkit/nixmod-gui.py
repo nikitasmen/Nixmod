@@ -82,7 +82,7 @@ row.pkg:hover .on-hover, row.pkg:focus-within .on-hover, row.pkg .on-hover:focus
 .count { font-feature-settings: "tnum"; }
 .small { font-size: 0.88em; }
 .sidebar row.side-heading, .sidebar row.side-heading:hover { background: transparent; padding: 18px 12px 4px 12px; }
-row:hover { background: #2e3247; }
+row:hover { background: #1e2030; }
 row:focus-visible { outline: 2px solid #c6a0f6; outline-offset: -2px; }
 entry { background: #363a4f; color: #cad3f5; border-radius: 10px; border: none; box-shadow: none; }
 entry:focus-within { outline: 2px solid #c6a0f6; outline-offset: -2px; }
@@ -91,7 +91,7 @@ button { background: #363a4f; background-image: none; color: #cad3f5; border: no
          box-shadow: none; padding: 6px 16px; min-width: 64px; }
 button:hover { background: #494d64; }
 button:focus-visible { outline: 2px solid #c6a0f6; outline-offset: 1px; }
-button:disabled { background: #2e3247; color: #6e738d; }
+button:disabled { background: #1e2030; color: #6e738d; }
 button.flat { background: transparent; color: #a5adcb; }
 button.flat:hover { background: #363a4f; color: #cad3f5; }
 button.destructive { color: #ed8796; }
@@ -104,7 +104,7 @@ button.add { color: #a6da95; }
 .chip { border-radius: 99px; padding: 2px 10px; font-size: 0.88em; font-weight: 600; }
 .chip.install { background: alpha(#a6da95, 0.15); color: #a6da95; }
 .chip.remove { background: alpha(#ed8796, 0.15); color: #ed8796; }
-.empty { color: #a5adcb; padding: 48px 0; }
+.empty-state { color: #a5adcb; padding: 48px 0; }  /* not ".empty": GTK gives level bars an "empty" block */
 .mono { font-family: monospace; font-size: 0.92em; }
 .refs { background: #1e2030; border-radius: 10px; padding: 10px 12px; }
 .chip.dep { background: #363a4f; color: #cad3f5; font-weight: 400; }
@@ -131,6 +131,7 @@ levelbar block.crit { background: #ed8796; }
 
 .runpanel { background: #1e2030; padding: 12px 28px; }
 .runpanel .ok { color: #a6da95; }
+.status-mark { font-size: 1.3em; font-weight: 700; min-width: 18px; }
 .runpanel .err { color: #ed8796; }
 textview, textview text { background: #181926; color: #cad3f5; font-family: monospace; }
 textview { padding: 10px; border-radius: 8px; }
@@ -148,15 +149,36 @@ def scan_lists():
     for path in sorted(glob.glob(pattern, recursive=True)):
         rel = os.path.relpath(path, REPO)
         stem = os.path.basename(path)[:-len(".packages.json")]
-        lists.append(dict(id=rel, path=path, rel=rel, label=f"User {stem}" if "/users/" in rel
-                          else stem.replace("-", " ").capitalize()))
-        for i, entry in enumerate(read_json(path, {}).get("packages", [])):
-            packages.setdefault(entry["name"], dict(list=rel, index=i, note=entry.get("note", "")))
+        lst = dict(id=rel, path=path, rel=rel, error=None, label=f"User {stem}" if "/users/" in rel
+                   else stem.replace("-", " ").capitalize())
+        lists.append(lst)
+        try:
+            entries = read_list(path).get("packages", [])
+        except ListError as e:
+            lst["error"], entries = str(e), []
+        for i, entry in enumerate(entries):
+            if isinstance(entry, dict) and "name" in entry:
+                packages.setdefault(entry["name"], dict(list=rel, index=i, note=entry.get("note", "")))
     return lists, packages
 
 
+class ListError(Exception):
+    """A package list file can't be read; editing it would overwrite the user's packages."""
+
+
+def read_list(path):
+    try:
+        with open(path) as f:
+            data = json.load(f)
+    except ValueError as e:
+        raise ListError(f"{os.path.relpath(path, REPO)} isn't valid JSON ({e}). Fix it in an editor first.") from e
+    if not isinstance(data, dict) or not isinstance(data.get("packages", []), list):
+        raise ListError(f"{os.path.relpath(path, REPO)} should look like {{\"packages\": [...]}}.")
+    return data
+
+
 def edit_list(lst, change):
-    data = read_json(lst["path"], {"packages": []})
+    data = read_list(lst["path"])  # raises instead of defaulting, so a typo can't wipe the list
     change(data.setdefault("packages", []))
     write_json(lst["path"], data)
 
@@ -194,13 +216,19 @@ def write_json(path, data):
 
 
 def load_index():
-    """{attr: (version, description)} for every nixpkgs package, cached per nixpkgs revision."""
-    meta = json.loads(subprocess.run(NIX + ["flake", "metadata", "nixpkgs", "--json"],
-                                     capture_output=True, text=True, check=True).stdout)
-    key = re.sub(r"[^A-Za-z0-9]", "", meta["locked"]["narHash"])[:32]
+    """{attr: (version, description)} for every package in the nixpkgs commit flake.lock pins, cached per commit.
+    (Overlay-only packages aren't searchable; `nix search` can't walk the configured package set.)"""
+    locks = json.loads(subprocess.run(NIX + ["flake", "metadata", f"path:{REPO}", "--json"],
+                                      capture_output=True, text=True, check=True).stdout)["locks"]
+    locked = locks["nodes"][locks["nodes"][locks["root"]]["inputs"]["nixpkgs"]]["locked"]
+    if locked.get("type") == "github":
+        ref = f"github:{locked['owner']}/{locked['repo']}/{locked['rev']}"
+    else:
+        ref = locked.get("url") or "nixpkgs"
+    key = re.sub(r"[^A-Za-z0-9]", "", locked["narHash"])[:32]
     cache = os.path.join(CACHE_DIR, f"index-{key}.json")
     if not os.path.exists(cache):
-        raw = subprocess.run(NIX + ["search", "nixpkgs", "^", "--json"],
+        raw = subprocess.run(NIX + ["search", ref, "^", "--json"],
                              capture_output=True, text=True, check=True).stdout
         compact = {k.split(".", 2)[2]: [v.get("version", ""), v.get("description", "")]
                    for k, v in json.loads(raw).items()}
@@ -211,13 +239,19 @@ def load_index():
         return {k: tuple(v) for k, v in json.load(f).items()}
 
 
-def search(index, query):
+def search_table(index):
+    """Lowercased (attr, name, description) rows, built once so each keystroke is a plain scan."""
+    return [(a, a.lower(), d.lower()) for a, (_, d) in index.items()]
+
+
+def search(table, query):
     q = query.lower().strip()
-    names = [a for a in index if q in a.lower()]
-    names.sort(key=lambda a: (a.lower() != q, not a.lower().startswith(q), "." in a, len(a), a))
+    names = [(a, al) for a, al, _ in table if q in al]
+    names.sort(key=lambda x: (x[1] != q, not x[1].startswith(q), "." in x[0], len(x[0]), x[0]))
+    names = [a for a, _ in names]
     if len(names) < MAX_RESULTS:  # top up with description matches
         seen = set(names)
-        names += [a for a, (_, d) in index.items() if a not in seen and q in d.lower()][:MAX_RESULTS - len(names)]
+        names += [a for a, al, dl in table if q in dl and a not in seen][:MAX_RESULTS - len(names)]
     return names[:MAX_RESULTS]
 
 
@@ -562,7 +596,7 @@ class Window(Gtk.ApplicationWindow):
         self.stack.add_titled(self.build_packages(), "packages", "Packages")
         self.stack.add_titled(self.build_system(), "system", "System")
         self.stack.connect("notify::visible-child-name", lambda *_: self.refresh_facts())
-        header = Gtk.HeaderBar()
+        header = Gtk.HeaderBar(decoration_layout=":close")  # only the close button, whatever the desktop default
         header.set_title_widget(Gtk.StackSwitcher(stack=self.stack))
         self.set_titlebar(header)
 
@@ -626,7 +660,7 @@ class Window(Gtk.ApplicationWindow):
 
         self.pkg_list = Gtk.ListBox(selection_mode=Gtk.SelectionMode.NONE, margin_top=6)
         self.pkg_list.connect("row-activated", self.row_activated)
-        self.pkg_empty = label("", "empty", wrap=True, xalign=0.5)
+        self.pkg_empty = label("", "empty-state", wrap=True, xalign=0.5)
         self.pkg_list.set_placeholder(self.pkg_empty)
         main.append(Gtk.ScrolledWindow(child=self.pkg_list, vexpand=True, hscrollbar_policy=Gtk.PolicyType.NEVER))
         split.append(main)
@@ -750,6 +784,7 @@ class Window(Gtk.ApplicationWindow):
 
     def index_ready(self, index, error):
         self.index = index
+        self.search_rows = search_table(index) if index else []
         self.index_error = (error or "").strip().splitlines()[-1:] if error else None
         if index:
             self.search.set_placeholder_text(f"Search {len(index):,} packages")
@@ -798,7 +833,8 @@ class Window(Gtk.ApplicationWindow):
             single = self.selected_list is not None and shown
             self.list_title.set_text(shown[0]["label"] if single else "All packages")
             self.list_path.set_text(shown[0]["rel"] if single else "")
-            self.pkg_empty.set_text("This list is empty. Search above to add a package to it." if single
+            self.pkg_empty.set_text(shown[0]["error"] if single and shown[0]["error"] else
+                                    "This list is empty. Search above to add a package to it." if single
                                     else "No package lists found in nixmod-system/modules.")
             for lst in shown:
                 attrs = self.list_entries(lst)
@@ -823,7 +859,7 @@ class Window(Gtk.ApplicationWindow):
                 f"Couldn't load the package list: {self.index_error[0]}" if self.index_error
                 else "Loading the package list. The first time takes about 30 seconds.")
         else:
-            attrs = search(self.index, query)
+            attrs = search(self.search_rows, query)
             self.list_title.set_text("Results")
             self.list_note.set_text(f"First {MAX_RESULTS} matches. Keep typing to narrow it down."
                                     if len(attrs) == MAX_RESULTS else "")
@@ -847,6 +883,7 @@ class Window(Gtk.ApplicationWindow):
     # ----- package details dialog -----
     def show_details(self, attr, program=None):
         win = Gtk.Window(transient_for=self, modal=True, title=attr, default_width=780, default_height=660)
+        win.set_titlebar(Gtk.HeaderBar(decoration_layout=":close"))
         keys = Gtk.ShortcutController()
         keys.add_shortcut(Gtk.Shortcut(trigger=Gtk.ShortcutTrigger.parse_string("Escape"),
                                        action=Gtk.CallbackAction.new(lambda *_: win.close() or True)))
@@ -1009,6 +1046,10 @@ class Window(Gtk.ApplicationWindow):
             section("Build inputs", chips(d["buildInputs"]) if d["buildInputs"] else label("None.", "dim"),
                     hint="Runtime dependencies are known once it's installed")
 
+    def show_error(self, text):
+        dialog = Gtk.AlertDialog(message=text, buttons=["OK"])
+        dialog.show(self)
+
     def rescan(self):
         self.lists, self.desired = scan_lists()
         self.list_by_id = {l["id"]: l for l in self.lists}
@@ -1029,9 +1070,9 @@ class Window(Gtk.ApplicationWindow):
                 self.restore(attr)
             else:
                 add_package(self.target_list(), attr)
-        except OSError as e:
-            self.list_note.set_text(f"Couldn't save the package list: {e}")
-            self.list_note.set_visible(True)
+        except (OSError, ListError) as e:
+            self.show_error(f"Couldn't change the package list. {e}")
+            return
         self.rescan()
         if self.search.get_text().strip():
             for row in self.result_rows:
@@ -1141,7 +1182,7 @@ class Window(Gtk.ApplicationWindow):
         panel = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10, css_classes=["runpanel"])
         top = Gtk.Box(spacing=12)
         self.run_spinner = Gtk.Spinner()
-        self.run_icon = Gtk.Image(pixel_size=18)
+        self.run_icon = label("", "status-mark")  # a glyph, not a themed icon: works with any icon theme
         text = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, hexpand=True)
         self.run_title = label("", "name")
         self.run_last = label("", "faint", ellipsize=True)
@@ -1203,6 +1244,7 @@ class Window(Gtk.ApplicationWindow):
 
     def ask_password(self, then):
         win = Gtk.Window(transient_for=self, modal=True, title="Authenticate", default_width=400, resizable=False)
+        win.set_titlebar(Gtk.HeaderBar(decoration_layout=":close"))
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10,
                       margin_top=22, margin_bottom=20, margin_start=22, margin_end=22)
         box.append(label("Enter your password", "title"))
@@ -1226,7 +1268,7 @@ class Window(Gtk.ApplicationWindow):
                 w.set_sensitive(False)
             error.set_css_classes(["dim"])
             error.set_text("Checking…")
-            proc = Gio.Subprocess.new([SUDO, "-S", "-p", "", "-v"],
+            proc = Gio.Subprocess.new([SUDO, "-k", "-S", "-p", "", "-v"],
                                       Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_SILENCE
                                       | Gio.SubprocessFlags.STDERR_SILENCE)
             proc.communicate_utf8_async(pw + "\n", None, checked, pw)
@@ -1264,7 +1306,9 @@ class Window(Gtk.ApplicationWindow):
         spec = ACTIONS[action] if isinstance(action, str) else action
         argv, flags = list(spec["argv"]), Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_MERGE
         if password is not None:
-            argv = [SUDO, "-S", "-p", "", "/run/current-system/sw/bin/env",
+            # -k: ignore cached credentials so sudo always reads (consumes) the password line; otherwise
+            # it would pass through to nixmod.sh and everything it starts.
+            argv = [SUDO, "-k", "-S", "-p", "", "/run/current-system/sw/bin/env",
                     f"PATH={os.environ.get('PATH', '')}"] + argv
             flags |= Gio.SubprocessFlags.STDIN_PIPE
         snapshot = dict(self.desired)
@@ -1312,8 +1356,10 @@ class Window(Gtk.ApplicationWindow):
         self.set_running(False)
         self.run_title.set_text(spec["done" if ok else "fail"])
         self.run_title.set_css_classes(["name", "ok" if ok else "err"])
-        self.run_icon.set_from_icon_name("emblem-ok-symbolic" if ok else "dialog-error-symbolic")
-        self.run_icon.set_css_classes(["ok" if ok else "err"])
+        self.run_icon.set_text("✓" if ok else "✕")
+        if self.run_last.get_text() == "Starting…":  # the command printed nothing
+            self.run_last.set_text("")
+        self.run_icon.set_css_classes(["status-mark", "ok" if ok else "err"])
         if not ok:
             self.run_last.set_text("See the details below for the error.")
             self.details.set_active(True)
